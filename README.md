@@ -1,5 +1,7 @@
 # SZTE egyetemi kurzus, 2023 tavaszi félév házi feleadat & Órai munka repó
 
+Git gyorstalpaló: https://github.com/CsharptutorialHungary/egyetemikurzus-2023-tavasz/blob/main/GitTutorial/Readme.md
+
 ## Követelmények
 
 Írj egy tetszőleges témájú programot, ami megfelel az alábbi technológiai követelményeknek a tanultak alapján:
