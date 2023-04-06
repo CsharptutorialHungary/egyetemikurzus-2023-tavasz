@@ -1,2 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using GoogleBooks.Controller;
+using GoogleBooks.Model;
+
+
+ResultController _resultController = new ResultController();
+
+List<SearchResult> results = new();
+
+
+    results = _resultController.Search("vuk");
+    foreach (SearchResult result in results)
+         Console.WriteLine(result.Title);
+
+
+
