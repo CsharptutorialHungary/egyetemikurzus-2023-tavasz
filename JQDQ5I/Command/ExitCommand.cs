@@ -3,7 +3,7 @@ public class ExitCommand : ICommand
 {
     public string Name => "exit";
 
-    public void Execute(string arg)
+    public void Execute(string[] args)
     {
         Environment.Exit(0);
     }

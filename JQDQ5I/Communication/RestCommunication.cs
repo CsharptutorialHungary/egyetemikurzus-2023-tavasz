@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using GoogleBooks.Exception;
+using RestSharp;
 using System.Net;
 namespace GoogleBooks.Communication;
 
@@ -22,7 +23,7 @@ public static class RestCommunication
 
         if (requestResult.StatusCode != HttpStatusCode.OK)
         {
-            throw new Exception($"Hiba az API kommunikációban. Státuszkód: {requestResult.StatusCode}; hiba: {requestResult.ErrorMessage}");
+            throw new SearchException($"Fail in API communication. statuscode: {requestResult.StatusCode}; error: {requestResult.ErrorMessage}", true);
         }
 
         return requestResult;

@@ -1,4 +1,5 @@
 ﻿using GoogleBooks.Communication;
+using GoogleBooks.Exception;
 using GoogleBooks.Model;
 using System.ComponentModel;
 
@@ -20,7 +21,7 @@ namespace GoogleBooks.Controller
 
             if (googleResult.totalItems == null || googleResult.totalItems == 0)
             {
-                throw new Exception("No results");
+                throw new SearchException("No results");
             }
 
             //számunkra megjeleníthető formára konvertáljuk
