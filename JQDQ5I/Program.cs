@@ -1,9 +1,11 @@
 ﻿using GoogleBooks.Command;
+using GoogleBooks.ViewCommon;
 
+#region print info
 Console.WriteLine("GoogleBooks API version 1.0");
 Console.WriteLine("Please enter full screen for the best experience.");
 Console.WriteLine("Type \"help\" for more information.");
-
+#endregion
 
 Type t = typeof(ICommand);
 
@@ -18,7 +20,7 @@ var commandTable = commandTypes
 
 do
 {
-    Console.Write("enter command> ");
+    Console.Write("enter kommand> ");
     string? input = Console.ReadLine();
     if (string.IsNullOrWhiteSpace(input))
         continue;
@@ -30,8 +32,15 @@ do
     {
         if (commandTable.ContainsKey(command) is false)
         {
-            throw new Exception($"Unknown command: {command}");
+            string exceptionMessage = $"Unknown command: {command}";
+
+            string similarCommand = CommandHelper.FindMostSimilarWord(commandTable.Keys.ToList(), command);
+            if (string.IsNullOrEmpty(similarCommand) is false)
+                exceptionMessage += $"\nDid you mean {similarCommand}?";
+
+            throw new Exception(exceptionMessage);
         }
+
         await Task.Run(() => commandTable[command].ExecuteAsync(parameters));
     }
     catch (Exception ex)
@@ -41,3 +50,4 @@ do
 
 }
 while (true);
+

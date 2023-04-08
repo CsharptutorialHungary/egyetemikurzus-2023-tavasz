@@ -1,4 +1,4 @@
-﻿namespace GoogleBooks.View;
+﻿namespace GoogleBooks.ViewCommon;
 public static class PrintTableHelper
 {
     const int _maxColumnSize = 50;

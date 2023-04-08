@@ -12,7 +12,7 @@ public class HelpCommand : ICommand
         Console.WriteLine("                      author (-a/--author)");
         Console.WriteLine("                      isbn   (-i/--isbn)");
         Console.WriteLine("usage: search -t vuk -a fekete");
-
         return Task.CompletedTask;
     }
+
 }

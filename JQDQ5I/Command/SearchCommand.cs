@@ -1,6 +1,6 @@
 ﻿using GoogleBooks.Controller;
 using GoogleBooks.Exception;
-using GoogleBooks.View;
+using GoogleBooks.ViewCommon;
 using System.Text;
 
 namespace GoogleBooks.Command;
