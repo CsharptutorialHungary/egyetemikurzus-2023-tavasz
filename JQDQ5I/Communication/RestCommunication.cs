@@ -6,7 +6,7 @@ namespace GoogleBooks.Communication;
 public static class RestCommunication
 {
 
-    public static RestResponse RestApiCommunication(Uri uri, Method methodName, Dictionary<string, string> parameters = null)
+    public static async Task<RestResponse> RestApiCommunicationAsync(Uri uri, Method methodName, Dictionary<string, string> parameters = null)
     {
         RestResponse requestResult;
         var _client = new RestClient();
@@ -19,7 +19,7 @@ public static class RestCommunication
                 request.AddParameter(param.Key, param.Value);
             }
 
-        requestResult = _client.Execute(request);
+        requestResult = await _client.ExecuteAsync(request);
 
         if (requestResult.StatusCode != HttpStatusCode.OK)
         {

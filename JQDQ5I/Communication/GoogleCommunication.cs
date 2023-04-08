@@ -15,12 +15,12 @@ public class GoogleCommunication
         //apiKey = ConfigurationManager.AppSettings["Google.ApiKey"];
     }
 
-    public GoogleApiSearchResult GoogleResultByParameters(string parameter)
+    public async Task<GoogleApiSearchResult> GoogleResultByParametersAsync(string parameter)
     {
         var uri = new Uri(baseUrl + "volumes/?q=" + parameter);
 
 
-        var response = RestCommunication.RestApiCommunication(uri, RestSharp.Method.Get);
+        var response = await RestCommunication.RestApiCommunicationAsync(uri, RestSharp.Method.Get);
 
         var results = JsonConvert.DeserializeObject<GoogleApiSearchResult>(response.Content);
 

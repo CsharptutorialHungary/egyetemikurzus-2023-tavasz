@@ -1,7 +1,7 @@
 ﻿using GoogleBooks.Command;
 
 Console.WriteLine("GoogleBooks API version 1.0");
-Console.WriteLine("Please enter full screen for the best experience");
+Console.WriteLine("Please enter full screen for the best experience.");
 Console.WriteLine("Type \"help\" for more information.");
 
 
@@ -20,12 +20,11 @@ do
 {
     Console.Write("enter command> ");
     string? input = Console.ReadLine();
-    string? command = input.Split(' ')[0];
-    string[] parameters = input.Split(' ', StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
-
-    if (string.IsNullOrWhiteSpace(command))
+    if (string.IsNullOrWhiteSpace(input))
         continue;
 
+    string? command = input.Split(' ')[0];
+    string[] parameters = input.Split(' ', StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
 
     try
     {
@@ -33,7 +32,7 @@ do
         {
             throw new Exception($"Unknown command: {command}");
         }
-        commandTable[command].Execute(parameters);
+        await Task.Run(() => commandTable[command].ExecuteAsync(parameters));
     }
     catch (Exception ex)
     {

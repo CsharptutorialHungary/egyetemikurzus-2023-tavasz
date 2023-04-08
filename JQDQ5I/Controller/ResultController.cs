@@ -13,11 +13,11 @@ namespace GoogleBooks.Controller
 
 
 
-        public List<List<string>> Search(string searchTerms)
+        public async Task<List<List<string>>> SearchAsync(string searchTerms)
         {
             List<SearchResult> results = new();
 
-            GoogleApiSearchResult googleResult = _apiManager.GoogleResultByParameters(searchTerms);
+            GoogleApiSearchResult googleResult = await _apiManager.GoogleResultByParametersAsync(searchTerms);
 
             if (googleResult.totalItems == null || googleResult.totalItems == 0)
             {

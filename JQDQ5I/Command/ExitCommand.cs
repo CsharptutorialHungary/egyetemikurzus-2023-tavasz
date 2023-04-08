@@ -3,8 +3,11 @@ public class ExitCommand : ICommand
 {
     public string Name => "exit";
 
-    public void Execute(string[] args)
+    public Task ExecuteAsync(string[] args)
     {
         Environment.Exit(0);
+
+        return Task.CompletedTask;
+
     }
 }
