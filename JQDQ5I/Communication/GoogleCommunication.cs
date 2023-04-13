@@ -6,19 +6,15 @@ namespace GoogleBooks.Communication;
 public class GoogleCommunication
 {
     private readonly string baseUrl;
-    //private readonly string apiKey;
-
 
     public GoogleCommunication()
     {
         baseUrl = ConfigurationManager.AppSettings["Google.Api.BaseUrl"];
-        //apiKey = ConfigurationManager.AppSettings["Google.ApiKey"];
     }
 
     public async Task<GoogleApiSearchResult> GoogleResultByParametersAsync(string parameter)
     {
         var uri = new Uri(baseUrl + "volumes/?q=" + parameter);
-
 
         var response = await RestCommunication.RestApiCommunicationAsync(uri, RestSharp.Method.Get);
 

@@ -1,6 +1,7 @@
 ﻿namespace GoogleBooks.ViewCommon;
 public static class CommandHelper
 {
+    const int _ScoreLimit = 2;
     public static string FindMostSimilarWord(List<string> words, string target)
     {
         string mostSimilarWord = "";
@@ -17,7 +18,7 @@ public static class CommandHelper
             }
         }
 
-        return bestScore > 2 ? mostSimilarWord : "";
+        return bestScore > _ScoreLimit ? mostSimilarWord : "";
     }
 
     private static int CalculateSimilarityScore(string word1, string word2)

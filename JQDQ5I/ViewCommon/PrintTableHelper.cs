@@ -2,33 +2,33 @@
 public static class PrintTableHelper
 {
     const int _maxColumnSize = 50;
+    static int[] _columnWidths = new int[10];
 
     public static void PrintTableFromList(List<List<string>> stringList)
     {
-        int[] columnWidths = CalculateColumnWidths(stringList);
-        int totalWith = columnWidths.Sum() + columnWidths.Count() + 1;
+        _columnWidths = CalculateColumnWidths(stringList);
+        int totalWith = _columnWidths.Sum() + _columnWidths.Count() + 1;
 
-        foreach (var row in stringList)
-            PrintTableRow(columnWidths, totalWith, row);
+        stringList.ForEach(row => PrintTableRow(totalWith, row));
         PrintLine(totalWith);
     }
 
-    static void PrintTableRow(int[] columnWidths, int totalWith, List<string> row)
+    static void PrintTableRow(int totalWith, List<string> row)
     {
         PrintLine(totalWith);
-        PrintRow(columnWidths, row);
+        PrintRow(row);
     }
 
     static void PrintLine(int width) => Console.WriteLine(new string('-', width));
 
 
-    static void PrintRow(int[] columnWidths, List<string> row)
+    static void PrintRow(List<string> row)
     {
         string currentRow = "|";
         for (int i = 0; i < row.Count; i++)
         {
             string element = row[i];
-            int columnWidth = columnWidths[i];
+            int columnWidth = _columnWidths[i];
             currentRow += AlignCentre(element, columnWidth) + "|";
         }
         Console.WriteLine(currentRow);
@@ -36,9 +36,10 @@ public static class PrintTableHelper
 
     static string AlignCentre(string text, int columnWidths)
     {
-        text = text.Length > _maxColumnSize ? text.Substring(0, columnWidths - 3) + "..." : text;
+        if (text.Length > _maxColumnSize)
+            text = text.Substring(0, columnWidths - 3) + "...";
 
-        return text.PadRight(columnWidths - (columnWidths - text.Length) / 2).PadLeft(columnWidths);
+        return text.PadRight(((columnWidths - text.Length) / 2) + text.Length).PadLeft(columnWidths);
 
     }
 

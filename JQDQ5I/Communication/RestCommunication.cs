@@ -14,10 +14,7 @@ public static class RestCommunication
         var request = new RestRequest(uri) { Method = methodName };
 
         if (parameters != null)
-            foreach (KeyValuePair<string, string> param in parameters)
-            {
-                request.AddParameter(param.Key, param.Value);
-            }
+            parameters.ToList().ForEach(param => request.AddParameter(param.Key, param.Value));
 
         requestResult = await _client.ExecuteAsync(request);
 

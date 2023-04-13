@@ -1,154 +1,154 @@
 ﻿namespace GoogleBooks.Model;
 
-public class GoogleApiSearchResult
+public record GoogleApiSearchResult
 {
-    public int totalItems { get; set; }
-    public List<Item> items { get; set; }
-    public string kind { get; set; }
-    public string id { get; set; }
-    public string etag { get; set; }
-    public string selfLink { get; set; }
-    public VolumeInfo volumeInfo { get; set; }
-    public SaleInfo saleInfo { get; set; }
-    public AccessInfo accessInfo { get; set; }
+    public int totalItems { get; init; }
+    public List<Item> items { get; init; }
+    public string kind { get; init; }
+    public string id { get; init; }
+    public string etag { get; init; }
+    public string selfLink { get; init; }
+    public VolumeInfo volumeInfo { get; init; }
+    public SaleInfo saleInfo { get; init; }
+    public AccessInfo accessInfo { get; init; }
 
-    public class VolumeInfo
+    public record VolumeInfo
     {
-        public string title { get; set; }
-        public List<string> authors { get; set; }
-        public string publisher { get; set; }
-        public string publishedDate { get; set; }
-        public string description { get; set; }
-        public List<IndustryIdentifier> industryIdentifiers { get; set; }
-        public ReadingModes readingModes { get; set; }
-        public int pageCount { get; set; }
-        public string printType { get; set; }
-        public List<string> categories { get; set; }
-        public string maturityRating { get; set; }
-        public bool allowAnonLogging { get; set; }
-        public string contentVersion { get; set; }
-        public PanelizationSummary panelizationSummary { get; set; }
-        public ImageLinks imageLinks { get; set; }
-        public string language { get; set; }
-        public string previewLink { get; set; }
-        public string infoLink { get; set; }
-        public string canonicalVolumeLink { get; set; }
-        public Dimensions dimensions { get; set; }
-        public string mainCategory { get; set; }
-        public double averageRating { get; set; }
-        public int ratingsCount { get; set; }
+        public string title { get; init; }
+        public List<string> authors { get; init; }
+        public string publisher { get; init; }
+        public string publishedDate { get; init; }
+        public string description { get; init; }
+        public List<IndustryIdentifier> industryIdentifiers { get; init; }
+        public ReadingModes readingModes { get; init; }
+        public int pageCount { get; init; }
+        public string printType { get; init; }
+        public List<string> categories { get; init; }
+        public string maturityRating { get; init; }
+        public bool allowAnonLogging { get; init; }
+        public string contentVersion { get; init; }
+        public PanelizationSummary panelizationSummary { get; init; }
+        public ImageLinks imageLinks { get; init; }
+        public string language { get; init; }
+        public string previewLink { get; init; }
+        public string infoLink { get; init; }
+        public string canonicalVolumeLink { get; init; }
+        public Dimensions dimensions { get; init; }
+        public string mainCategory { get; init; }
+        public double averageRating { get; init; }
+        public int ratingsCount { get; init; }
 
     }
 
-    public class AccessInfo
+    public record AccessInfo
     {
-        public string country { get; set; }
-        public string viewability { get; set; }
-        public bool embeddable { get; set; }
-        public bool publicDomain { get; set; }
-        public string textToSpeechPermission { get; set; }
-        public Epub epub { get; set; }
-        public Pdf pdf { get; set; }
-        public string webReaderLink { get; set; }
-        public string accessViewStatus { get; set; }
-        public bool quoteSharingAllowed { get; set; }
+        public string country { get; init; }
+        public string viewability { get; init; }
+        public bool embeddable { get; init; }
+        public bool publicDomain { get; init; }
+        public string textToSpeechPermission { get; init; }
+        public Epub epub { get; init; }
+        public Pdf pdf { get; init; }
+        public string webReaderLink { get; init; }
+        public string accessViewStatus { get; init; }
+        public bool quoteSharingAllowed { get; init; }
     }
 
-    public class Dimensions
+    public record Dimensions
     {
-        public string height { get; set; }
-        public string width { get; set; }
-        public string thickness { get; set; }
+        public string height { get; init; }
+        public string width { get; init; }
+        public string thickness { get; init; }
     }
 
-    public class Epub
+    public record Epub
     {
-        public bool isAvailable { get; set; }
-        public string acsTokenLink { get; set; }
+        public bool isAvailable { get; init; }
+        public string acsTokenLink { get; init; }
     }
 
-    public class ImageLinks
+    public record ImageLinks
     {
-        public string smallThumbnail { get; set; }
-        public string thumbnail { get; set; }
-        public string small { get; set; }
-        public string medium { get; set; }
-        public string large { get; set; }
-        public string extraLarge { get; set; }
+        public string smallThumbnail { get; init; }
+        public string thumbnail { get; init; }
+        public string small { get; init; }
+        public string medium { get; init; }
+        public string large { get; init; }
+        public string extraLarge { get; init; }
     }
 
-    public class IndustryIdentifier
+    public record IndustryIdentifier
     {
-        public string type { get; set; }
-        public string identifier { get; set; }
+        public string type { get; init; }
+        public string identifier { get; init; }
     }
 
-    public class Item
+    public record Item
     {
-        public string kind { get; set; }
-        public string id { get; set; }
-        public string etag { get; set; }
-        public string selfLink { get; set; }
-        public VolumeInfo volumeInfo { get; set; }
-        public SaleInfo saleInfo { get; set; }
-        public AccessInfo accessInfo { get; set; }
-        public SearchInfo searchInfo { get; set; }
+        public string kind { get; init; }
+        public string id { get; init; }
+        public string etag { get; init; }
+        public string selfLink { get; init; }
+        public VolumeInfo volumeInfo { get; init; }
+        public SaleInfo saleInfo { get; init; }
+        public AccessInfo accessInfo { get; init; }
+        public SearchInfo searchInfo { get; init; }
     }
 
-    public class ListPrice
+    public record ListPrice
     {
-        public int amount { get; set; }
-        public string currencyCode { get; set; }
-        public long amountInMicros { get; set; }
+        public int amount { get; init; }
+        public string currencyCode { get; init; }
+        public long amountInMicros { get; init; }
     }
 
-    public class Offer
+    public record Offer
     {
-        public int finskyOfferType { get; set; }
-        public ListPrice listPrice { get; set; }
-        public RetailPrice retailPrice { get; set; }
+        public int finskyOfferType { get; init; }
+        public ListPrice listPrice { get; init; }
+        public RetailPrice retailPrice { get; init; }
     }
 
-    public class PanelizationSummary
+    public record PanelizationSummary
     {
-        public bool containsEpubBubbles { get; set; }
-        public bool containsImageBubbles { get; set; }
+        public bool containsEpubBubbles { get; init; }
+        public bool containsImageBubbles { get; init; }
     }
 
-    public class Pdf
+    public record Pdf
     {
-        public bool isAvailable { get; set; }
-        public string acsTokenLink { get; set; }
+        public bool isAvailable { get; init; }
+        public string acsTokenLink { get; init; }
     }
 
-    public class ReadingModes
+    public record ReadingModes
     {
-        public bool text { get; set; }
-        public bool image { get; set; }
+        public bool text { get; init; }
+        public bool image { get; init; }
     }
 
-    public class RetailPrice
+    public record RetailPrice
     {
-        public int amount { get; set; }
-        public string currencyCode { get; set; }
-        public long amountInMicros { get; set; }
+        public int amount { get; init; }
+        public string currencyCode { get; init; }
+        public long amountInMicros { get; init; }
     }
 
 
-    public class SaleInfo
+    public record SaleInfo
     {
-        public string country { get; set; }
-        public string saleability { get; set; }
-        public bool isEbook { get; set; }
-        public ListPrice listPrice { get; set; }
-        public RetailPrice retailPrice { get; set; }
-        public string buyLink { get; set; }
-        public List<Offer> offers { get; set; }
+        public string country { get; init; }
+        public string saleability { get; init; }
+        public bool isEbook { get; init; }
+        public ListPrice listPrice { get; init; }
+        public RetailPrice retailPrice { get; init; }
+        public string buyLink { get; init; }
+        public List<Offer> offers { get; init; }
     }
 
-    public class SearchInfo
+    public record SearchInfo
     {
-        public string textSnippet { get; set; }
+        public string textSnippet { get; init; }
     }
 
 

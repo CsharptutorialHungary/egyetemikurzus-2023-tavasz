@@ -5,7 +5,6 @@ namespace GoogleBooks.Model;
 public class SearchResult
 {    
     public SearchResult(GoogleApiSearchResult.Item item) {
-
         Title = item.volumeInfo.title;
         Author = item.volumeInfo.authors?[0] ?? "-";
         Publisher = item.volumeInfo.publisher;

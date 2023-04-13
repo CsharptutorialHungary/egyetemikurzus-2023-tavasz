@@ -24,19 +24,19 @@ namespace GoogleBooks.Controller
                 throw new SearchException("No results");
             }
 
-            //számunkra megjeleníthető formára konvertáljuk
+            //számunkra megjeleníthető formára konvertáljuk az eredményt
             foreach (var item in googleResult.items)
             {
                 results.Add(new SearchResult(item));
             }
 
-            //string listává alakítjuk, hogy táblázatos formában meg lehessen jeleníteni 
-            List<List<string>> stringList = ConvertClassListToStringList(results);
+            //2D string listává alakítjuk, hogy táblázatos formában meg lehessen jeleníteni 
+            List<List<string>> stringList = ConvertClassListTo2DStringList(results);
 
             return stringList;
         }
 
-        List<List<string>> ConvertClassListToStringList<T>(List<T> classList) where T : class
+        List<List<string>> ConvertClassListTo2DStringList<T>(List<T> classList) where T : class
         {
             List<List<string>> stringList = new List<List<string>>
             {

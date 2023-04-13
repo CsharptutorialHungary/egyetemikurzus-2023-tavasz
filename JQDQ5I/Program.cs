@@ -41,7 +41,8 @@ do
             throw new Exception(exceptionMessage);
         }
 
-        await Task.Run(() => commandTable[command].ExecuteAsync(parameters));
+        //await Task.Run(() => commandTable[command].ExecuteAsync(parameters));
+        await commandTable[command].ExecuteAsync(parameters);
     }
     catch (Exception ex)
     {
