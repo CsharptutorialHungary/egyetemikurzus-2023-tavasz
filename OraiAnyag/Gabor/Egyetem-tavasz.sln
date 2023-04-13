@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElsoOra", "ElsoOra\ElsoOra.csproj", "{EE435469-099C-4BFB-97BD-0B647415D761}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElsoOra", "ElsoOra\ElsoOra.csproj", "{EE435469-099C-4BFB-97BD-0B647415D761}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fajlkezeles", "fajlkezeles\fajlkezeles.csproj", "{77A84D19-CAB7-4A11-BBD2-3CB417288793}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reflection-linq", "reflection-linq\reflection-linq.csproj", "{70266D9C-C2A9-4E43-9B6E-FC98387C1DE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{EE435469-099C-4BFB-97BD-0B647415D761}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE435469-099C-4BFB-97BD-0B647415D761}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE435469-099C-4BFB-97BD-0B647415D761}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77A84D19-CAB7-4A11-BBD2-3CB417288793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77A84D19-CAB7-4A11-BBD2-3CB417288793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77A84D19-CAB7-4A11-BBD2-3CB417288793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77A84D19-CAB7-4A11-BBD2-3CB417288793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70266D9C-C2A9-4E43-9B6E-FC98387C1DE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70266D9C-C2A9-4E43-9B6E-FC98387C1DE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70266D9C-C2A9-4E43-9B6E-FC98387C1DE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70266D9C-C2A9-4E43-9B6E-FC98387C1DE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
