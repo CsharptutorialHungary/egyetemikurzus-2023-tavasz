@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,8 @@ namespace _r5jxrm_
     public record class MyConsoleColor
     {
         public List<ConsoleColor> colorsList;
-
-        public void adding(List<ConsoleColor> colorsList)
+        /*
+        public void hozzaadas(List<ConsoleColor> colorsList)
         {
             colorsList.Add(ConsoleColor.Black);
             colorsList.Add(ConsoleColor.DarkBlue);
@@ -29,7 +30,20 @@ namespace _r5jxrm_
             colorsList.Add(ConsoleColor.Magenta);
             colorsList.Add(ConsoleColor.Yellow);
             colorsList.Add(ConsoleColor.White);
+        }*/
+
+        public void kiiratas(List<ConsoleColor> colorsList)
+        {
+            ConsoleColor[] consoleColors = {ConsoleColor.Black, ConsoleColor.DarkBlue, ConsoleColor.DarkGreen, ConsoleColor.DarkCyan, ConsoleColor.DarkRed,
+            ConsoleColor.DarkMagenta, ConsoleColor.DarkYellow, ConsoleColor.Gray, ConsoleColor.DarkGray, ConsoleColor.Blue, ConsoleColor.Green, ConsoleColor.Cyan,
+            ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Yellow, ConsoleColor.White};
+            colorsList.AddRange(consoleColors);
+            foreach (var szinek in colorsList)
+            {
+                Console.WriteLine($"A választható színek: {szinek}");
+            }
         }
+        
 
 
         public override string ToString()

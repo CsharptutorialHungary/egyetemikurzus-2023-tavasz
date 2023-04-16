@@ -19,7 +19,7 @@ namespace _r5jxrm_
             string[] pakli = new[] { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
 
             //Fontos változók deklarálása
-            double zseton = 200;
+            double zseton = 500;
             double tet = 0;
 
             bool isPlaying = false;
@@ -30,11 +30,12 @@ namespace _r5jxrm_
             var szines = new MyConsoleColor();
             Console.WriteLine("Milyen háttérszínt szeretnél? Add meg a nevét!");
             List<ConsoleColor> consoleColors = new List<ConsoleColor>();
-            szines.adding(consoleColors);
+            szines.kiiratas(consoleColors);
+            /*szines.hozzaadas(consoleColors);
             foreach (var color in consoleColors)
             {
                 Console.WriteLine($"A választható színek: {color}");
-            }
+            }*/
             var beszin = Console.ReadLine();
             beszin = beszin.ToLower();
             szinek(beszin, consoleColors);
@@ -48,7 +49,17 @@ namespace _r5jxrm_
             Console.WriteLine(cim + "\n\n");
 
             Console.WriteLine("Mennyi zsetonod van?");
-            zseton = Convert.ToInt32(Console.ReadLine());
+            try
+            {
+                zseton = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine("Helytelen amit megadtál...");
+                Console.WriteLine("Az alapértelmezett 500 zsetonnal kezdesz!");
+            }
+            
+            double kezdoZseton = zseton;
             Console.WriteLine();
 
 
@@ -59,7 +70,7 @@ namespace _r5jxrm_
                 if (isPlaying)
                 {
                     Console.WriteLine($"Zsetonjaid száma:  {zseton}\n");
-                    tet = osztoKezdo(zseton);
+                    tet = osztoKezdo(zseton, kezdoZseton);
                     zseton += jatek(pakli, tet, zseton);
                     //Várakozás a felhasználóra
                     Console.WriteLine("A folytatáshoz nyomj entert!");
@@ -72,6 +83,30 @@ namespace _r5jxrm_
                     else
                     {
                         quit = true;
+                        Deser optional = new Deser();
+                        double maximum = optional.max(zseton);
+                        var mentes = new Osszeg();
+                        var serializer = new XmlSerializer(typeof(Osszeg));
+                        if (zseton >= maximum)
+                        {
+                            mentes.legnagyobbOsszeg = zseton;
+                        }
+                        else
+                        {
+                            mentes.legnagyobbOsszeg = maximum;
+                        }
+                        mentes.nyeremeny = zseton - kezdoZseton;
+                        mentes.osszesNyeremeny = optional.osszeadas(zseton-kezdoZseton);
+                        using (var writer = new StreamWriter("MentesOsszeg.xml"))
+                        {
+                            serializer.Serialize(writer, mentes);
+                        }
+                        Console.WriteLine();
+                        Console.WriteLine("A jaték mentése elkészült...");
+                        Console.WriteLine($"Nyereményed: {mentes.nyeremeny}");
+                        Console.WriteLine($"Legnagyobb összeged eddig: {mentes.legnagyobbOsszeg}");
+                        Console.WriteLine($"Eddigi összes nyereményed: {mentes.osszesNyeremeny}");
+                        Console.WriteLine();
                         Console.WriteLine("Kifogytál a zsetonokból!\nKöszönjük a játékot!");
                         //Várakozás a felhasználóra
                         Console.WriteLine("A folytatáshoz nyomj entert!");
@@ -97,17 +132,17 @@ namespace _r5jxrm_
                         {
                             mentes.legnagyobbOsszeg = maximum;
                         }
-                        mentes.mentettOsszeg = zseton;
-                        mentes.osszesNyeremeny = optional.osszeadas(zseton);
+                        mentes.nyeremeny = zseton-kezdoZseton;
+                        mentes.osszesNyeremeny = optional.osszeadas(zseton-kezdoZseton);
                         using (var writer = new StreamWriter("MentesOsszeg.xml"))
                         {
                             serializer.Serialize(writer, mentes);
                         }
 
 
-                        Console.WriteLine("A zsetonod mentése elkészült...");
-                        Console.WriteLine($"Mentett összeged: {mentes.mentettOsszeg}");
-                        Console.WriteLine($"Legnagyobb nyereményed: {mentes.legnagyobbOsszeg}");
+                        Console.WriteLine("A jaték mentése elkészült...");
+                        Console.WriteLine($"Nyereményed: {mentes.nyeremeny}");
+                        Console.WriteLine($"Legnagyobb összeged eddig: {mentes.legnagyobbOsszeg}");
                         Console.WriteLine($"Eddigi összes nyereményed: {mentes.osszesNyeremeny}");
                         Console.WriteLine();
                         Console.WriteLine("Köszönjük a játékot!");
@@ -166,7 +201,7 @@ namespace _r5jxrm_
         //Összegzés
         //Köszöntjük a játékost, megnézzük mennyit szeretne fogadni, megvizsgáljuk van-e elég zsetonja,
         //majd visszaadja a feltett zsetont a játékosnak
-        static private double osztoKezdo(double ennyivan)
+        static private double osztoKezdo(double ennyivan, double kezdoZseton)
         {
             //Deklarálunk egy változót, ami csekkolja van-e elég zsetonja a játékosnak
             bool vaneleg = false;
@@ -191,6 +226,39 @@ namespace _r5jxrm_
                 if ((int)tet == 0)
                 {
                     //Elköszönő szöveg
+                    Console.WriteLine("Nem tettél fel tétet, tehát kiszállsz...\n");
+                    //Zsetonok mentése, statisztika írása
+                    Deser optional = new Deser();
+                    double maximum = optional.max(ennyivan);
+                    var mentes = new Osszeg();
+                    var serializer = new XmlSerializer(typeof(Osszeg));
+                    if (ennyivan >= maximum)
+                    {
+                        mentes.legnagyobbOsszeg = ennyivan;
+                    }
+                    else
+                    {
+                        mentes.legnagyobbOsszeg = maximum;
+                    }
+                    mentes.nyeremeny = ennyivan - kezdoZseton;
+                    mentes.osszesNyeremeny = optional.osszeadas(ennyivan - kezdoZseton);
+                    using (var writer = new StreamWriter("MentesOsszeg.xml"))
+                    {
+                        serializer.Serialize(writer, mentes);
+                    }
+
+
+                    Console.WriteLine("A jaték mentése elkészült...");
+                    Console.WriteLine($"Nyereményed: {mentes.nyeremeny}");
+                    Console.WriteLine($"Legnagyobb összeged eddig: {mentes.legnagyobbOsszeg}");
+                    Console.WriteLine($"Eddigi összes nyereményed: {mentes.osszesNyeremeny}");
+                    Console.WriteLine();
+
+
+
+
+
+
                     Console.WriteLine("Köszönjük a játékot!");
                     Console.ReadKey();
                     Environment.Exit(0);
