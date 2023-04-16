@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.IO;
 using _r5jxrm_;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml.Serialization;
 
 namespace _r5jxrm_
 {
@@ -82,6 +84,32 @@ namespace _r5jxrm_
                     quit = valasztas(zseton);
                     if (quit)
                     {
+                        //Zsetonok mentése, statisztika írása
+                        Deser optional = new Deser();
+                        double maximum = optional.max(zseton);
+                        var mentes = new Osszeg();
+                        var serializer = new XmlSerializer(typeof(Osszeg));
+                        if (zseton>=maximum)
+                        {
+                            mentes.legnagyobbOsszeg = zseton;
+                        }
+                        else
+                        {
+                            mentes.legnagyobbOsszeg = maximum;
+                        }
+                        mentes.mentettOsszeg = zseton;
+                        mentes.osszesNyeremeny = optional.osszeadas(zseton);
+                        using (var writer = new StreamWriter("MentesOsszeg.xml"))
+                        {
+                            serializer.Serialize(writer, mentes);
+                        }
+
+
+                        Console.WriteLine("A zsetonod mentése elkészült...");
+                        Console.WriteLine($"Mentett összeged: {mentes.mentettOsszeg}");
+                        Console.WriteLine($"Legnagyobb nyereményed: {mentes.legnagyobbOsszeg}");
+                        Console.WriteLine($"Eddigi összes nyereményed: {mentes.osszesNyeremeny}");
+                        Console.WriteLine();
                         Console.WriteLine("Köszönjük a játékot!");
                         //Várakozás a felhasználóra
                         Console.WriteLine("A folytatáshoz nyomj entert!");
@@ -890,6 +918,7 @@ namespace _r5jxrm_
             {
                 case "black":
                     Console.BackgroundColor = szineklista[0]; //Console.BackgroundColor = ConsoleColor.Black
+                    Console.ForegroundColor = szineklista[15];
                     break;
                 case "darkblue":
                     Console.BackgroundColor = szineklista[1]; //Console.BackgroundColor = ConsoleColor.DarkBlue
