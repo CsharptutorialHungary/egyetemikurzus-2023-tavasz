@@ -13,10 +13,23 @@ namespace _r5jxrm_
         //XML-ből Deserialize Object-be /talán igy helyes a megfogalmazás
         internal Osszeg DeserializeTheObject()
         {
+            string filename = "MentesOsszeg.xml";
+            if (!File.Exists(filename))
+            {
+                Osszeg nonexist = new Osszeg();
+                var ser = new XmlSerializer(typeof(Osszeg));
+                nonexist.nyeremeny = 0;
+                nonexist.osszesNyeremeny=0;
+                nonexist.legnagyobbOsszeg = 0;
+                using (var writer = new StreamWriter(filename))
+                {
+                    ser.Serialize(writer, nonexist);
+                }
+            }
             //Visszatér a deserializált objektummal
             Osszeg objectToDeserialize = new Osszeg();
             XmlSerializer xmlserializer = new XmlSerializer(objectToDeserialize.GetType());
-            using (StreamReader reader = new StreamReader("MentesOsszeg.xml"))
+            using (StreamReader reader = new StreamReader(filename))
             {
                 return (Osszeg)xmlserializer.Deserialize(reader);
             }
