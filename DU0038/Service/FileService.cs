@@ -6,6 +6,20 @@ namespace DU0038.Service;
 
 public class FileService
 {
+    private static FileService? _instance = null;
+    private static readonly object Padlock = new object();
+
+    public static FileService Instance
+    {
+        get
+        {
+            lock (Padlock)
+            {
+                return _instance ??= new FileService();
+            }
+        }
+    }
+
     private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
     {
         WriteIndented = true,
