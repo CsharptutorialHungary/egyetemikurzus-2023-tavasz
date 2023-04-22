@@ -73,8 +73,7 @@ namespace _r5jxrm_
                     tet = osztoKezdo(zseton, kezdoZseton);
                     zseton += jatek(pakli, tet, zseton);
                     //Várakozás a felhasználóra
-                    Console.WriteLine("A folytatáshoz nyomj entert!");
-                    Console.ReadKey();
+                    tovabbLepesSzoveg();
                     // ------------- Console.Clear();
                     if (zseton > 0)
                     {
@@ -109,9 +108,7 @@ namespace _r5jxrm_
                         Console.WriteLine();
                         Console.WriteLine("Kifogytál a zsetonokból!\nKöszönjük a játékot!");
                         //Várakozás a felhasználóra
-                        Console.WriteLine("A folytatáshoz nyomj entert!");
-                        Console.ReadKey();
-                        Console.Clear();
+                        tovabbLepesSzovegClear();
                     }
                 }
                 else
@@ -147,9 +144,7 @@ namespace _r5jxrm_
                         Console.WriteLine();
                         Console.WriteLine("Köszönjük a játékot!");
                         //Várakozás a felhasználóra
-                        Console.WriteLine("A folytatáshoz nyomj entert!");
-                        Console.ReadKey();
-                        Console.Clear();
+                        tovabbLepesSzovegClear();
                     }
                     isPlaying = true;
                 }
@@ -189,8 +184,7 @@ namespace _r5jxrm_
                         break;
                     default:
                         Console.WriteLine("Rossz lehetőséget választottál");
-                        Console.ReadKey();
-                        Console.Clear();
+                        tovabbLepesSzovegClear();
                         break;
                 }
             }
@@ -260,7 +254,7 @@ namespace _r5jxrm_
 
 
                     Console.WriteLine("Köszönjük a játékot!");
-                    Console.ReadKey();
+                    tovabbLepesSzovegClear();
                     Environment.Exit(0);
                 }
                 else if (tet < 0)
@@ -284,8 +278,7 @@ namespace _r5jxrm_
                 {
                     Console.WriteLine($"A megtett tét {tet} zseton. Még {ennyivan} zsetonod maradt.");
                     vaneleg = true;
-                    Console.WriteLine("Nyomj egy gombot a folytatáshoz.");
-                    Console.Clear();
+                    tovabbLepesSzovegClear();
                 }
                 //Egyéb esetben, ha a maradék zseton kevesebb, mint 0
                 else
@@ -344,10 +337,8 @@ namespace _r5jxrm_
             Console.Clear();
             Console.WriteLine("Kezdődik a játék");
             Console.WriteLine("Kártyák megkeverése és kiosztása.");
-            Console.WriteLine("Nyomjon egy gombot a folytatáshoz...");
             paklik = Keveres(paklik);
-            Console.ReadKey();
-            Console.Clear();
+            tovabbLepesSzovegClear();
             int i = 0;
             for (; i < 2; i++)
             {
@@ -407,13 +398,11 @@ namespace _r5jxrm_
                             if (biztositottZseton > 0 && ennyivan - (biztositottZseton + tet) >= 0 && biztositottZseton <= tet / 2)
                             {
                                 Console.WriteLine($"Sikeres biztosítás, értéke : {biztositottZseton}\n\nNézzük az osztó kártyáit");
-                                Console.WriteLine("Nyomj gombot a folytatáshoz");
-                                Console.ReadKey();
+                                tovabbLepesSzoveg();
                                 if (osztoKartyaErtek == 21)
                                 {
                                     Console.WriteLine("Az osztónak BlackJack-je van!");
-                                    Console.ReadKey();
-                                    Console.Clear();
+                                    tovabbLepesSzovegClear();
                                     isPlaying = false;
                                     if (jatekosKartyaErtek != 21)
                                     {
@@ -437,8 +426,7 @@ namespace _r5jxrm_
                                 {
                                     Console.WriteLine($"Az osztónak nincs BlackJack-je, a játék folytatódik tovább..." +
                                         $"\nVesztettél {biztositottZseton} (Biztosított zsetonod)");
-                                    Console.ReadKey();
-                                    Console.Clear();
+                                    tovabbLepesSzovegClear();
                                     biztositas = false;
                                 }
 
@@ -446,27 +434,24 @@ namespace _r5jxrm_
                             else if ((int)biztositottZseton == 0)
                             {
                                 Console.WriteLine("Nem biztosítottál semmit.");
-                                Console.ReadKey();
-                                Console.Clear();
+                                tovabbLepesSzovegClear();
                                 biztositas = false;
                             }
                             else
                             {
                                 Console.WriteLine("Hibás érték, nézd meg mégegyszer...");
-                                Console.ReadKey();
+                                tovabbLepesSzoveg();
                             }
                         }
                         break;
                     case "2":
                         Console.WriteLine("Nem biztosítottál semmit, a játék folytatódik");
-                        Console.ReadKey();
-                        Console.Clear();
+                        tovabbLepesSzovegClear();
                         biztositas = false;
                         break;
                     default:
                         Console.WriteLine("Nem választottál semmit.");
-                        Console.ReadKey();
-                        Console.Clear();
+                        tovabbLepesSzovegClear();
                         break;
                 }
             }
@@ -475,7 +460,7 @@ namespace _r5jxrm_
             if (jatekosKartyaErtek == 21)
             {
                 Console.WriteLine("21-ed van elsőkézben!");
-                Console.ReadKey();
+                tovabbLepesSzoveg();
                 isPlaying = false;
                 tet = tet * 1.5;
             }
@@ -483,7 +468,7 @@ namespace _r5jxrm_
             if (osztoKartyaErtek == 21 && nyert == false && vesztett == false)
             {
                 Console.WriteLine("Az osztónak elsőkézben 21-e van!");
-                Console.ReadKey();
+                tovabbLepesSzoveg();
                 isPlaying = false;
             }
             //Ha a játékosnak 2 ugyanolyan lapja van, lehetséges a szétválasztás
@@ -563,14 +548,12 @@ namespace _r5jxrm_
                                         i = 0;
                                     }
                                 }
-                                Console.ReadKey();
-                                Console.Clear();
+                                tovabbLepesSzovegClear();
                                 break;
                             //Ha marad
                             case "2":
                                 Console.WriteLine($"Maradtál {jatekosSzetvalasztottKartyaErtek} értékkel");
-                                Console.ReadKey();
-                                Console.Clear();
+                                tovabbLepesSzovegClear();
                                 splitting = false;
                                 i = 0;
                                 break;
@@ -581,8 +564,7 @@ namespace _r5jxrm_
                                 {
                                     errorSave = true;
                                 }
-                                Console.ReadKey();
-                                Console.Clear();
+                                tovabbLepesSzovegClear();
                                 break;
                             default:
                                 break;
@@ -643,12 +625,11 @@ namespace _r5jxrm_
                                         }
                                     }
                                 }
-                                Console.ReadKey();
-                                Console.Clear();
+                                tovabbLepesSzovegClear();
                                 break;
                             case "2":
                                 Console.WriteLine($"Maradtál, jelenleg {jatekosKartyaErtek}");
-                                Console.ReadKey();
+                                tovabbLepesSzoveg();
                                 jatekosKor = false;
                                 break;
                             case "":
@@ -657,8 +638,7 @@ namespace _r5jxrm_
                                 {
                                     errorSave = true;
                                 }
-                                Console.ReadKey();
-                                Console.Clear();
+                                tovabbLepesSzovegClear();
                                 break;
                             default:
                                 break;
@@ -703,7 +683,7 @@ namespace _r5jxrm_
                                             isPlaying = false;
                                         }
                                     }
-                                    Console.ReadKey();
+                                    tovabbLepesSzoveg();
                                     jatekosKor = false;
                                     tet = tet * 2;
                                 }
@@ -711,16 +691,14 @@ namespace _r5jxrm_
                                 {
                                     Console.WriteLine("Nincs elég zsetonod duplázni");
                                     errorSave = true;
-                                    Console.ReadKey();
-                                    Console.Clear();
+                                    tovabbLepesSzovegClear();
                                 }
                                 break;
                             //Ha megadja
                             case "4":
                                 tet = tet / 2;
                                 Console.WriteLine("Megadtad! Csak a felét veszted el, a tétnek");
-                                Console.ReadKey();
-                                Console.Clear();
+                                tovabbLepesSzovegClear();
                                 vesztett = true;
                                 isPlaying = false;
                                 break;
@@ -754,8 +732,7 @@ namespace _r5jxrm_
                                 {
                                     Console.WriteLine("Nincs elég zsetonod szétválasztani!");
                                     errorSave = true;
-                                    Console.ReadKey();
-                                    Console.Clear();
+                                    tovabbLepesSzovegClear();
                                 }
                                 break;
                         }
@@ -781,7 +758,7 @@ namespace _r5jxrm_
                     if (osztoKartyaErtek > 16)
                     {
                         Console.WriteLine($"Az osztó marad {osztoKartyaErtek} értékkel");
-                        Console.ReadKey();
+                        tovabbLepesSzoveg();
                         isPlaying = false;
                     }
                     else
@@ -818,7 +795,7 @@ namespace _r5jxrm_
                                 isPlaying = false;
                             }
                         }
-                        Console.ReadKey();
+                        tovabbLepesSzoveg();
                     }
                 }
             }
@@ -935,6 +912,20 @@ namespace _r5jxrm_
             }
             return index;
         }
+
+        static private void tovabbLepesSzovegClear()
+        {
+            Console.WriteLine("Nyomj gombot a folytatáshoz!");
+            Console.ReadKey();
+            Console.Clear();
+        }
+
+        static private void tovabbLepesSzoveg()
+        {
+            Console.WriteLine("Nyomj gombot a folytatáshoz!");
+            Console.ReadKey();
+        }
+
 
         static private int convertToInt(string[] pakli, int index)
         {
