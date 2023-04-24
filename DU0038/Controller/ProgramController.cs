@@ -16,7 +16,7 @@ public class ProgramController
         Console.WriteLine("Ha az alkalmazásból nem az 'exit' parancsal lépsz ki, az adatok el fognak veszni!");
         while (true)
         {
-            Console.WriteLine("\n# Adjon meg egy parancsot: ");
+            Console.Write("\n# Adjon meg egy parancsot: ");
             string? command = Console.ReadLine();
             if (command != null && command.Trim() != "")
             {
@@ -24,7 +24,7 @@ public class ProgramController
             }
             else
             {
-                Console.WriteLine("Nem adtál meg parancsot!");
+                Console.WriteLine("# Nem adtál meg parancsot!");
             }
         }
     }
@@ -68,26 +68,26 @@ public class ProgramController
 
         while (categoryName == null || categoryName.Trim() == "")
         {
-            Console.WriteLine("Adjon meg egy nevet a kategóriának:");
+            Console.Write("## Adjon meg egy nevet a kategóriának: ");
             categoryName = Console.ReadLine();
             if (categoryName == null || categoryName.Trim() == "")
             {
-                Console.WriteLine("Érvénytelen érték!");
+                Console.WriteLine("## Érvénytelen érték!");
             }
         }
         
         while (isIncomeString == null || isIncomeString.Trim() == "" || (isIncomeString != "+" && isIncomeString != "-"))
         {
-            Console.WriteLine("Bevétel (+) vagy költség (-) kategória lesz:");
+            Console.Write("## Bevétel (+) vagy költség (-) kategória lesz: ");
             isIncomeString = Console.ReadLine();
             if (isIncomeString == null || isIncomeString.Trim() == "" || (isIncomeString != "+" && isIncomeString != "-"))
             {
-                Console.WriteLine("Érvénytelen érték! Adjon meg + vagy - karaktert!");
+                Console.WriteLine("## Érvénytelen érték! Adjon meg + vagy - karaktert!");
             }
         }
         
         CategoryService.Instance.AddCategory(categoryName, isIncomeString == "+");
-        Console.WriteLine("Kategória hozzáadása sikeres!");
+        Console.WriteLine("### Kategória hozzáadása sikeres!");
     }
 
     private void SaveStateAndExitProgram()
@@ -130,11 +130,11 @@ public class ProgramController
 
         while (transactionName == null || transactionName.Trim() == "")
         {
-            Console.WriteLine("## Adjon meg egy nevet a tranzakciónak:");
+            Console.Write("## Adjon meg egy nevet a tranzakciónak: ");
             transactionName = Console.ReadLine();
             if (transactionName == null || transactionName.Trim() == "")
             {
-                Console.WriteLine("Érvénytelen érték!");
+                Console.WriteLine("## Érvénytelen érték!");
             }
         }
         
@@ -144,13 +144,13 @@ public class ProgramController
         bool isParsable = false;
         while (categoryString == null || categoryString.Trim() == "" || !isParsable)
         {
-            Console.WriteLine("## Választott kategória sorszáma:");
+            Console.Write("## Választott kategória sorszáma: ");
             categoryString = Console.ReadLine();
             int categoryIndex;
             isParsable = Int32.TryParse(categoryString, out categoryIndex);
             if (categoryString == null || categoryString.Trim() == "" || !isParsable)
             {
-                Console.WriteLine("Érvénytelen érték!");
+                Console.WriteLine("## Érvénytelen érték!");
             }
             else
             {
@@ -165,7 +165,7 @@ public class ProgramController
         isParsable = false;
         while (valueString == null || valueString.Trim() == "" || !isParsable)
         {
-            Console.WriteLine("## Érték megadása:");
+            Console.Write("## Érték megadása: ");
             valueString = Console.ReadLine();
             isParsable = UInt32.TryParse(valueString, out value);
             if (valueString == null || valueString.Trim() == "" || !isParsable)
