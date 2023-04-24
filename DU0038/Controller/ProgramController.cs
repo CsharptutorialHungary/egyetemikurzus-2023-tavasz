@@ -71,6 +71,18 @@ public class ProgramController
         {
             GetSumExpense();
         }
+        else if (command == Commands.ListExpensesByCategory)
+        {
+            ListExpensesByCategory();
+        }
+        else if (command == Commands.ListIncomesByCategory)
+        {
+            ListIncomesByCategory();
+        }
+        else
+        {
+            Console.WriteLine("Nem létezik ilyen parancs! Parancsok kilistázásához használd a 'help'-et!");
+        }
     }
 
     private void AddCategory()
@@ -221,5 +233,31 @@ public class ProgramController
     private void GetSumIncome()
     {
         Console.WriteLine($"## Összesített bevétel: {TransactionService.Instance.GetSumIncome()} Ft");
+    }
+
+    private void ListExpensesByCategory()
+    {
+        Console.WriteLine("## Költségek kategóriánként:");
+        foreach (var category in CategoryService.Instance.GetCategories().FindAll(category => !category.IsIncome))
+        {
+            Console.WriteLine($"## {category.Name}:");
+            foreach (var transaction in TransactionService.Instance.GetExpensesByCategory(category.Id))
+            {
+                Console.WriteLine($"\t {transaction.Date:yyyy. MM. dd.} {transaction.Name} -{transaction.Value} Ft");
+            }
+        }
+    }
+    
+    private void ListIncomesByCategory()
+    {
+        Console.WriteLine("## Bevételek kategóriánként:");
+        foreach (var category in CategoryService.Instance.GetCategories().FindAll(category => category.IsIncome))
+        {
+            Console.WriteLine($"## {category.Name}:");
+            foreach (var transaction in TransactionService.Instance.GetIncomesByCategory(category.Id))
+            {
+                Console.WriteLine($"\t {transaction.Date:yyyy. MM. dd.} {transaction.Name} +{transaction.Value} Ft");
+            }
+        }
     }
 }

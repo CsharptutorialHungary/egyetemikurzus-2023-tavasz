@@ -66,11 +66,25 @@ public class TransactionService
     
     public int GetSumExpense()
     {
-        return (from incomeTransactions in GetExpenseTransactions() select incomeTransactions.Value).Sum();
+        return (from expenseTransactions in GetExpenseTransactions() select expenseTransactions.Value).Sum();
     }
 
     public int GetBalance()
     {
         return GetSumIncome() - GetSumExpense();
+    }
+    
+    public List<Transaction> GetExpensesByCategory(string categoryId)
+    {
+        return (from expenseTransactions in GetExpenseTransactions() 
+            where expenseTransactions.CategoryId.Equals(categoryId) 
+            select expenseTransactions).ToList();
+    }
+    
+    public List<Transaction> GetIncomesByCategory(string categoryId)
+    {
+        return (from incomeTransactions in GetIncomeTransactions() 
+            where incomeTransactions.CategoryId.Equals(categoryId) 
+            select incomeTransactions).ToList();
     }
 }
