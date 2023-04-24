@@ -33,7 +33,7 @@ public class ProgramController
     {
         if (command == Commands.AddCategory)
         {
-            HandleAddCategory();
+            AddCategory();
         }
         else if (command == Commands.Exit)
         {
@@ -47,9 +47,13 @@ public class ProgramController
         {
             ListCategory();
         }
+        else if (command == Commands.AddTransaction)
+        {
+            AddTransaction();
+        }
     }
 
-    private void HandleAddCategory()
+    private void AddCategory()
     {
         string? categoryName = null;
         string? isIncomeString = null;
@@ -101,10 +105,68 @@ public class ProgramController
         Console.WriteLine("## Kategóriák listája:");
         var categoryNames = CategoryService.Instance.GetCategories().Select(category => category.Name)
             .OrderBy(name => name);
-        
+
+        int i = 1;
         foreach (var name in categoryNames)
         {
-            Console.WriteLine("\t - " + name);
+            Console.WriteLine("\t " + i + ". " + name);
+            i++;
         }
+    }
+
+    private void AddTransaction()
+    {
+        string? transactionName = null;
+        string categoryId = "";
+        uint value = 0;
+
+        while (transactionName == null || transactionName.Trim() == "")
+        {
+            Console.WriteLine("## Adjon meg egy nevet a tranzakciónak:");
+            transactionName = Console.ReadLine();
+            if (transactionName == null || transactionName.Trim() == "")
+            {
+                Console.WriteLine("Érvénytelen érték!");
+            }
+        }
+        
+        Console.WriteLine("## Add meg a választott kategória sorszámát!");
+        ListCategory();
+        string? categoryString = null;
+        bool isParsable = false;
+        while (categoryString == null || categoryString.Trim() == "" || !isParsable)
+        {
+            Console.WriteLine("## Választott kategória sorszáma:");
+            categoryString = Console.ReadLine();
+            int categoryIndex;
+            isParsable = Int32.TryParse(categoryString, out categoryIndex);
+            if (categoryString == null || categoryString.Trim() == "" || !isParsable)
+            {
+                Console.WriteLine("Érvénytelen érték!");
+            }
+            else
+            {
+                var categories = CategoryService.Instance.GetCategories()
+                    .OrderBy(category => category.Name);
+                categoryId = categories.ElementAt(categoryIndex - 1).Id;
+            }
+        }
+        
+        Console.WriteLine("## Add meg a tranzakció értékét (pozitív egész szám):");
+        string? valueString = null;
+        isParsable = false;
+        while (valueString == null || valueString.Trim() == "" || !isParsable)
+        {
+            Console.WriteLine("## Érték megadása:");
+            valueString = Console.ReadLine();
+            isParsable = UInt32.TryParse(valueString, out value);
+            if (valueString == null || valueString.Trim() == "" || !isParsable)
+            {
+                Console.WriteLine("Érvénytelen érték!");
+            }
+        }
+        
+        TransactionService.Instance.AddTransaction(transactionName, value, DateTime.Today, categoryId);
+        Console.WriteLine("### Tranzakció hozzáadása sikeres!");
     }
 }
