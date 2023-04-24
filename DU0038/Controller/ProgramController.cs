@@ -13,6 +13,7 @@ public class ProgramController
     {
         Console.WriteLine("##### Üdvözöllek az alkalmazásban #####");
         Console.WriteLine("A megadható parancsok listázásához add meg a 'help' parancsot!");
+        Console.WriteLine("Ha az alkalmazásból nem az 'exit' parancsal lépsz ki, az adatok el fognak veszni!");
         while (true)
         {
             Console.WriteLine("\n# Adjon meg egy parancsot: ");
@@ -41,6 +42,10 @@ public class ProgramController
         else if (command == Commands.Help)
         {
             ListCommands();
+        }
+        else if (command == Commands.ListCategory)
+        {
+            ListCategory();
         }
     }
 
@@ -88,6 +93,18 @@ public class ProgramController
         {
             var v = p.GetValue(null);
             Console.WriteLine("\t - " + v);
+        }
+    }
+
+    private void ListCategory()
+    {
+        Console.WriteLine("## Kategóriák listája:");
+        var categoryNames = CategoryService.Instance.GetCategories().Select(category => category.Name)
+            .OrderBy(name => name);
+        
+        foreach (var name in categoryNames)
+        {
+            Console.WriteLine("\t - " + name);
         }
     }
 }
