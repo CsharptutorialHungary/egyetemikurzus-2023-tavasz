@@ -51,6 +51,14 @@ public class ProgramController
         {
             AddTransaction();
         }
+        else if (command == Commands.ListIncomes)
+        {
+            ListIncomes();
+        }
+        else if (command == Commands.ListExpenses)
+        {
+            ListExpenses();
+        }
     }
 
     private void AddCategory()
@@ -168,5 +176,23 @@ public class ProgramController
         
         TransactionService.Instance.AddTransaction(transactionName, value, DateTime.Today, categoryId);
         Console.WriteLine("### Tranzakció hozzáadása sikeres!");
+    }
+
+    private void ListIncomes()
+    {
+        Console.WriteLine("## Bevételek listája:");
+        foreach (var transaction in TransactionService.Instance.GetIncomeTransactions())
+        {
+            Console.WriteLine($"\t {transaction.Date:yyyy. MM. dd.} {transaction.Name} +{transaction.Value} Ft");
+        }
+    }
+    
+    private void ListExpenses()
+    {
+        Console.WriteLine("## Kiadások listája:");
+        foreach (var transaction in TransactionService.Instance.GetExpenseTransactions())
+        {
+            Console.WriteLine($"\t {transaction.Date:yyyy. MM. dd.} {transaction.Name} -{transaction.Value} Ft");
+        }
     }
 }

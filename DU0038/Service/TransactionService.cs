@@ -38,4 +38,24 @@ public class TransactionService
     {
         return _transactions;
     }
+
+    public List<Transaction> GetIncomeTransactions()
+    {
+        return (from transaction in _transactions
+            join category in CategoryService.Instance.GetCategories() on
+                transaction.CategoryId equals category.Id
+            where category.IsIncome
+            orderby transaction.Date
+            select transaction).ToList();
+    }
+    
+    public List<Transaction> GetExpenseTransactions()
+    {
+        return (from transaction in _transactions
+            join category in CategoryService.Instance.GetCategories() on
+                transaction.CategoryId equals category.Id
+            where !category.IsIncome
+            orderby transaction.Date
+            select transaction).ToList();
+    }
 }
