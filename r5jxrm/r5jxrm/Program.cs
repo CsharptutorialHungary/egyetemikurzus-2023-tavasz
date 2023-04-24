@@ -247,12 +247,6 @@ namespace _r5jxrm_
                     Console.WriteLine($"Legnagyobb összeged eddig: {mentes.legnagyobbOsszeg}");
                     Console.WriteLine($"Eddigi összes nyereményed: {mentes.osszesNyeremeny}");
                     Console.WriteLine();
-
-
-
-
-
-
                     Console.WriteLine("Köszönjük a játékot!");
                     tovabbLepesSzovegClear();
                     Environment.Exit(0);
@@ -880,7 +874,7 @@ namespace _r5jxrm_
         }
 
 
-        static private string[] Keveres(string[] pakli)
+        static public string[] Keveres(string[] pakli)
         {
             Random kevero = new Random();
             int keveroindex;
@@ -898,8 +892,14 @@ namespace _r5jxrm_
         }
 
 
-        static private int checkHaVanAsz(string[] pakli)
+        static public int checkHaVanAsz(string[] pakli)
         {
+            bool containsAsz = Array.Exists(pakli, element => element == "A");
+            if (!containsAsz)
+            {
+                return -1;
+            }
+
             int index = -1;
             bool vegzett = false;
             while (!vegzett)
