@@ -11,7 +11,7 @@ public class ProgramController
 
     public void StartProgramLoop()
     {
-        Console.WriteLine("##### Üdvözöllek az alkalmazásban #####");
+        Console.WriteLine("\n\t##### Üdvözöllek az alkalmazásban #####");
         Console.WriteLine("A megadható parancsok listázásához add meg a 'help' parancsot!");
         Console.WriteLine("Ha az alkalmazásból nem az 'exit' parancsal lépsz ki, az adatok el fognak veszni!");
         while (true)
@@ -58,6 +58,18 @@ public class ProgramController
         else if (command == Commands.ListExpenses)
         {
             ListExpenses();
+        }
+        else if (command == Commands.GetBalance)
+        {
+            GetBalance();
+        }
+        else if (command == Commands.GetSumIncome)
+        {
+            GetSumIncome();
+        }
+        else if (command == Commands.GetSumExpense)
+        {
+            GetSumExpense();
         }
     }
 
@@ -126,7 +138,7 @@ public class ProgramController
     {
         string? transactionName = null;
         string categoryId = "";
-        uint value = 0;
+        int value = 0;
 
         while (transactionName == null || transactionName.Trim() == "")
         {
@@ -167,7 +179,7 @@ public class ProgramController
         {
             Console.Write("## Érték megadása: ");
             valueString = Console.ReadLine();
-            isParsable = UInt32.TryParse(valueString, out value);
+            isParsable = Int32.TryParse(valueString, out value);
             if (valueString == null || valueString.Trim() == "" || !isParsable)
             {
                 Console.WriteLine("Érvénytelen érték!");
@@ -194,5 +206,20 @@ public class ProgramController
         {
             Console.WriteLine($"\t {transaction.Date:yyyy. MM. dd.} {transaction.Name} -{transaction.Value} Ft");
         }
+    }
+
+    private void GetBalance()
+    {
+        Console.WriteLine($"## Egyenleg: {TransactionService.Instance.GetBalance()} Ft");
+    }
+    
+    private void GetSumExpense()
+    {
+        Console.WriteLine($"## Összesített kiadás: {TransactionService.Instance.GetSumExpense()} Ft");
+    }
+    
+    private void GetSumIncome()
+    {
+        Console.WriteLine($"## Összesített bevétel: {TransactionService.Instance.GetSumIncome()} Ft");
     }
 }

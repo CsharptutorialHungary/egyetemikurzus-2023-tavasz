@@ -24,7 +24,7 @@ public class TransactionService
         }
     }
 
-    public void AddTransaction(string name, uint value, DateTime date, string categoryId)
+    public void AddTransaction(string name, int value, DateTime date, string categoryId)
     {
         _transactions.Add(new Transaction(name, value, date, categoryId));
     }
@@ -57,5 +57,20 @@ public class TransactionService
             where !category.IsIncome
             orderby transaction.Date
             select transaction).ToList();
+    }
+
+    public int GetSumIncome()
+    {
+        return (from incomeTransactions in GetIncomeTransactions() select incomeTransactions.Value).Sum();
+    }
+    
+    public int GetSumExpense()
+    {
+        return (from incomeTransactions in GetExpenseTransactions() select incomeTransactions.Value).Sum();
+    }
+
+    public int GetBalance()
+    {
+        return GetSumIncome() - GetSumExpense();
     }
 }

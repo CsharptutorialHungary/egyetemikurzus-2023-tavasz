@@ -6,7 +6,7 @@ public class TransactionBuilder
 {
     private string _id;
     private string _name;
-    private uint _value;
+    private int _value;
     private DateTime _date;
     private string _categoryId;
     
@@ -25,7 +25,7 @@ public class TransactionBuilder
         return this;
     }
     
-    public TransactionBuilder WithValue(uint value)
+    public TransactionBuilder WithValue(int value)
     {
         _value = value;
         return this;
