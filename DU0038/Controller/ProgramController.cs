@@ -1,4 +1,5 @@
-﻿using DU0038.Service;
+﻿using DU0038.Model;
+using DU0038.Service;
 
 namespace DU0038.Controller;
 
@@ -10,9 +11,11 @@ public class ProgramController
 
     public void StartProgramLoop()
     {
+        Console.WriteLine("##### Üdvözöllek az alkalmazásban #####");
+        Console.WriteLine("A megadható parancsok listázásához add meg a 'help' parancsot!");
         while (true)
         {
-            Console.WriteLine("Adjon meg egy parancsot: ");
+            Console.WriteLine("\n# Adjon meg egy parancsot: ");
             string? command = Console.ReadLine();
             if (command != null && command.Trim() != "")
             {
@@ -27,13 +30,17 @@ public class ProgramController
 
     private void EvaluateCommand(string command)
     {
-        if (command == "add category")
+        if (command == Commands.AddCategory)
         {
             HandleAddCategory();
         }
-        else if (command == "exit")
+        else if (command == Commands.Exit)
         {
             SaveStateAndExitProgram();
+        }
+        else if (command == Commands.Help)
+        {
+            ListCommands();
         }
     }
 
@@ -71,5 +78,16 @@ public class ProgramController
         CategoryService.Instance.SaveCategories();
         TransactionService.Instance.SaveTransactions();
         Environment.Exit(0);
+    }
+
+    private void ListCommands()
+    {
+        Console.WriteLine("## Megadható parancsok listája:");
+        Type type = typeof(Commands);
+        foreach (var p in type.GetFields( System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public))
+        {
+            var v = p.GetValue(null);
+            Console.WriteLine("\t - " + v);
+        }
     }
 }
