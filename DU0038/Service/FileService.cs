@@ -48,40 +48,32 @@ public class FileService
         return JsonSerializer.Deserialize<List<Category>>(serializedCategoryList, _jsonSerializerOptions);
     }
 
-    public void WriteTransactionsToFile(List<Transaction> transactions)
+    public async void WriteTransactionsToFile(List<Transaction> transactions)
     {
-        using (FileStream file = File.OpenWrite(_transactionsFilePath))
+        await using FileStream file = File.OpenWrite(_transactionsFilePath);
+        await using StreamWriter writer = new StreamWriter(file);
+        try
         {
-            using (StreamWriter writer = new StreamWriter(file))
-            {
-                try
-                {
-                    writer.WriteLine(SerializeTransactionList(transactions));
-                }
-                catch (IOException ex)
-                {
-                    Console.WriteLine("Hiba történt a tranzakciók fájlba írása során!");
-                }
-            }
-        }   
+            await writer.WriteLineAsync(SerializeTransactionList(transactions));
+        }
+        catch (IOException ex)
+        {
+            Console.WriteLine("Hiba történt a tranzakciók fájlba írása során!");
+        }
     }
     
-    public void WriteCategoriesToFile(List<Category> categories)
+    public async void WriteCategoriesToFile(List<Category> categories)
     {
-        using (FileStream file = File.OpenWrite(_categoriesFilePath))
+        await using FileStream file = File.OpenWrite(_categoriesFilePath);
+        await using StreamWriter writer = new StreamWriter(file);
+        try
         {
-            using (StreamWriter writer = new StreamWriter(file))
-            {
-                try
-                {
-                    writer.WriteLine(SerializeCategoryList(categories));
-                }
-                catch (IOException ex)
-                {
-                    Console.WriteLine("Hiba történt a kategóriák fájlba írása során!");
-                }
-            }
-        }   
+            await writer.WriteLineAsync(SerializeCategoryList(categories));
+        }
+        catch (IOException ex)
+        {
+            Console.WriteLine("Hiba történt a kategóriák fájlba írása során!");
+        }
     }
 
     public List<Transaction> ReadTransactionsFromFile()
