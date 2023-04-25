@@ -7,12 +7,16 @@ public class TransactionService
 {
     private static TransactionService? _instance = null;
     private static readonly object Padlock = new object();
-    private List<Transaction> _transactions;
+    private List<Transaction> _transactions = new List<Transaction>();
 
     private TransactionService()
     {
-        _transactions = FileService.Instance.ReadTransactionsFromFile();
     }
+
+    public async Task InitializeTransactions()
+    {
+        _transactions = await FileService.Instance.ReadTransactionsFromFile();
+    } 
     
     public static TransactionService Instance
     {

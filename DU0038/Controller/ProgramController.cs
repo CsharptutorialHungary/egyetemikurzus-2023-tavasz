@@ -8,7 +8,18 @@ public class ProgramController
 
     private string? _command = "";
 
-    public void StartProgramLoop()
+    public ProgramController()
+    {
+        InitializeProgram();
+    }
+
+    private void InitializeProgram()
+    {
+        Task.WaitAll(CategoryService.Instance.InitializeCategories(), TransactionService.Instance.InitializeTransactions());
+        StartProgramLoop();
+    }
+
+    private void StartProgramLoop()
     {
         Console.WriteLine("\n\t##### Üdvözöllek az alkalmazásban #####");
         Console.WriteLine("A megadható parancsok listázásához add meg a 'help' parancsot!");
@@ -144,6 +155,13 @@ public class ProgramController
 
     private void HandleAddTransaction()
     {
+        if (CategoryService.Instance.GetCategories().Count == 0)
+        {
+            Console.WriteLine("## Nincs még kategóriád! " +
+                              "Tranzakció létrehozása előtt hozz létre kategóriát az 'add category' paranccsal!");
+            return;
+        }
+        
         string transactionName = GetNameForNewTransaction();
         var categoryId = GetCategoryForNewTransaction();
         var value = GetValueForNewTransaction();

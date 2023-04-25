@@ -6,11 +6,15 @@ public class CategoryService
 {
     private static CategoryService? _instance;
     private static readonly object Padlock = new();
-    private List<Category> _categories;
+    private List<Category> _categories = new List<Category>();
 
     private CategoryService()
     {
-        _categories = FileService.Instance.ReadCategoriesFromFile();
+    }
+    
+    public async Task InitializeCategories()
+    {
+        _categories = await FileService.Instance.ReadCategoriesFromFile();
     }
     
     public static CategoryService Instance

@@ -6,8 +6,7 @@ namespace DU0038
     {
         public static void Main(string[] args)
         {
-            ProgramController programController = new ProgramController();
-            programController.StartProgramLoop();
+            var programController = new ProgramController();
         }
     }
 }

@@ -80,18 +80,17 @@ public class FileService
         }
     }
 
-    public List<Transaction> ReadTransactionsFromFile()
+    public async Task<List<Transaction>> ReadTransactionsFromFile()
     {
         var transactions = new List<Transaction>();
         try
         {
-            var serializedTransactions = File.ReadAllText(_transactionsFilePath);
+            var serializedTransactions = await File.ReadAllTextAsync(_transactionsFilePath);
             transactions = DeserializeTransactionList(serializedTransactions);
         }
         catch (FileNotFoundException)
         {
             WriteTransactionsToFile(new List<Transaction>());
-            ReadTransactionsFromFile();
         }
         catch (IOException)
         {
@@ -100,18 +99,17 @@ public class FileService
         return transactions ?? new List<Transaction>();
     }
     
-    public List<Category> ReadCategoriesFromFile()
+    public async Task<List<Category>> ReadCategoriesFromFile()
     {
         var categories = new List<Category>();
         try
         {
-            var serializedCategories = File.ReadAllText(_categoriesFilePath);
+            var serializedCategories = await File.ReadAllTextAsync(_categoriesFilePath);
             categories = DeserializeCategoryList(serializedCategories);
         }
         catch (FileNotFoundException)
         {
             WriteCategoriesToFile(new List<Category>());
-            ReadCategoriesFromFile();
         }
         catch (IOException)
         {
