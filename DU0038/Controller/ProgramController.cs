@@ -32,40 +32,40 @@ public class ProgramController
         switch (_command)
         {
             case Commands.AddCategory:
-                AddCategory();
+                HandleAddCategory();
                 break;
             case Commands.Exit:
-                SaveStateAndExitProgram();
+                HandleSaveStateAndExitProgram();
                 break;
             case Commands.Help:
-                ListCommands();
+                HandleListCommands();
                 break;
             case Commands.ListCategory:
-                ListCategory();
+                HandleListCategory();
                 break;
             case Commands.AddTransaction:
-                AddTransaction();
+                HandleAddTransaction();
                 break;
             case Commands.ListIncomes:
-                ListIncomes();
+                HandleListIncomes();
                 break;
             case Commands.ListExpenses:
-                ListExpenses();
+                HandleListExpenses();
                 break;
             case Commands.GetBalance:
-                GetBalance();
+                HandleGetBalance();
                 break;
             case Commands.GetSumIncome:
-                GetSumIncome();
+                HandleGetSumIncome();
                 break;
             case Commands.GetSumExpense:
-                GetSumExpense();
+                HandleGetSumExpense();
                 break;
             case Commands.ListExpensesByCategory:
-                ListExpensesByCategory();
+                HandleListExpensesByCategory();
                 break;
             case Commands.ListIncomesByCategory:
-                ListIncomesByCategory();
+                HandleListIncomesByCategory();
                 break;
             default:
                 Console.WriteLine("Nem létezik ilyen parancs! Parancsok kilistázásához használd a 'help'-et!");
@@ -73,20 +73,31 @@ public class ProgramController
         }
     }
 
-    private void AddCategory()
+    private void HandleAddCategory()
     {
-        string? categoryName = null;
-        string? isIncomeString = null;
+        var categoryName = GetNameForNewCategory();
+        var isIncome = GetIsIncomeForNewCategory();
+        
+        CategoryService.Instance.AddCategory(categoryName, isIncome);
+        Console.WriteLine("### Kategória hozzáadása sikeres!");
+    }
 
+    private string GetNameForNewCategory()
+    {
         _command = null;
         while (IsCommandInvalid())
         {
             Console.Write("## Adjon meg egy nevet a kategóriának: ");
             _command = Console.ReadLine();
             if (IsCommandInvalid()) Console.WriteLine("## Érvénytelen érték!");
-            else categoryName = _command;
+            else break;
         }
 
+        return _command!;
+    }
+
+    private bool GetIsIncomeForNewCategory()
+    {
         _command = null;
         while (IsCommandInvalid() || (_command != "+" && _command != "-"))
         {
@@ -94,35 +105,35 @@ public class ProgramController
             _command = Console.ReadLine();
             if (IsCommandInvalid() || (_command != "+" && _command != "-"))
                 Console.WriteLine("## Érvénytelen érték! Adjon meg + vagy - karaktert!");
-            else isIncomeString = _command;
+            else break;
         }
-        CategoryService.Instance.AddCategory(categoryName, isIncomeString == "+");
-        Console.WriteLine("### Kategória hozzáadása sikeres!");
+
+        return _command! == "+";
     }
 
-    private void SaveStateAndExitProgram()
+    private void HandleSaveStateAndExitProgram()
     {
         CategoryService.Instance.SaveCategories();
         TransactionService.Instance.SaveTransactions();
         Environment.Exit(0);
     }
 
-    private void ListCommands()
+    private void HandleListCommands()
     {
         Console.WriteLine("## Megadható parancsok listája:");
         var type = typeof(Commands);
-        foreach (var p in type.GetFields( System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public))
+        foreach (var p in type
+                     .GetFields( System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public))
         {
             var v = p.GetValue(null);
             Console.WriteLine("\t - " + v);
         }
     }
 
-    private void ListCategory()
+    private void HandleListCategory()
     {
         Console.WriteLine("## Kategóriák listája:");
-        var categoryNames = CategoryService.Instance.GetCategories().Select(category => category.Name)
-            .OrderBy(name => name);
+        var categoryNames = CategoryService.Instance.GetCategoriesNameInOrder();
 
         var i = 1;
         foreach (var name in categoryNames)
@@ -131,23 +142,33 @@ public class ProgramController
         }
     }
 
-    private void AddTransaction()
+    private void HandleAddTransaction()
     {
-        string? transactionName = null;
-        var categoryId = "";
-        var value = 0;
+        string transactionName = GetNameForNewTransaction();
+        var categoryId = GetCategoryForNewTransaction();
+        var value = GetValueForNewTransaction();
+        
+        TransactionService.Instance.AddTransaction(transactionName, value, DateTime.Today, categoryId);
+        Console.WriteLine("### Tranzakció hozzáadása sikeres!");
+    }
 
+    private string GetNameForNewTransaction()
+    {
         _command = null;
         while (IsCommandInvalid())
         {
             Console.Write("## Adjon meg egy nevet a tranzakciónak: ");
             _command = Console.ReadLine();
             if (IsCommandInvalid()) Console.WriteLine("## Érvénytelen érték!");
-            else transactionName = _command;
+            else break;
         }
-        
+        return _command!;
+    }
+
+    private string GetCategoryForNewTransaction()
+    {
         Console.WriteLine("## Add meg a választott kategória sorszámát!");
-        ListCategory();
+        HandleListCategory();
         var numberOfCategories = CategoryService.Instance.GetCategories().Count;
         var isParsable = false;
         var categoryIndex = 0;
@@ -159,29 +180,33 @@ public class ProgramController
             isParsable = int.TryParse(_command, out categoryIndex);
             if (IsCommandInvalid() || !isParsable || categoryIndex < 1 || categoryIndex > numberOfCategories)
                 Console.WriteLine("## Érvénytelen érték!");
-            else
-            {
-                var categories = CategoryService.Instance.GetCategories()
-                    .OrderBy(category => category.Name);
-                categoryId = categories.ElementAt(categoryIndex - 1).Id;
-            }
+            else break;
         }
-        
+
+        var categories = CategoryService.Instance.GetCategories()
+            .OrderBy(category => category.Name);
+        return categories.ElementAt(categoryIndex - 1).Id;
+    }
+
+    private int GetValueForNewTransaction()
+    {
         Console.WriteLine("## Add meg a tranzakció értékét (pozitív egész szám):");
+        var isParsable = false;
+        var value = 0;
         _command = null;
-        isParsable = false;
         while (IsCommandInvalid() || !isParsable || value <= 0)
         {
             Console.Write("## Érték megadása: ");
             _command = Console.ReadLine();
             isParsable = int.TryParse(_command, out value);
             if (IsCommandInvalid() || !isParsable || value <= 0) Console.WriteLine("Érvénytelen érték!");
-            TransactionService.Instance.AddTransaction(transactionName, value, DateTime.Today, categoryId);
+            else break;
         }
-        Console.WriteLine("### Tranzakció hozzáadása sikeres!");
+
+        return value;
     }
 
-    private void ListIncomes()
+    private void HandleListIncomes()
     {
         Console.WriteLine("## Bevételek listája:");
         foreach (var transaction in TransactionService.Instance.GetIncomeTransactions())
@@ -190,7 +215,7 @@ public class ProgramController
         }
     }
     
-    private void ListExpenses()
+    private void HandleListExpenses()
     {
         Console.WriteLine("## Kiadások listája:");
         foreach (var transaction in TransactionService.Instance.GetExpenseTransactions())
@@ -199,22 +224,22 @@ public class ProgramController
         }
     }
 
-    private void GetBalance()
+    private void HandleGetBalance()
     {
         Console.WriteLine($"## Egyenleg: {TransactionService.Instance.GetBalance()} Ft");
     }
     
-    private void GetSumExpense()
+    private void HandleGetSumExpense()
     {
         Console.WriteLine($"## Összesített kiadás: {TransactionService.Instance.GetSumExpense()} Ft");
     }
     
-    private void GetSumIncome()
+    private void HandleGetSumIncome()
     {
         Console.WriteLine($"## Összesített bevétel: {TransactionService.Instance.GetSumIncome()} Ft");
     }
 
-    private void ListExpensesByCategory()
+    private void HandleListExpensesByCategory()
     {
         Console.WriteLine("## Költségek kategóriánként:");
         foreach (var category in CategoryService.Instance.GetCategories().FindAll(category => !category.IsIncome))
@@ -227,7 +252,7 @@ public class ProgramController
         }
     }
     
-    private void ListIncomesByCategory()
+    private void HandleListIncomesByCategory()
     {
         Console.WriteLine("## Bevételek kategóriánként:");
         foreach (var category in CategoryService.Instance.GetCategories().FindAll(category => category.IsIncome))

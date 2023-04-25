@@ -43,4 +43,10 @@ public class CategoryService
     {
         return _categories;
     }
+    
+    public List<string> GetCategoriesNameInOrder()
+    {
+        return _categories.Select(category => category.Name)
+            .OrderBy(name => name).ToList();
+    }
 }
