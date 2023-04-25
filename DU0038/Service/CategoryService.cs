@@ -4,11 +4,11 @@ namespace DU0038.Service;
 
 public class CategoryService
 {
-    private static CategoryService? _instance = null;
-    private static readonly object Padlock = new object();
+    private static CategoryService? _instance;
+    private static readonly object Padlock = new();
     private List<Category> _categories;
 
-    public CategoryService()
+    private CategoryService()
     {
         _categories = FileService.Instance.ReadCategoriesFromFile();
     }

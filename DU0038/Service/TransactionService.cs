@@ -1,4 +1,5 @@
-﻿using DU0038.Model;
+﻿using DU0038.Builder;
+using DU0038.Model;
 
 namespace DU0038.Service;
 
@@ -8,7 +9,7 @@ public class TransactionService
     private static readonly object Padlock = new object();
     private List<Transaction> _transactions;
 
-    public TransactionService()
+    private TransactionService()
     {
         _transactions = FileService.Instance.ReadTransactionsFromFile();
     }
@@ -26,7 +27,12 @@ public class TransactionService
 
     public void AddTransaction(string name, int value, DateTime date, string categoryId)
     {
-        _transactions.Add(new Transaction(name, value, date, categoryId));
+        _transactions.Add(new TransactionBuilder()
+            .WithName(name)
+            .WithValue(value)
+            .WithDate(date)
+            .WithCategoryId(categoryId)
+            .Build());
     }
 
     public void SaveTransactions()

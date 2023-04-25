@@ -2,16 +2,16 @@
 
 public static class Commands
 {
-    public static readonly string AddCategory = "add category";
-    public static readonly string ListCategory = "list categories";
-    public static readonly string AddTransaction = "add transaction";
-    public static readonly string ListIncomes = "list incomes";
-    public static readonly string ListIncomesByCategory = "list incomes by category";
-    public static readonly string ListExpenses = "list expenses";
-    public static readonly string ListExpensesByCategory = "list expenses by category";
-    public static readonly string GetBalance = "get balance";
-    public static readonly string GetSumExpense = "get sum expense";
-    public static readonly string GetSumIncome = "get sum income";
-    public static readonly string Help = "help";
-    public static readonly string Exit = "exit";
+    public const string AddCategory = "add category";
+    public const string ListCategory = "list categories";
+    public const string AddTransaction = "add transaction";
+    public const string ListIncomes = "list incomes";
+    public const string ListIncomesByCategory = "list incomes by category";
+    public const string ListExpenses = "list expenses";
+    public const string ListExpensesByCategory = "list expenses by category";
+    public const string GetBalance = "get balance";
+    public const string GetSumExpense = "get sum expense";
+    public const string GetSumIncome = "get sum income";
+    public const string Help = "help";
+    public const string Exit = "exit";
 }

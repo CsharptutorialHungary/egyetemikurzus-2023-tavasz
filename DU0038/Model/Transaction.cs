@@ -3,10 +3,10 @@
 public class Transaction
 {
     public string Id { get; init; }
-    public string Name { get; set; }
-    public int Value { get; set; }
-    public DateTime Date { get; set; }
-    public string CategoryId { get; set; }
+    public string Name { get; }
+    public int Value { get; }
+    public DateTime Date { get; }
+    public string CategoryId { get; }
 
     public Transaction(string name, int value, DateTime date, string categoryId)
     {

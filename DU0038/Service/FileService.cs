@@ -6,8 +6,12 @@ namespace DU0038.Service;
 
 public class FileService
 {
-    private static FileService? _instance = null;
-    private static readonly object Padlock = new object();
+    private static FileService? _instance;
+    private static readonly object Padlock = new();
+
+    private FileService()
+    {
+    }
 
     public static FileService Instance
     {
@@ -20,7 +24,7 @@ public class FileService
         }
     }
 
-    private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
         WriteIndented = true,
     };
@@ -50,8 +54,8 @@ public class FileService
 
     public async void WriteTransactionsToFile(List<Transaction> transactions)
     {
-        await using FileStream file = File.OpenWrite(_transactionsFilePath);
-        await using StreamWriter writer = new StreamWriter(file);
+        await using var file = File.OpenWrite(_transactionsFilePath);
+        await using var writer = new StreamWriter(file);
         try
         {
             await writer.WriteLineAsync(SerializeTransactionList(transactions));
@@ -64,8 +68,8 @@ public class FileService
     
     public async void WriteCategoriesToFile(List<Category> categories)
     {
-        await using FileStream file = File.OpenWrite(_categoriesFilePath);
-        await using StreamWriter writer = new StreamWriter(file);
+        await using var file = File.OpenWrite(_categoriesFilePath);
+        await using var writer = new StreamWriter(file);
         try
         {
             await writer.WriteLineAsync(SerializeCategoryList(categories));
@@ -78,18 +82,18 @@ public class FileService
 
     public List<Transaction> ReadTransactionsFromFile()
     {
-        List<Transaction>? transactions = new List<Transaction>();
+        var transactions = new List<Transaction>();
         try
         {
             var serializedTransactions = File.ReadAllText(_transactionsFilePath);
             transactions = DeserializeTransactionList(serializedTransactions);
         }
-        catch (FileNotFoundException fnfe)
+        catch (FileNotFoundException)
         {
             WriteTransactionsToFile(new List<Transaction>());
             ReadTransactionsFromFile();
         }
-        catch (IOException ex)
+        catch (IOException)
         {
             Console.WriteLine("Hiba történt a tranzakció fájl olvasása során!");
         }
@@ -98,18 +102,18 @@ public class FileService
     
     public List<Category> ReadCategoriesFromFile()
     {
-        List<Category>? categories = new List<Category>();
+        var categories = new List<Category>();
         try
         {
             var serializedCategories = File.ReadAllText(_categoriesFilePath);
             categories = DeserializeCategoryList(serializedCategories);
         }
-        catch (FileNotFoundException fnfe)
+        catch (FileNotFoundException)
         {
             WriteCategoriesToFile(new List<Category>());
             ReadCategoriesFromFile();
         }
-        catch (IOException ex)
+        catch (IOException)
         {
             Console.WriteLine("Hiba történt a kategóriák fájl olvasása során!");
         }
