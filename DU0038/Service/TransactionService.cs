@@ -39,9 +39,9 @@ public class TransactionService
             .Build());
     }
 
-    public void SaveTransactions()
+    public async Task SaveTransactions()
     {
-        FileService.Instance.WriteTransactionsToFile(_transactions);
+        await FileService.Instance.WriteTransactionsToFile(_transactions);
     }
     
     public List<Transaction> GetTransactions()

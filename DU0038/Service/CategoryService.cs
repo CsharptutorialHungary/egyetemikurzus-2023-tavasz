@@ -38,9 +38,9 @@ public class CategoryService
         ));
     }
 
-    public void SaveCategories()
+    public async Task SaveCategories()
     {
-        FileService.Instance.WriteCategoriesToFile(_categories);
+        await FileService.Instance.WriteCategoriesToFile(_categories);
     }
 
     public List<Category> GetCategories()

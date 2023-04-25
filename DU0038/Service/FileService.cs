@@ -52,7 +52,7 @@ public class FileService
         return JsonSerializer.Deserialize<List<Category>>(serializedCategoryList, _jsonSerializerOptions);
     }
 
-    public async void WriteTransactionsToFile(List<Transaction> transactions)
+    public async Task WriteTransactionsToFile(List<Transaction> transactions)
     {
         await using var file = File.OpenWrite(_transactionsFilePath);
         await using var writer = new StreamWriter(file);
@@ -66,7 +66,7 @@ public class FileService
         }
     }
     
-    public async void WriteCategoriesToFile(List<Category> categories)
+    public async Task WriteCategoriesToFile(List<Category> categories)
     {
         await using var file = File.OpenWrite(_categoriesFilePath);
         await using var writer = new StreamWriter(file);
