@@ -90,7 +90,7 @@ public class FileService
         }
         catch (FileNotFoundException)
         {
-            WriteTransactionsToFile(new List<Transaction>());
+            await WriteTransactionsToFile(new List<Transaction>());
         }
         catch (IOException)
         {
@@ -109,7 +109,7 @@ public class FileService
         }
         catch (FileNotFoundException)
         {
-            WriteCategoriesToFile(new List<Category>());
+            await WriteCategoriesToFile(new List<Category>());
         }
         catch (IOException)
         {
