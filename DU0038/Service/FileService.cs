@@ -62,7 +62,7 @@ public class FileService
         }
         catch (IOException ex)
         {
-            Console.WriteLine("Hiba történt a tranzakciók fájlba írása során!");
+            Console.WriteLine("# Hiba történt a tranzakciók fájlba írása során!");
         }
     }
     
@@ -76,7 +76,7 @@ public class FileService
         }
         catch (IOException ex)
         {
-            Console.WriteLine("Hiba történt a kategóriák fájlba írása során!");
+            Console.WriteLine("# Hiba történt a kategóriák fájlba írása során!");
         }
     }
 
@@ -94,7 +94,7 @@ public class FileService
         }
         catch (Exception)
         {
-            Console.WriteLine("Hiba történt a tranzakció fájl olvasása során!");
+            Console.WriteLine("# Hiba történt a tranzakció fájl olvasása során!");
         }
         return transactions ?? new List<Transaction>();
     }
@@ -113,7 +113,7 @@ public class FileService
         }
         catch (IOException)
         {
-            Console.WriteLine("Hiba történt a kategóriák fájl olvasása során!");
+            Console.WriteLine("# Hiba történt a kategóriák fájl olvasása során!");
         }
         return categories ?? new List<Category>();
     }

@@ -80,7 +80,7 @@ public class ProgramController
                 HandleListIncomesByCategory();
                 break;
             default:
-                Console.WriteLine("Nem létezik ilyen parancs! Parancsok kilistázásához használd a 'help'-et!");
+                Console.WriteLine("# Nem létezik ilyen parancs! Parancsok kilistázásához használd a 'help'-et!");
                 break;
         }
     }
@@ -145,12 +145,12 @@ public class ProgramController
     private void HandleListCategory()
     {
         Console.WriteLine("## Kategóriák listája:");
-        var categoryNames = CategoryService.Instance.GetCategoriesNameInOrder();
+        var categoriesInNameOrder = CategoryService.Instance.GetCategoriesInNameOrder();
 
         var i = 1;
-        foreach (var name in categoryNames)
+        foreach (var category in categoriesInNameOrder)
         {
-            Console.WriteLine("\t " + i++ + ". " + name);
+            Console.WriteLine($"\t {i++}. {category.Name} ({(category.IsIncome ? "+" : "-")})");
         }
     }
 
@@ -218,7 +218,7 @@ public class ProgramController
             Console.Write("## Érték megadása: ");
             _command = Console.ReadLine();
             isParsable = int.TryParse(_command, out value);
-            if (IsCommandInvalid() || !isParsable || value <= 0) Console.WriteLine("Érvénytelen érték!");
+            if (IsCommandInvalid() || !isParsable || value <= 0) Console.WriteLine("## Érvénytelen érték!");
             else break;
         }
 

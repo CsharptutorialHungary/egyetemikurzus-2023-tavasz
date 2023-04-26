@@ -48,9 +48,9 @@ public class CategoryService
         return _categories;
     }
     
-    public List<string> GetCategoriesNameInOrder()
+    public List<Category> GetCategoriesInNameOrder()
     {
-        return _categories.Select(category => category.Name)
-            .OrderBy(name => name).ToList();
+        return _categories.Select(category => category)
+            .OrderBy(category => category.Name).ToList();
     }
 }
