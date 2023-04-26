@@ -29,8 +29,8 @@ public class FileService
         WriteIndented = true,
     };
     
-    private readonly string _transactionsFilePath = Path.Combine(AppContext.BaseDirectory, "assets/transactions.txt");
-    private readonly string _categoriesFilePath = Path.Combine(AppContext.BaseDirectory, "assets/categories.txt");
+    private readonly string _transactionsFilePath = Path.Combine(AppContext.BaseDirectory, "transactions.txt");
+    private readonly string _categoriesFilePath = Path.Combine(AppContext.BaseDirectory, "categories.txt");
     
     private string SerializeTransactionList(List<Transaction> transactionList)
     {
@@ -92,7 +92,7 @@ public class FileService
         {
             await WriteTransactionsToFile(new List<Transaction>());
         }
-        catch (IOException)
+        catch (Exception)
         {
             Console.WriteLine("Hiba történt a tranzakció fájl olvasása során!");
         }

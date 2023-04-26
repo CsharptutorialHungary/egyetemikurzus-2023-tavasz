@@ -29,8 +29,8 @@ public class ProgramController
             Console.Write("\n# Adjon meg egy parancsot: ");
             _command = Console.ReadLine();
             if (!IsCommandInvalid()) EvaluateCommand();
-            if (_command == Commands.Exit) return;
             else Console.WriteLine("# Nem adtál meg parancsot!");
+            if (_command == Commands.Exit) return;
         }
     }
 
@@ -123,10 +123,10 @@ public class ProgramController
         return _command! == "+";
     }
 
-    private async void HandleSaveStateAndExitProgram()
+    private void HandleSaveStateAndExitProgram()
     {
-        await CategoryService.Instance.SaveCategories();
-        await TransactionService.Instance.SaveTransactions();
+        Task.WaitAll(TransactionService.Instance.SaveTransactions(),
+            CategoryService.Instance.SaveCategories());
         Environment.Exit(0);
     }
 
