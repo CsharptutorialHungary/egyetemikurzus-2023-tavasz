@@ -155,7 +155,7 @@ namespace _r5jxrm_
         //Összegzés
         //Menü megjelenítése, választás
         //Visszatérése: Bool-lal tér vissza, hogy a játékból kiléptünk-e vagy sem
-        static private bool valasztas(double penz)
+        static public bool valasztas(double penz)
         {
             //Kilépő változó deklarálása
             bool quit = false;
@@ -334,28 +334,7 @@ namespace _r5jxrm_
             paklik = Keveres(paklik);
             tovabbLepesSzovegClear();
             int i = 0;
-            for (; i < 2; i++)
-            {
-                //Kioszt 2db kártyát a játékosnak
-                jatekosKartyai[i] = paklik[kartyak];
-                Console.WriteLine($"A {paklik[kartyak]} kártyát kaptad");
-                if (jatekosKartyaErtek + convertToInt(paklik, kartyak) > 21)
-                {
-                    jatekosKartyai[0] = "A - One";
-                    jatekosKartyaErtek -= 10;
-                }
-                jatekosKartyaErtek += convertToInt(paklik, kartyak);
-                kartyak--;
-                //Kioszt 2db kártyát az osztónak
-                osztoKartyai[i] = paklik[kartyak];
-                if (osztoKartyaErtek + convertToInt(paklik, kartyak) > 21)
-                {
-                    osztoKartyai[1] = "A - One";
-                    osztoKartyaErtek -= 10;
-                }
-                osztoKartyaErtek += convertToInt(paklik, kartyak);
-                kartyak--;
-            }
+            KartyaOsztas(paklik, ref kartyak, ref osztoKartyaErtek, ref jatekosKartyaErtek, jatekosKartyai, osztoKartyai, ref i);
 
             //Osztó megmutatja a kártyáját
             Console.WriteLine($"Az osztó kártyái {osztoKartyai[0]} és *");
@@ -374,69 +353,7 @@ namespace _r5jxrm_
                 switch (valasztas)
                 {
                     case "1":
-                        while (biztositas)
-                        {
-                            Console.Clear();
-                            Console.WriteLine($"Jelenleg {ennyivan - tet} zsetonod van, és eddig {tet} zsetont tettél fel." +
-                                $"\nMennyit szeretnél biztosítani? Figyelem, maximum a téted felét tudod biztosítani!" +
-                                $"\nA kilépéshez: 0");
-                            try
-                            {
-                                biztositottZseton = Convert.ToDouble(Console.ReadLine());
-                            }
-                            catch
-                            {
-                                Console.WriteLine("\nError");
-                                biztositottZseton = -1;
-                            }
-                            if (biztositottZseton > 0 && ennyivan - (biztositottZseton + tet) >= 0 && biztositottZseton <= tet / 2)
-                            {
-                                Console.WriteLine($"Sikeres biztosítás, értéke : {biztositottZseton}\n\nNézzük az osztó kártyáit");
-                                tovabbLepesSzoveg();
-                                if (osztoKartyaErtek == 21)
-                                {
-                                    Console.WriteLine("Az osztónak BlackJack-je van!");
-                                    tovabbLepesSzovegClear();
-                                    isPlaying = false;
-                                    if (jatekosKartyaErtek != 21)
-                                    {
-                                        vesztett = true;
-                                        biztositas = false;
-                                        tet = tet - (biztositottZseton * 2);
-                                        biztositottZseton = 0;
-                                        if (tet == 0)
-                                        {
-                                            nyert = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        nyert = true;
-                                        tet = biztositottZseton;
-                                        biztositottZseton = 0;
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"Az osztónak nincs BlackJack-je, a játék folytatódik tovább..." +
-                                        $"\nVesztettél {biztositottZseton} (Biztosított zsetonod)");
-                                    tovabbLepesSzovegClear();
-                                    biztositas = false;
-                                }
-
-                            }
-                            else if ((int)biztositottZseton == 0)
-                            {
-                                Console.WriteLine("Nem biztosítottál semmit.");
-                                tovabbLepesSzovegClear();
-                                biztositas = false;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Hibás érték, nézd meg mégegyszer...");
-                                tovabbLepesSzoveg();
-                            }
-                        }
+                        BiztositasValasztasa(ref tet, ennyivan, ref biztositas, ref vesztett, ref nyert, ref isPlaying, ref biztositottZseton, osztoKartyaErtek, jatekosKartyaErtek);
                         break;
                     case "2":
                         Console.WriteLine("Nem biztosítottál semmit, a játék folytatódik");
@@ -501,47 +418,7 @@ namespace _r5jxrm_
                             //Ha megüti
                             case "1":
                                 //Ha a következő lap egy ász 11-es értékű, és a játékos másik paklija 21 fölé megy a hozzáadással, legyen egy értéke
-                                if (convertToInt(paklik, kartyak) == 11 && jatekosSzetvalasztottKartyaErtek + convertToInt(paklik, kartyak) > 21)
-                                {
-                                    //Mozgatjuk a játékos tovább
-                                    i++;
-                                    //Player's other deck add ace with value of one
-                                    jatekosSzetvalasztottKartyak[i] = "A - One";
-                                    jatekosSzetvalasztottKartyaErtek += 1;
-                                    Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosSzetvalasztottKartyaErtek} van");
-                                    //Pakli aljára mozgatás
-                                    kartyak--;
-                                }
-                                else
-                                {
-                                    i++;
-                                    jatekosSzetvalasztottKartyak[i] = paklik[kartyak];
-                                    jatekosSzetvalasztottKartyaErtek += convertToInt(paklik, kartyak);
-                                    Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosSzetvalasztottKartyaErtek} van");
-                                    kartyak--;
-                                }
-                                //Ha a szétválasztásnál több, mint 21
-                                if (jatekosSzetvalasztottKartyaErtek > 21)
-                                {
-                                    //Megnézzük, hogy a játékos paklijában van-e "ÁSZ"
-                                    int index = checkHaVanAsz(jatekosSzetvalasztottKartyak);
-                                    //Ha van "ÁSZ", aminek 11 az értéke, akkor változtassuk meg 1-re
-                                    if (jatekosSzetvalasztottKartyak[index] == "A")
-                                    {
-                                        //Átállítjuk a nevét
-                                        jatekosSzetvalasztottKartyak[index] = "A - One";
-                                        //És az értéket csökkentjük 10-zel
-                                        jatekosSzetvalasztottKartyaErtek -= 10;
-                                        Console.WriteLine($"A játékosnak volt Ásza, az értékét 1-re csökkentettük, a játékos jelenleg {jatekosSzetvalasztottKartyaErtek} van");
-                                    }
-                                    else
-                                    {
-                                        //
-                                        splitLost = true;
-                                        splitting = false;
-                                        i = 0;
-                                    }
-                                }
+                                MegütésSzétválasztással(paklik, ref splitLost, ref splitting, ref kartyak, ref jatekosSzetvalasztottKartyaErtek, jatekosSzetvalasztottKartyak, ref i);
                                 tovabbLepesSzovegClear();
                                 break;
                             //Ha marad
@@ -570,55 +447,7 @@ namespace _r5jxrm_
                         {
                             //Ha megüti a játékos
                             case "1":
-                                if (convertToInt(paklik, kartyak) == 11 && jatekosKartyaErtek + convertToInt(paklik, kartyak) > 21)
-                                {
-                                    //Továbbmegyünk a játékos pakliján
-                                    i++;
-                                    //Adunk egy Ász 1-es értéket a játékos paklijának
-                                    jatekosKartyai[i] = "A - One";
-                                    //Növeljük az értéket 1-el
-                                    jatekosKartyaErtek += 1;
-                                    Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosKartyaErtek} van");
-                                    //Csökkentjük a paklit
-                                    kartyak--;
-                                }
-                                //Mást üt?
-                                else
-                                {
-                                    //Továbbmegyünk a játékos pakliján
-                                    i++;
-                                    //Hozzáadjuk a kártyát
-                                    jatekosKartyai[i] = paklik[kartyak];
-                                    //Hozzáadjuk az értékét
-                                    jatekosKartyaErtek += convertToInt(paklik, kartyak);
-                                    Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosKartyaErtek} van");
-                                    //Csökkentjük a paklit
-                                    kartyak--;
-                                }
-                                //Ha a játékos átlépte a 21-et
-                                if (jatekosKartyaErtek > 21)
-                                {
-                                    //Megnézzük van-e Ász 11-es értékkel
-                                    int index = checkHaVanAsz(jatekosKartyai);
-                                    if (jatekosKartyai[index] == "A")
-                                    {
-                                        jatekosKartyai[index] = "A - One";
-                                        jatekosKartyaErtek -= 10;
-                                        Console.WriteLine($"Volt 11-es Ász, az értéke megváltozott 1-re, jelenleg {jatekosKartyaErtek} van");
-                                    }
-                                    else
-                                    {
-                                        vesztett = true;
-                                        if (!hasSplit || hasSplit && splitLost)
-                                        {
-                                            isPlaying = false;
-                                        }
-                                        else
-                                        {
-                                            jatekosKor = false;
-                                        }
-                                    }
-                                }
+                                MegütésSzétválasztásNélkül(paklik, splitLost, ref vesztett, ref isPlaying, ref jatekosKor, hasSplit, ref kartyak, ref jatekosKartyaErtek, jatekosKartyai, ref i);
                                 tovabbLepesSzovegClear();
                                 break;
                             case "2":
@@ -643,58 +472,11 @@ namespace _r5jxrm_
                         switch (valasztas)
                         {
                             case "3":
-                                //Csekkoljuk, hogy van-e elég zsetonja duplázni
-                                if (ennyivan - tet * 2 >= 0)
-                                {
-                                    if (convertToInt(paklik, kartyak) == 11 && jatekosKartyaErtek + convertToInt(paklik, kartyak) > 21)
-                                    {
-                                        i++;
-                                        jatekosKartyai[i] = "A - One";
-                                        jatekosKartyaErtek += 1;
-                                        Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosKartyaErtek} van");
-                                        kartyak--;
-                                    }
-                                    else
-                                    {
-                                        i++;
-                                        jatekosKartyai[i] = paklik[kartyak];
-                                        jatekosKartyaErtek += convertToInt(paklik, kartyak);
-                                        Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosKartyaErtek} van");
-                                        kartyak--;
-                                    }
-                                    if (jatekosKartyaErtek > 21)
-                                    {
-                                        int index = checkHaVanAsz(jatekosKartyai);
-                                        if (jatekosKartyai[index] == "A")
-                                        {
-                                            jatekosKartyai[index] = "A - One";
-                                            jatekosKartyaErtek -= 10;
-                                            Console.WriteLine($"Volt 11-es Ász, az értéke megváltozott 1-re, jelenleg {jatekosKartyaErtek} van");
-                                        }
-                                        else
-                                        {
-                                            vesztett = true;
-                                            isPlaying = false;
-                                        }
-                                    }
-                                    tovabbLepesSzoveg();
-                                    jatekosKor = false;
-                                    tet = tet * 2;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Nincs elég zsetonod duplázni");
-                                    errorSave = true;
-                                    tovabbLepesSzovegClear();
-                                }
+                                DuplazasPluszMegütes(paklik, ref tet, ennyivan, ref errorSave, ref vesztett, ref isPlaying, ref jatekosKor, ref kartyak, ref jatekosKartyaErtek, jatekosKartyai, ref i);
                                 break;
                             //Ha megadja
                             case "4":
-                                tet = tet / 2;
-                                Console.WriteLine("Megadtad! Csak a felét veszted el, a tétnek");
-                                tovabbLepesSzovegClear();
-                                vesztett = true;
-                                isPlaying = false;
+                                tet = MegadásMethod(tet, out vesztett, out isPlaying);
                                 break;
                         }
                     }
@@ -705,29 +487,7 @@ namespace _r5jxrm_
                         {
                             //Ha szétválaszt
                             case "5":
-                                if (ennyivan - tet * 2 >= 0)
-                                {
-                                    splitting = true;
-                                    hasSplit = true;
-                                    if (jatekosKartyai[1] == "A - One" && jatekosKartyai[0] == "A")
-                                    {
-                                        jatekosKartyai[1] = "A";
-                                        jatekosKartyaErtek += 10;
-                                    }
-                                    jatekosSzetvalasztottKartyak[0] = jatekosKartyai[1];
-                                    jatekosKartyaErtek -= convertToInt(jatekosKartyai, 1);
-                                    jatekosSzetvalasztottKartyaErtek += convertToInt(jatekosKartyai, 1);
-                                    jatekosKartyai[1] = "";
-                                    tet = tet * 2;
-                                    i = 0;
-                                    Console.Clear();
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Nincs elég zsetonod szétválasztani!");
-                                    errorSave = true;
-                                    tovabbLepesSzovegClear();
-                                }
+                                SzetvalasztasMethod(ref tet, ennyivan, ref errorSave, ref splitting, ref hasSplit, ref jatekosKartyaErtek, ref jatekosSzetvalasztottKartyaErtek, jatekosKartyai, jatekosSzetvalasztottKartyak, ref i);
                                 break;
                         }
                     }
@@ -757,122 +517,424 @@ namespace _r5jxrm_
                     }
                     else
                     {
-                        if (convertToInt(paklik, kartyak) == 11 && osztoKartyaErtek + convertToInt(paklik, kartyak) > 21)
-                        {
-                            //Növeljük az osztó kártyáit
-                            i++;
-                            osztoKartyai[i] = "A - One";
-                            osztoKartyaErtek += 1;
-                            Console.WriteLine($"Az osztó megütötte! Az osztó {paklik[kartyak]} lapot kapott, jelenleg {osztoKartyaErtek} van neki");
-                            kartyak--;
-                        }
-                        else
-                        {
-                            i++;
-                            osztoKartyai[i] = paklik[kartyak];
-                            osztoKartyaErtek += convertToInt(paklik, kartyak);
-                            Console.WriteLine($"Az osztó megütötte! Az osztó {paklik[kartyak]} lapot kapott, jelenleg {osztoKartyaErtek} van neki");
-                            kartyak--;
-                        }
-                        if (osztoKartyaErtek > 21)
-                        {
-                            int index = checkHaVanAsz(jatekosKartyai);
-                            if (osztoKartyai[index] == "A")
-                            {
-                                osztoKartyai[index] = "A - One";
-                                osztoKartyaErtek -= 10;
-                                Console.WriteLine($"Az osztónál volt Ász, az értéke 1-re lett állítva, az osztónál jelenleg {osztoKartyaErtek} van");
-                            }
-                            else
-                            {
-                                nyert = true;
-                                isPlaying = false;
-                            }
-                        }
-                        tovabbLepesSzoveg();
+                        OsztoUtes(paklik, ref nyert, ref isPlaying, ref kartyak, ref osztoKartyaErtek, jatekosKartyai, osztoKartyai, ref i);
                     }
                 }
             }
 
             if (hasSplit)
             {
-                if (vesztett == false && splitLost == false && osztoKartyaErtek < jatekosKartyaErtek && osztoKartyaErtek < jatekosSzetvalasztottKartyaErtek
-                    || nyert == true && vesztett == false && splitLost == false)
-                {
-                    Console.WriteLine($"Nyertél! Nyeremény: {tet} zseton");
-                    return tet - biztositottZseton;
-                }
-                else if (osztoKartyaErtek == jatekosKartyaErtek && osztoKartyaErtek == jatekosSzetvalasztottKartyaErtek
-                    || nyert == true && vesztett == true && splitLost == true)
-                {
-                    Console.WriteLine("Döntetlen! Nincs zseton nyeremény vagy veszteség.");
-                    return 0 - biztositottZseton;
-                }
-                else if (vesztett == false && splitLost == true && osztoKartyaErtek < jatekosKartyaErtek ||
-                    vesztett == true && splitLost == false && osztoKartyaErtek < jatekosSzetvalasztottKartyaErtek ||
-                    vesztett == false && splitLost == false && jatekosSzetvalasztottKartyaErtek < osztoKartyaErtek && osztoKartyaErtek < jatekosKartyaErtek ||
-                    vesztett == false && splitLost == false && jatekosKartyaErtek < osztoKartyaErtek && osztoKartyaErtek < jatekosSzetvalasztottKartyaErtek ||
-                    vesztett == false && splitLost == true && nyert == true || vesztett == true && splitLost == false && nyert == true)
-                {
-                    Console.WriteLine("Döntetlen! Nincs zseton nyeremény vagy veszteség.");
-                    return 0 - biztositottZseton;
-                }
-                else if (osztoKartyaErtek == jatekosKartyaErtek && osztoKartyaErtek < jatekosSzetvalasztottKartyaErtek && vesztett == false && splitLost == false ||
-                    osztoKartyaErtek == jatekosSzetvalasztottKartyaErtek && osztoKartyaErtek < jatekosKartyaErtek && vesztett == false && splitLost == false)
-                {
-                    tet = tet / 2;
-                    Console.WriteLine($"Nyertél! Nyereményed: {tet}");
-                    return tet - biztositottZseton;
-                }
-                else if (osztoKartyaErtek == jatekosKartyaErtek && splitLost == true ||
-                    osztoKartyaErtek == jatekosSzetvalasztottKartyaErtek && vesztett == true ||
-                    osztoKartyaErtek == jatekosKartyaErtek && osztoKartyaErtek > jatekosSzetvalasztottKartyaErtek && vesztett == false && splitLost == false ||
-                    osztoKartyaErtek == jatekosSzetvalasztottKartyaErtek && osztoKartyaErtek > jatekosKartyaErtek && vesztett == false && splitLost == false)
-                {
-                    tet = tet / 2;
-                    Console.WriteLine($"Vesztettél! A veszteség: {tet}");
-                    return -tet - biztositottZseton;
-                }
-                else if (vesztett == true && splitLost == true && nyert == false ||
-                    osztoKartyaErtek > jatekosKartyaErtek && osztoKartyaErtek > jatekosSzetvalasztottKartyaErtek && vesztett == false && splitLost == false ||
-                    osztoKartyaErtek > jatekosKartyaErtek && splitLost == true ||
-                    osztoKartyaErtek > jatekosSzetvalasztottKartyaErtek && vesztett == true)
-                {
-                    Console.WriteLine($"Vesztettél: {tet}");
-                    return -tet - biztositottZseton;
-                }
-                else
-                {
-                    return tet;
-                }
+                return VegeredmenyHaSzetvalasztott(ref tet, splitLost, vesztett, nyert, biztositottZseton, osztoKartyaErtek, jatekosKartyaErtek, jatekosSzetvalasztottKartyaErtek);
 
             }
             else
             {
-                if (vesztett == false && osztoKartyaErtek < jatekosKartyaErtek || nyert == true && vesztett == false)
+                return VegeredmenyHaNemValasztottSzet(ref tet, vesztett, nyert, biztositottZseton, osztoKartyaErtek, jatekosKartyaErtek);
+            }
+        }
+
+        private static void KartyaOsztas(string[] paklik, ref int kartyak, ref int osztoKartyaErtek, ref int jatekosKartyaErtek, string[] jatekosKartyai, string[] osztoKartyai, ref int i)
+        {
+            for (; i < 2; i++)
+            {
+                //Kioszt 2db kártyát a játékosnak
+                jatekosKartyai[i] = paklik[kartyak];
+                Console.WriteLine($"A {paklik[kartyak]} kártyát kaptad");
+                if (jatekosKartyaErtek + convertToInt(paklik, kartyak) > 21)
                 {
-                    Console.WriteLine($"Nyertél! Nyereményed: {tet}");
-                    return (tet - biztositottZseton);
+                    jatekosKartyai[0] = "A - One";
+                    jatekosKartyaErtek -= 10;
                 }
-                else if (osztoKartyaErtek == jatekosKartyaErtek || nyert == true && vesztett == true)
+                jatekosKartyaErtek += convertToInt(paklik, kartyak);
+                kartyak--;
+                //Kioszt 2db kártyát az osztónak
+                osztoKartyai[i] = paklik[kartyak];
+                if (osztoKartyaErtek + convertToInt(paklik, kartyak) > 21)
                 {
-                    Console.WriteLine("Döntetlen! Nincs zseton nyereség vagy veszteség.");
-                    tet = 0 - biztositottZseton;
-                    return tet;
+                    osztoKartyai[1] = "A - One";
+                    osztoKartyaErtek -= 10;
                 }
-                else if (vesztett == true && nyert == false || osztoKartyaErtek > jatekosKartyaErtek)
+                osztoKartyaErtek += convertToInt(paklik, kartyak);
+                kartyak--;
+            }
+        }
+
+        private static void BiztositasValasztasa(ref double tet, double ennyivan, ref bool biztositas, ref bool vesztett, ref bool nyert, ref bool isPlaying, ref double biztositottZseton, int osztoKartyaErtek, int jatekosKartyaErtek)
+        {
+            while (biztositas)
+            {
+                Console.Clear();
+                Console.WriteLine($"Jelenleg {ennyivan - tet} zsetonod van, és eddig {tet} zsetont tettél fel." +
+                    $"\nMennyit szeretnél biztosítani? Figyelem, maximum a téted felét tudod biztosítani!" +
+                    $"\nA kilépéshez: 0");
+                try
                 {
-                    Console.WriteLine($"Vesztettél! A veszteség: {tet}");
-                    tet = -tet - biztositottZseton;
-                    return tet;
+                    biztositottZseton = Convert.ToDouble(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("\nError");
+                    biztositottZseton = -1;
+                }
+                if (biztositottZseton > 0 && ennyivan - (biztositottZseton + tet) >= 0 && biztositottZseton <= tet / 2)
+                {
+                    SikeresenBiztositott(ref tet, ref biztositas, ref vesztett, ref nyert, ref isPlaying, ref biztositottZseton, osztoKartyaErtek, jatekosKartyaErtek);
+
+                }
+                else if ((int)biztositottZseton == 0)
+                {
+                    Console.WriteLine("Nem biztosítottál semmit.");
+                    tovabbLepesSzovegClear();
+                    biztositas = false;
                 }
                 else
                 {
-                    return tet;
+                    Console.WriteLine("Hibás érték, nézd meg mégegyszer...");
+                    tovabbLepesSzoveg();
                 }
             }
         }
 
+        private static void OsztoUtes(string[] paklik, ref bool nyert, ref bool isPlaying, ref int kartyak, ref int osztoKartyaErtek, string[] jatekosKartyai, string[] osztoKartyai, ref int i)
+        {
+            if (convertToInt(paklik, kartyak) == 11 && osztoKartyaErtek + convertToInt(paklik, kartyak) > 21)
+            {
+                //Növeljük az osztó kártyáit
+                i++;
+                osztoKartyai[i] = "A - One";
+                osztoKartyaErtek += 1;
+                Console.WriteLine($"Az osztó megütötte! Az osztó {paklik[kartyak]} lapot kapott, jelenleg {osztoKartyaErtek} van neki");
+                kartyak--;
+            }
+            else
+            {
+                i++;
+                osztoKartyai[i] = paklik[kartyak];
+                osztoKartyaErtek += convertToInt(paklik, kartyak);
+                Console.WriteLine($"Az osztó megütötte! Az osztó {paklik[kartyak]} lapot kapott, jelenleg {osztoKartyaErtek} van neki");
+                kartyak--;
+            }
+            if (osztoKartyaErtek > 21)
+            {
+                int index = checkHaVanAsz(jatekosKartyai);
+                if (osztoKartyai[index] == "A")
+                {
+                    osztoKartyai[index] = "A - One";
+                    osztoKartyaErtek -= 10;
+                    Console.WriteLine($"Az osztónál volt Ász, az értéke 1-re lett állítva, az osztónál jelenleg {osztoKartyaErtek} van");
+                }
+                else
+                {
+                    nyert = true;
+                    isPlaying = false;
+                }
+            }
+            tovabbLepesSzoveg();
+        }
+
+        private static void SikeresenBiztositott(ref double tet, ref bool biztositas, ref bool vesztett, ref bool nyert, ref bool isPlaying, ref double biztositottZseton, int osztoKartyaErtek, int jatekosKartyaErtek)
+        {
+            Console.WriteLine($"Sikeres biztosítás, értéke : {biztositottZseton}\n\nNézzük az osztó kártyáit");
+            tovabbLepesSzoveg();
+            if (osztoKartyaErtek == 21)
+            {
+                Console.WriteLine("Az osztónak BlackJack-je van!");
+                tovabbLepesSzovegClear();
+                isPlaying = false;
+                if (jatekosKartyaErtek != 21)
+                {
+                    vesztett = true;
+                    biztositas = false;
+                    tet = tet - (biztositottZseton * 2);
+                    biztositottZseton = 0;
+                    if (tet == 0)
+                    {
+                        nyert = true;
+                    }
+                }
+                else
+                {
+                    nyert = true;
+                    tet = biztositottZseton;
+                    biztositottZseton = 0;
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Az osztónak nincs BlackJack-je, a játék folytatódik tovább..." +
+                    $"\nVesztettél {biztositottZseton} (Biztosított zsetonod)");
+                tovabbLepesSzovegClear();
+                biztositas = false;
+            }
+        }
+
+        private static void MegütésSzétválasztással(string[] paklik, ref bool splitLost, ref bool splitting, ref int kartyak, ref int jatekosSzetvalasztottKartyaErtek, string[] jatekosSzetvalasztottKartyak, ref int i)
+        {
+            if (convertToInt(paklik, kartyak) == 11 && jatekosSzetvalasztottKartyaErtek + convertToInt(paklik, kartyak) > 21)
+            {
+                //Mozgatjuk a játékos tovább
+                i++;
+                //Player's other deck add ace with value of one
+                jatekosSzetvalasztottKartyak[i] = "A - One";
+                jatekosSzetvalasztottKartyaErtek += 1;
+                Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosSzetvalasztottKartyaErtek} van");
+                //Pakli aljára mozgatás
+                kartyak--;
+            }
+            else
+            {
+                i++;
+                jatekosSzetvalasztottKartyak[i] = paklik[kartyak];
+                jatekosSzetvalasztottKartyaErtek += convertToInt(paklik, kartyak);
+                Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosSzetvalasztottKartyaErtek} van");
+                kartyak--;
+            }
+            //Ha a szétválasztásnál több, mint 21
+            if (jatekosSzetvalasztottKartyaErtek > 21)
+            {
+                //Megnézzük, hogy a játékos paklijában van-e "ÁSZ"
+                int index = checkHaVanAsz(jatekosSzetvalasztottKartyak);
+                //Ha van "ÁSZ", aminek 11 az értéke, akkor változtassuk meg 1-re
+                if (jatekosSzetvalasztottKartyak[index] == "A")
+                {
+                    //Átállítjuk a nevét
+                    jatekosSzetvalasztottKartyak[index] = "A - One";
+                    //És az értéket csökkentjük 10-zel
+                    jatekosSzetvalasztottKartyaErtek -= 10;
+                    Console.WriteLine($"A játékosnak volt Ásza, az értékét 1-re csökkentettük, a játékos jelenleg {jatekosSzetvalasztottKartyaErtek} van");
+                }
+                else
+                {
+                    //
+                    splitLost = true;
+                    splitting = false;
+                    i = 0;
+                }
+            }
+        }
+
+        private static void MegütésSzétválasztásNélkül(string[] paklik, bool splitLost, ref bool vesztett, ref bool isPlaying, ref bool jatekosKor, bool hasSplit, ref int kartyak, ref int jatekosKartyaErtek, string[] jatekosKartyai, ref int i)
+        {
+            if (convertToInt(paklik, kartyak) == 11 && jatekosKartyaErtek + convertToInt(paklik, kartyak) > 21)
+            {
+                //Továbbmegyünk a játékos pakliján
+                i++;
+                //Adunk egy Ász 1-es értéket a játékos paklijának
+                jatekosKartyai[i] = "A - One";
+                //Növeljük az értéket 1-el
+                jatekosKartyaErtek += 1;
+                Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosKartyaErtek} van");
+                //Csökkentjük a paklit
+                kartyak--;
+            }
+            //Mást üt?
+            else
+            {
+                //Továbbmegyünk a játékos pakliján
+                i++;
+                //Hozzáadjuk a kártyát
+                jatekosKartyai[i] = paklik[kartyak];
+                //Hozzáadjuk az értékét
+                jatekosKartyaErtek += convertToInt(paklik, kartyak);
+                Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosKartyaErtek} van");
+                //Csökkentjük a paklit
+                kartyak--;
+            }
+            //Ha a játékos átlépte a 21-et
+            if (jatekosKartyaErtek > 21)
+            {
+                //Megnézzük van-e Ász 11-es értékkel
+                int index = checkHaVanAsz(jatekosKartyai);
+                if (jatekosKartyai[index] == "A")
+                {
+                    jatekosKartyai[index] = "A - One";
+                    jatekosKartyaErtek -= 10;
+                    Console.WriteLine($"Volt 11-es Ász, az értéke megváltozott 1-re, jelenleg {jatekosKartyaErtek} van");
+                }
+                else
+                {
+                    vesztett = true;
+                    if (!hasSplit || hasSplit && splitLost)
+                    {
+                        isPlaying = false;
+                    }
+                    else
+                    {
+                        jatekosKor = false;
+                    }
+                }
+            }
+        }
+
+        private static void DuplazasPluszMegütes(string[] paklik, ref double tet, double ennyivan, ref bool errorSave, ref bool vesztett, ref bool isPlaying, ref bool jatekosKor, ref int kartyak, ref int jatekosKartyaErtek, string[] jatekosKartyai, ref int i)
+        {
+            //Csekkoljuk, hogy van-e elég zsetonja duplázni
+            if (ennyivan - tet * 2 >= 0)
+            {
+                jatekosKor = Duplazhat(paklik, ref tet, ref vesztett, ref isPlaying, ref kartyak, ref jatekosKartyaErtek, jatekosKartyai, ref i);
+            }
+            else
+            {
+                Console.WriteLine("Nincs elég zsetonod duplázni");
+                errorSave = true;
+                tovabbLepesSzovegClear();
+            }
+        }
+
+        private static bool Duplazhat(string[] paklik, ref double tet, ref bool vesztett, ref bool isPlaying, ref int kartyak, ref int jatekosKartyaErtek, string[] jatekosKartyai, ref int i)
+        {
+            bool jatekosKor;
+            if (convertToInt(paklik, kartyak) == 11 && jatekosKartyaErtek + convertToInt(paklik, kartyak) > 21)
+            {
+                i++;
+                jatekosKartyai[i] = "A - One";
+                jatekosKartyaErtek += 1;
+                Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosKartyaErtek} van");
+                kartyak--;
+            }
+            else
+            {
+                i++;
+                jatekosKartyai[i] = paklik[kartyak];
+                jatekosKartyaErtek += convertToInt(paklik, kartyak);
+                Console.WriteLine($"Megütötted! {paklik[kartyak]} lapot kaptad, jelenleg {jatekosKartyaErtek} van");
+                kartyak--;
+            }
+            if (jatekosKartyaErtek > 21)
+            {
+                int index = checkHaVanAsz(jatekosKartyai);
+                if (jatekosKartyai[index] == "A")
+                {
+                    jatekosKartyai[index] = "A - One";
+                    jatekosKartyaErtek -= 10;
+                    Console.WriteLine($"Volt 11-es Ász, az értéke megváltozott 1-re, jelenleg {jatekosKartyaErtek} van");
+                }
+                else
+                {
+                    vesztett = true;
+                    isPlaying = false;
+                }
+            }
+            tovabbLepesSzoveg();
+            jatekosKor = false;
+            tet = tet * 2;
+            return jatekosKor;
+        }
+
+        private static double MegadásMethod(double tet, out bool vesztett, out bool isPlaying)
+        {
+            tet = tet / 2;
+            Console.WriteLine("Megadtad! Csak a felét veszted el, a tétnek");
+            tovabbLepesSzovegClear();
+            vesztett = true;
+            isPlaying = false;
+            return tet;
+        }
+
+        private static void SzetvalasztasMethod(ref double tet, double ennyivan, ref bool errorSave, ref bool splitting, ref bool hasSplit, ref int jatekosKartyaErtek, ref int jatekosSzetvalasztottKartyaErtek, string[] jatekosKartyai, string[] jatekosSzetvalasztottKartyak, ref int i)
+        {
+            if (ennyivan - tet * 2 >= 0)
+            {
+                splitting = true;
+                hasSplit = true;
+                if (jatekosKartyai[1] == "A - One" && jatekosKartyai[0] == "A")
+                {
+                    jatekosKartyai[1] = "A";
+                    jatekosKartyaErtek += 10;
+                }
+                jatekosSzetvalasztottKartyak[0] = jatekosKartyai[1];
+                jatekosKartyaErtek -= convertToInt(jatekosKartyai, 1);
+                jatekosSzetvalasztottKartyaErtek += convertToInt(jatekosKartyai, 1);
+                jatekosKartyai[1] = "";
+                tet = tet * 2;
+                i = 0;
+                Console.Clear();
+            }
+            else
+            {
+                Console.WriteLine("Nincs elég zsetonod szétválasztani!");
+                errorSave = true;
+                tovabbLepesSzovegClear();
+            }
+        }
+
+        private static double VegeredmenyHaNemValasztottSzet(ref double tet, bool vesztett, bool nyert, double biztositottZseton, int osztoKartyaErtek, int jatekosKartyaErtek)
+        {
+            if (vesztett == false && osztoKartyaErtek < jatekosKartyaErtek || nyert == true && vesztett == false)
+            {
+                Console.WriteLine($"Nyertél! Nyereményed: {tet}");
+                return (tet - biztositottZseton);
+            }
+            else if (osztoKartyaErtek == jatekosKartyaErtek || nyert == true && vesztett == true)
+            {
+                Console.WriteLine("Döntetlen! Nincs zseton nyereség vagy veszteség.");
+                tet = 0 - biztositottZseton;
+                return tet;
+            }
+            else if (vesztett == true && nyert == false || osztoKartyaErtek > jatekosKartyaErtek)
+            {
+                Console.WriteLine($"Vesztettél! A veszteség: {tet}");
+                tet = -tet - biztositottZseton;
+                return tet;
+            }
+            else
+            {
+                return tet;
+            }
+        }
+
+        private static double VegeredmenyHaSzetvalasztott(ref double tet, bool splitLost, bool vesztett, bool nyert, double biztositottZseton, int osztoKartyaErtek, int jatekosKartyaErtek, int jatekosSzetvalasztottKartyaErtek)
+        {
+            if (vesztett == false && splitLost == false && osztoKartyaErtek < jatekosKartyaErtek && osztoKartyaErtek < jatekosSzetvalasztottKartyaErtek
+                                || nyert == true && vesztett == false && splitLost == false)
+            {
+                Console.WriteLine($"Nyertél! Nyeremény: {tet} zseton");
+                return tet - biztositottZseton;
+            }
+            else if (osztoKartyaErtek == jatekosKartyaErtek && osztoKartyaErtek == jatekosSzetvalasztottKartyaErtek
+                || nyert == true && vesztett == true && splitLost == true)
+            {
+                Console.WriteLine("Döntetlen! Nincs zseton nyeremény vagy veszteség.");
+                return 0 - biztositottZseton;
+            }
+            else if (vesztett == false && splitLost == true && osztoKartyaErtek < jatekosKartyaErtek ||
+                vesztett == true && splitLost == false && osztoKartyaErtek < jatekosSzetvalasztottKartyaErtek ||
+                vesztett == false && splitLost == false && jatekosSzetvalasztottKartyaErtek < osztoKartyaErtek && osztoKartyaErtek < jatekosKartyaErtek ||
+                vesztett == false && splitLost == false && jatekosKartyaErtek < osztoKartyaErtek && osztoKartyaErtek < jatekosSzetvalasztottKartyaErtek ||
+                vesztett == false && splitLost == true && nyert == true || vesztett == true && splitLost == false && nyert == true)
+            {
+                Console.WriteLine("Döntetlen! Nincs zseton nyeremény vagy veszteség.");
+                return 0 - biztositottZseton;
+            }
+            else if (osztoKartyaErtek == jatekosKartyaErtek && osztoKartyaErtek < jatekosSzetvalasztottKartyaErtek && vesztett == false && splitLost == false ||
+                osztoKartyaErtek == jatekosSzetvalasztottKartyaErtek && osztoKartyaErtek < jatekosKartyaErtek && vesztett == false && splitLost == false)
+            {
+                tet = tet / 2;
+                Console.WriteLine($"Nyertél! Nyereményed: {tet}");
+                return tet - biztositottZseton;
+            }
+            else if (osztoKartyaErtek == jatekosKartyaErtek && splitLost == true ||
+                osztoKartyaErtek == jatekosSzetvalasztottKartyaErtek && vesztett == true ||
+                osztoKartyaErtek == jatekosKartyaErtek && osztoKartyaErtek > jatekosSzetvalasztottKartyaErtek && vesztett == false && splitLost == false ||
+                osztoKartyaErtek == jatekosSzetvalasztottKartyaErtek && osztoKartyaErtek > jatekosKartyaErtek && vesztett == false && splitLost == false)
+            {
+                tet = tet / 2;
+                Console.WriteLine($"Vesztettél! A veszteség: {tet}");
+                return -tet - biztositottZseton;
+            }
+            else if (vesztett == true && splitLost == true && nyert == false ||
+                osztoKartyaErtek > jatekosKartyaErtek && osztoKartyaErtek > jatekosSzetvalasztottKartyaErtek && vesztett == false && splitLost == false ||
+                osztoKartyaErtek > jatekosKartyaErtek && splitLost == true ||
+                osztoKartyaErtek > jatekosSzetvalasztottKartyaErtek && vesztett == true)
+            {
+                Console.WriteLine($"Vesztettél: {tet}");
+                return -tet - biztositottZseton;
+            }
+            else
+            {
+                return tet;
+            }
+        }
 
         static public string[] Keveres(string[] pakli)
         {
@@ -897,7 +959,7 @@ namespace _r5jxrm_
             bool containsAsz = Array.Exists(pakli, element => element == "A");
             if (!containsAsz)
             {
-                return -1;
+                return 0;
             }
 
             int index = -1;
