@@ -6,7 +6,8 @@ public class HelpCommand : ICommand
     public Task ExecuteAsync(string[] args)
     {
         Console.WriteLine("commands:");
-        Console.WriteLine("exit      exit from the application");
+        Console.WriteLine("exit      it is so egyertelmu");
+        Console.WriteLine("clear     clears the console");
         Console.WriteLine("search    search for book (at least one parameter should be given)");
         Console.WriteLine("          parameters: title  (-t/--title)");
         Console.WriteLine("                      author (-a/--author)");

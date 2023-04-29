@@ -2,6 +2,7 @@
 using GoogleBooks.ViewCommon;
 
 #region print info
+Console.Title = "Google Books";
 Console.WriteLine("GoogleBooks API version 1.0");
 Console.WriteLine("Please enter full screen for the best experience.");
 Console.WriteLine("Type \"help\" for more information.");
@@ -41,8 +42,7 @@ do
             throw new Exception(exceptionMessage);
         }
 
-        //await Task.Run(() => commandTable[command].ExecuteAsync(parameters));
-        await commandTable[command].ExecuteAsync(parameters);
+        await Task.Run(() => commandTable[command].ExecuteAsync(parameters));
     }
     catch (Exception ex)
     {
