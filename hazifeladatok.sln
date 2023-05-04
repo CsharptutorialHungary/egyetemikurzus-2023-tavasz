@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "T4XJYT-LGI301", "T4XJYT-LGI301", "{41AABA5A-378B-44AB-A0AA-4FB52EFFB04B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T4XJYT-LGI301", "T4XJYT-LGI301\T4XJYT-LGI301\T4XJYT-LGI301.csproj", "{475C13E8-C1D3-4719-BDEC-F7F04AFFBA07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -10,5 +14,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{475C13E8-C1D3-4719-BDEC-F7F04AFFBA07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{475C13E8-C1D3-4719-BDEC-F7F04AFFBA07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{475C13E8-C1D3-4719-BDEC-F7F04AFFBA07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{475C13E8-C1D3-4719-BDEC-F7F04AFFBA07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{475C13E8-C1D3-4719-BDEC-F7F04AFFBA07} = {41AABA5A-378B-44AB-A0AA-4FB52EFFB04B}
 	EndGlobalSection
 EndGlobal
