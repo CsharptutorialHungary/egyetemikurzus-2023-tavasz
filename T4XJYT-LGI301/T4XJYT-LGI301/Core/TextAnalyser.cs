@@ -6,11 +6,12 @@ namespace T4XJYT_LGI301
 {
     public class TextAnalyser : ITextAnalyser
     {
-        public string TextToAnalyze { get; set; }
+        public string RawText { get; set; }
 
-        public Word[] Words { get; set; }
-
-        public TextAnalyser(string textToAnalyze) => TextToAnalyze = textToAnalyze;
+        public TextAnalyser(string textToAnalyze)
+        {
+            RawText = textToAnalyze;
+        }
 
         public int CountWords()
         {
@@ -45,6 +46,19 @@ namespace T4XJYT_LGI301
         public double WordDensity()
         {
             // TODO: Implement WordDensity function
+            throw new NotImplementedException();
+        }
+
+        public List<Word> CreateWordsFromRawText()
+        {
+            // TODO: Implement CreateWordsFromRawText function
+            // Don't forget to remove the [" from the start and "] from the end of the text.
+            throw new NotImplementedException();
+        }
+
+        public TextAnalysis CreateTextAnalysis()
+        {
+            // TODO: Implement CreateTextAnalysis
             throw new NotImplementedException();
         }
     }

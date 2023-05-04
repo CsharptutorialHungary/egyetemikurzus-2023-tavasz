@@ -3,11 +3,9 @@ using T4XJYT_LGI301.Core.Models;
 
 namespace T4XJYT_LGI301.Core
 {
-	public interface ITextAnalyser
+	interface ITextAnalyser
 	{
-        string TextToAnalyze { get; set; }
-
-        Word[] Words { get; set; }
+        string RawText { get; }
 
         int CountWords();
 
@@ -20,6 +18,8 @@ namespace T4XJYT_LGI301.Core
         char MostCommonLetter();
 
         double WordDensity();
+
+        List<Word> CreateWordsFromRawText();
     }
 }
 

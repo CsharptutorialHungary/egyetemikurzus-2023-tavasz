@@ -9,6 +9,7 @@ namespace T4XJYT_LGI301
             Console.WriteLine("Getting the text from the API...\n\n");
             ApiDataProvider apiDataProvider = ApiDataProvider.GetInstance();
             string textFromApi = await apiDataProvider.GetTextFromAPI();
+            Console.WriteLine(textFromApi);
         }
     }
 }

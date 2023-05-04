@@ -2,7 +2,7 @@
 
 namespace T4XJYT_LGI301.Core.Models
 {
-    record TextAnalysis
+    public record TextAnalysis
     {
         public int WordsCount { get; set; }
 
