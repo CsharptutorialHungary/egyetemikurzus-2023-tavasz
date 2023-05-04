@@ -5,9 +5,7 @@ namespace T4XJYT_LGI301.Core.IO
 {
 	public interface IAnalysisFileSaver
 	{
-		Task SaveAnalysisAsXml(TextAnalysis textAnalysis);
-
-		Task SaveAnalysisAsJson(TextAnalysis textAnalysis);
+		Task SaveAnalysis(TextAnalysis textAnalysis, FileFormat format);
 	}
 }
 
