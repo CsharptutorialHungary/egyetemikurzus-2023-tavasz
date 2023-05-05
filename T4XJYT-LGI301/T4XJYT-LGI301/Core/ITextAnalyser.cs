@@ -14,7 +14,7 @@ namespace T4XJYT_LGI301.Core
 
         double AverageWordLength();
 
-        char MostCommonLetter();
+        string MostCommonLetter();
 
         double WordDensity();
 

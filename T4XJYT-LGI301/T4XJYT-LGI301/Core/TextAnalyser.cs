@@ -36,7 +36,7 @@ namespace T4XJYT_LGI301
             throw new NotImplementedException();
         }
 
-        public char MostCommonLetter()
+        public string MostCommonLetter()
         {
             // TODO: Implement MostCommonLetter function
             throw new NotImplementedException();
@@ -52,6 +52,8 @@ namespace T4XJYT_LGI301
         {
             // TODO: Implement CreateWordsFromRawText function
             // Don't forget to remove the [" from the start and "] from the end of the text.
+            // Also remove every symbol such as .,!? etc.
+            // This function should not be case sensitive, so "Hello" and "hello" should be the same.
             throw new NotImplementedException();
         }
 

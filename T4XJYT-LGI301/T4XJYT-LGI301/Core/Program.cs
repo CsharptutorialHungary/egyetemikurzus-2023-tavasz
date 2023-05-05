@@ -22,7 +22,7 @@ namespace T4XJYT_LGI301
                 MaximumWordLength = 15,
                 MinimumWordLength = 1,
                 AverageWordLength = 5,
-                MostCommonLetter = 'e',
+                MostCommonLetter = "e",
                 WordDensity = 0.1
             };
 
