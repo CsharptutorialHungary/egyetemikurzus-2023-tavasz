@@ -5,7 +5,7 @@ using System.Reflection;
 using Moq.Protected;
 using T4XJYT_LGI301.Core.API;
 
-namespace T4XJYT_LGI301.Tests.Core.API
+namespace T4XJYT_LGI301.Tests
 {
     [TestFixture]
     public class ApiDataProviderTests
