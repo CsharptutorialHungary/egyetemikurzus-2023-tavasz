@@ -2,38 +2,31 @@
 {
     public class ApiDataProvider : IApiDataProvider
     {
-        private static ApiDataProvider _instance;
-
+        
         private readonly string _apiURL = "https://baconipsum.com/api/?type=meat-and-filler";
 
-        private ApiDataProvider() {}
-
-        public static ApiDataProvider GetInstance()
+        private HttpClient _httpClient;
+        
+        public ApiDataProvider(HttpClient? httpClient = null)
         {
-            if (_instance == null)
-                _instance = new ApiDataProvider();
-
-            return _instance;
+            _httpClient = httpClient ?? new HttpClient();
         }
 
         public async Task<string> GetTextFromAPI()
         {
             try
             {
-                using HttpClient httpClient = new HttpClient();
-                HttpResponseMessage response = await httpClient.GetAsync(_apiURL);
+                HttpResponseMessage response = await _httpClient.GetAsync(_apiURL);
 
                 if (response.IsSuccessStatusCode)
                 {
                     string text = await response.Content.ReadAsStringAsync();
                     return text;
                 }
-                else
-                {
-                    // Handle unsuccessful status codes
-                    string errorMessage = $"Error: {response.StatusCode} - {response.ReasonPhrase}";
-                    throw new HttpRequestException(errorMessage);
-                }
+
+                // Handle unsuccessful status codes
+                string errorMessage = $"Error: {response.StatusCode} - {response.ReasonPhrase}";
+                throw new HttpRequestException(errorMessage);
             }
             catch (HttpRequestException ex)
             {

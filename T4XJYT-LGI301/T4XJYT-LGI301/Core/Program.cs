@@ -9,7 +9,7 @@ namespace T4XJYT_LGI301
         static async Task Main(string[] args)
         {
             Console.WriteLine("Getting the text from the API...\n\n");
-            ApiDataProvider apiDataProvider = ApiDataProvider.GetInstance();
+            ApiDataProvider apiDataProvider = new ApiDataProvider();
             string textFromApi = await apiDataProvider.GetTextFromAPI();
             Console.WriteLine(textFromApi);
             Console.WriteLine("Testing the saving XML method");
