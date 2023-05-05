@@ -1,5 +1,4 @@
-﻿using System;
-using T4XJYT_LGI301.Core;
+﻿using T4XJYT_LGI301.Core;
 using T4XJYT_LGI301.Core.Models;
 
 namespace T4XJYT_LGI301
