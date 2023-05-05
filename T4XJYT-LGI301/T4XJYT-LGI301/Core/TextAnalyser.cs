@@ -48,7 +48,7 @@ namespace T4XJYT_LGI301
             throw new NotImplementedException();
         }
 
-        public List<Word> CreateWordsFromRawText()
+        public List<T> CreateWordsFromRawText<T>()
         {
             // TODO: Implement CreateWordsFromRawText function
             // Don't forget to remove the [" from the start and "] from the end of the text.

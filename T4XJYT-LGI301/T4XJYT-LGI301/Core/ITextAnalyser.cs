@@ -18,7 +18,9 @@ namespace T4XJYT_LGI301.Core
 
         double WordDensity();
 
-        List<Word> CreateWordsFromRawText();
-    }
+        List<T> CreateWordsFromRawText<T>();
+
+        TextAnalysis CreateTextAnalysis();
+	}
 }
 
