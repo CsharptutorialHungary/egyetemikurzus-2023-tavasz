@@ -1,13 +1,9 @@
-﻿using System;
-using static System.Net.WebRequestMethods;
-
-namespace T4XJYT_LGI301.Core.API
+﻿namespace T4XJYT_LGI301.Core.API
 {
     public class ApiDataProvider : IApiDataProvider
     {
         private static ApiDataProvider _instance;
 
-        private readonly HttpClient _httpClient = new HttpClient();
         private readonly string _apiURL = "https://baconipsum.com/api/?type=meat-and-filler";
 
         private ApiDataProvider() {}
