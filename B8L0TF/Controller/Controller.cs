@@ -66,7 +66,7 @@ namespace B8L0TF.Controller
 
         private void CreateGameLoop()
         {
-            lessonsController.Init();
+            lessonsController.Init(user.Name);
         }
 
         private void WritePlayedGamesStats()

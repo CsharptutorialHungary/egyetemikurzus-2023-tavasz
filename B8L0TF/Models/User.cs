@@ -10,6 +10,7 @@ namespace B8L0TF.Models
     {
 
         public string ?Name { get; set; }
+        public string ?score { get; set; }
 
     }
 }

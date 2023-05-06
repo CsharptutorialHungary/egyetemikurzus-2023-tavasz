@@ -12,9 +12,12 @@ namespace B8L0TF.Controller
     {
 
         private List<Lesson> _lessons = new();
+        private User _user = new();
 
-        public void Init()
+
+        public void Init(string userName)
         {
+            _user.Name = userName;
             _lessons = CreateLessons();
             Run();
         }
@@ -35,8 +38,8 @@ namespace B8L0TF.Controller
         {
             Random rnd = new();
 
-            int firstDigit = rnd.Next(lesson.difficulty * 10);
-            int secondDigit = rnd.Next(lesson.difficulty * 10);
+            int firstDigit = rnd.Next((int)Math.Pow(10,lesson.difficulty));
+            int secondDigit = rnd.Next((int)Math.Pow(10, lesson.difficulty));
 
             char mathOperator;
 
@@ -64,9 +67,42 @@ namespace B8L0TF.Controller
             return lesson;
         }
 
-        public static void Run()
+        public void Run()
         {
-            Console.WriteLine($"GameRun");
+            Console.WriteLine("A jatek hamarosan indul 10 feladatot kapsz sok sikert!");
+            Console.WriteLine("A jatek hamarosan kezdodik...");
+            System.Threading.Thread.Sleep(5000);
+            int? result, score = 0, questionNumber = 1;
+            while (true)
+            {
+                foreach(var lesson in _lessons)
+                {
+                    Console.WriteLine($"{questionNumber}. Feladat:");
+                    Console.WriteLine($"{lesson.text}");
+
+                    try
+                    {
+                        result = int.Parse(Console.ReadLine());
+                        if (result == lesson.result)
+                        {
+                            score += lesson.difficulty;
+                            Console.WriteLine("A valaszod helyes!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("A valaszod helytelen!");
+                        }
+
+                    } catch (Exception)
+                    {
+                        Console.WriteLine("Maskor szamot adj meg!");
+                    }
+                    questionNumber++;
+                    System.Threading.Thread.Sleep(3000);
+                    Console.Clear();
+                }
+                return;
+            }
         }
     }
 }
