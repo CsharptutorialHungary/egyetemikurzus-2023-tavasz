@@ -17,17 +17,13 @@ namespace T4XJYT_LGI301
 
         public int CountWords()
         {
-            //Count words in text basic
+            //char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
+            //String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-            /*
-             * char[] delimiters = new char[] { ' ', '\r', '\n' };
-             * RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
-             */
-
-            char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
-            String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-            int count = raw_text_split.Count();
+            if (CleanedUpWords == null) {
+                return 0;
+            }
+            int count = CleanedUpWords.Count();
             return count;
 
             // TODO: Implement CountWords function
@@ -36,25 +32,12 @@ namespace T4XJYT_LGI301
 
         public int MaximumWordLength()
         {
-            //Max word length
+            if (CleanedUpWords == null)
+            {
+                return 0;
+            }
 
-            //char[] delimiters = new char[] { ' ', '\r', '\n' };
-            //int longest_word_length = -1;
-            //String longest_word = "";
-
-            //var words = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-            //for(String word in words) {
-            //    if (word.Length > longest_word) { 
-            //        longest_word = word;
-            //        longest_word_length = word.Length;
-            //    }
-            //}
-
-            char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
-            String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-            string longest_word = raw_text_split.OrderByDescending(s => s.Length).First();
+            string longest_word = CleanedUpWords.OrderByDescending(s => s.Length).First().ToString();
 
             return longest_word.Length;
 
@@ -64,28 +47,14 @@ namespace T4XJYT_LGI301
 
         public int MinimumWordLength()
         {
+            if (CleanedUpWords == null)
+            {
+                return 0;
+            }
 
-            //char[] delimiters = new char[] { ' ', '\r', '\n' };
-            //int longest_word_length = int.MaxValue;
-            //String longest_word = "";
+            string shortest_word = CleanedUpWords.OrderByDescending(s => s.Length).Last().ToString();
 
-            //var words = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-            //for(String word in words)
-            //{
-            //    if (word.Length < longest_word)
-            //    {
-            //        longest_word = word;
-            //        longest_word_length = word.Length;
-            //    }
-            //}
-
-            char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
-            String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-            string longest_word = raw_text_split.OrderByDescending(s => s.Length).Last();
-
-            return longest_word.Length;
+            return shortest_word.Length;
 
             // TODO: Implement MinimumWordLength function
             // throw new NotImplementedException();
@@ -93,11 +62,15 @@ namespace T4XJYT_LGI301
 
         public double AverageWordLength()
         {
-            
-            char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
-            String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            if (CleanedUpWords == null)
+            {
+                return 0;
+            }
 
-            double average_word_length = raw_text_split.Average(w => w.Length);
+            //char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
+            //String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+
+            double average_word_length = CleanedUpWords.Average(w => w.Length);
 
             return average_word_length;
 
@@ -108,9 +81,24 @@ namespace T4XJYT_LGI301
 
         public string MostCommonLetter()
         {
-            var charMap = RawText.Distinct().ToDictionary(c => c, c => RawText.Count(s => s == c));
-            return charMap.OrderByDescending(kvp => kvp.Value)
-                .First().Key.ToString();
+            //var letterCounts = CleanedUpWords
+            //   .SelectMany(word => word.ToLower())
+            //   .Where(char.IsLetter)
+            //   .GroupBy(letter => letter)
+            //   .Select(group => new { Letter = group.Key, Count = group.Count() })
+            //   .OrderByDescending(x => x.Count);
+
+            if (CleanedUpWords == null)
+            {
+                return "";
+            }
+
+            var letterCounts = CleanedUpWords
+                .GroupBy(letter => letter)
+                .Select(group => new { Letter = group.Key, Count = group.Count() })
+                .OrderByDescending(x => x.Count);
+
+            return letterCounts.First().Letter.ToString();
 
             // TODO: Implement MostCommonLetter function
             //throw new NotImplementedException();
@@ -118,16 +106,16 @@ namespace T4XJYT_LGI301
 
         public double WordDensity()
         {
-            char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
-            String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            if (CleanedUpWords == null)
+            {
+                return 0;
+            }
 
             double word_density = 0;
-            var sum_words = raw_text_split.Count();
+            int sum_words = CleanedUpWords.Count();
 
-            var number_of_unique_words = raw_text_split
-              .GroupBy(s => s)
-              .Where(g => g.Count() == 1)
-              .Select(g=>g.Key).Count();
+            var number_of_unique_words = CleanedUpWords
+                .Distinct().Count();
 
             word_density = number_of_unique_words / sum_words;
 
