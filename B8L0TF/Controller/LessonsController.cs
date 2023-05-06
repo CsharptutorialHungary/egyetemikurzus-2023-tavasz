@@ -19,7 +19,7 @@ namespace B8L0TF.Controller
         {
             _user.Name = userName;
             _lessons = CreateLessons();
-            Run();
+            RunAsync();
         }
 
         private List<Lesson> CreateLessons()
@@ -67,12 +67,16 @@ namespace B8L0TF.Controller
             return lesson;
         }
 
-        public void Run()
+        public async Task RunAsync()
         {
+            int? result, score = 0, questionNumber = 1;
+            
             Console.WriteLine("A jatek hamarosan indul 10 feladatot kapsz sok sikert!");
             Console.WriteLine("A jatek hamarosan kezdodik...");
-            System.Threading.Thread.Sleep(5000);
-            int? result, score = 0, questionNumber = 1;
+            
+            System.Threading.Thread.Sleep(4000);
+            Console.Clear();
+            
             while (true)
             {
                 foreach(var lesson in _lessons)
@@ -97,12 +101,26 @@ namespace B8L0TF.Controller
                     {
                         Console.WriteLine("Maskor szamot adj meg!");
                     }
+                    
                     questionNumber++;
-                    System.Threading.Thread.Sleep(3000);
+
+                    Console.WriteLine("Ha el akarod menteni az eredmenyedet ird be a 'save' parancsot, ha nem, akkor barmit beirhatsz");
+                    string save = Console.ReadLine();
+                    if(save == "save")
+                    {
+                        await SaveGameResult();
+                    }
+                    
+                    System.Threading.Thread.Sleep(2000);
                     Console.Clear();
                 }
                 return;
             }
+        }
+
+        private Task SaveGameResult()
+        {
+            throw new NotImplementedException();
         }
     }
 }
