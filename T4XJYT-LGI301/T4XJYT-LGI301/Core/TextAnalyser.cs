@@ -17,13 +17,11 @@ namespace T4XJYT_LGI301
 
         public int CountWords()
         {
-            //char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
-            //String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
             if (CleanedUpWords == null) {
                 return 0;
             }
-            int count = CleanedUpWords.Count();
+            int count = CleanedUpWords
+                .Count();
             return count;
 
             // TODO: Implement CountWords function
@@ -37,7 +35,10 @@ namespace T4XJYT_LGI301
                 return 0;
             }
 
-            string longest_word = CleanedUpWords.OrderByDescending(s => s.Length).First().ToString();
+            string longest_word = CleanedUpWords
+                .OrderByDescending(s => s.Length)
+                .First()
+                .ToString();
 
             return longest_word.Length;
 
@@ -52,7 +53,10 @@ namespace T4XJYT_LGI301
                 return 0;
             }
 
-            string shortest_word = CleanedUpWords.OrderByDescending(s => s.Length).Last().ToString();
+            string shortest_word = CleanedUpWords
+                .OrderByDescending(s => s.Length)
+                .Last()
+                .ToString();
 
             return shortest_word.Length;
 
@@ -67,13 +71,10 @@ namespace T4XJYT_LGI301
                 return 0;
             }
 
-            //char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
-            //String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-            double average_word_length = CleanedUpWords.Average(w => w.Length);
+            double average_word_length = CleanedUpWords
+                .Average(w => w.Length);
 
             return average_word_length;
-
 
             // TODO: Implement AverageWordLength function
             //throw new NotImplementedException();
@@ -81,13 +82,6 @@ namespace T4XJYT_LGI301
 
         public string MostCommonLetter()
         {
-            //var letterCounts = CleanedUpWords
-            //   .SelectMany(word => word.ToLower())
-            //   .Where(char.IsLetter)
-            //   .GroupBy(letter => letter)
-            //   .Select(group => new { Letter = group.Key, Count = group.Count() })
-            //   .OrderByDescending(x => x.Count);
-
             if (CleanedUpWords == null)
             {
                 return "";
@@ -110,14 +104,12 @@ namespace T4XJYT_LGI301
             {
                 return 0;
             }
-
-            double word_density = 0;
+                   
             int sum_words = CleanedUpWords.Count();
-
             var number_of_unique_words = CleanedUpWords
                 .Distinct().Count();
 
-            word_density = number_of_unique_words / sum_words;
+            double word_density = number_of_unique_words / sum_words;
 
             return word_density;
             // TODO: Implement WordDensity function
