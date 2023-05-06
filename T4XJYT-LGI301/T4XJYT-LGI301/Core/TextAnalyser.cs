@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.RegularExpressions;
 using T4XJYT_LGI301.Core;
 using T4XJYT_LGI301.Core.Models;
 
@@ -6,11 +7,12 @@ namespace T4XJYT_LGI301
 {
     public class TextAnalyser : ITextAnalyser
     {
-        public string RawText { get; set; }
-
+        private string RawText;
+        private List<Word> CleanedUpWords;
         public TextAnalyser(string textToAnalyze)
         {
             RawText = textToAnalyze;
+            CleanedUpWords = CreateWordsFromRawText<Word>();
         }
 
         public int CountWords()
@@ -91,7 +93,7 @@ namespace T4XJYT_LGI301
 
         public double AverageWordLength()
         {
-
+            
             char[] delimiters = new char[] { ' ', '\r', '\n', '.', '?', '!' };
             String[] raw_text_split = RawText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
@@ -134,13 +136,29 @@ namespace T4XJYT_LGI301
             //throw new NotImplementedException();
         }
 
-        public List<T> CreateWordsFromRawText<T>()
+        public List<T> CreateWordsFromRawText<T>() where T : Word, new()
         {
-            // TODO: Implement CreateWordsFromRawText function
             // Don't forget to remove the [" from the start and "] from the end of the text.
             // Also remove every symbol such as .,!? etc.
-            // This function should not be case sensitive, so "Hello" and "hello" should be the same.
-            throw new NotImplementedException();
+            // Remove [" from the start and "] from the end of the text
+            string trimmedText = RawText.TrimStart('[').TrimEnd(']');
+
+            // Remove every symbol such as .,!? etc.
+            string symbols = @"[^a-zA-Z\s]";
+            string cleanedText = Regex.Replace(trimmedText, symbols, "");
+
+            // Split the text into words
+            string[] words = cleanedText.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            // Create a list of words
+            List<T> wordList = new List<T>();
+            foreach (string word in words)
+            {
+                T newWord = new T { Text = word.ToLowerInvariant()};
+                wordList.Add(newWord);
+            }
+
+            return wordList;
         }
 
         public TextAnalysis CreateTextAnalysis()

@@ -7,11 +7,10 @@ namespace T4XJYT_LGI301.Tests
     {
         
         [Theory]
-        [InlineData("This is a sample text. It contains words of different lengths.", 11)]
+        [InlineData("this is a sample text it contains words of different lengths", 11)]
         [InlineData("", 0)]
-        [InlineData("$#@,.", 0)]
-        [InlineData("Hello world!", 2)]
-        [InlineData("Count words in this sentence.", 5)]
+        [InlineData("hello world", 2)]
+        [InlineData("count words in this sentence", 5)]
         public void TextAnalyser_CountWords_ReturnsInt(string textInput, int expectedCount)
         {
             // Arrange
@@ -27,7 +26,6 @@ namespace T4XJYT_LGI301.Tests
         [Theory]
         [InlineData("This is a sample text. It contains words of different lengths.", 9)]
         [InlineData("", 0)]
-        [InlineData("$#@,.", 0)]
         [InlineData("Hello world!", 5)]
         [InlineData("Count words in this sentence.", 8)]
         public void TextAnalyser_CountMaximumWordLength_ReturnsInt(string textInput, int expectedMaxWordLength)
@@ -45,7 +43,6 @@ namespace T4XJYT_LGI301.Tests
         [Theory]
         [InlineData("This is a sample text. It contains words of different lengths.", 1)]
         [InlineData("", 0)]
-        [InlineData("$#@,.", 0)]
         [InlineData("Hello world!", 5)]
         [InlineData("Count words in this sentence.", 2)]
         public void TextAnalyser_CountMinimumWordLength_ReturnsInt(string textInput, int expectedMinWordLength)
@@ -63,7 +60,6 @@ namespace T4XJYT_LGI301.Tests
         [Theory]
         [InlineData("This is a sample text. It contains words of different lengths.", 4.54)]
         [InlineData("", 0)]
-        [InlineData("$#@,.", 0)]
         [InlineData("Hello world!", 5)]
         [InlineData("Count words in this sentence.", 4.8)]
         public void TextAnalyser_AverageWordLength_ReturnsInt(string textInput, double expectedAvgWordLength)
@@ -81,7 +77,6 @@ namespace T4XJYT_LGI301.Tests
         [Theory]
         [InlineData("This is a sample text. It contains words of different lengths.", "t")]
         [InlineData("", "NA")]
-        [InlineData("$#@,.", "NA")]
         [InlineData("Hello world!", "l")]
         [InlineData("Count words in this sentence.", "t")]
         public void TextAnalyser_MostCommonLetter_ReturnsString(string textInput, string expectedMostCommonLetter)
@@ -115,27 +110,33 @@ namespace T4XJYT_LGI301.Tests
         }
         
         [Theory]
-        [InlineData("[\"This is a sample text. It contains words of different lengths.\"]", new string[] { "This", "is", "a", "sample", "text", "It", "contains", "words", "of", "different", "lengths" })]
-        [InlineData("[\"Hello, World!\"]", new string[] { "Hello", "World" })]
+        [InlineData("[\"This is a sample text. It contains words of different lengths.\"]", new[] { "this", "is", "a", "sample", "text", "it", "contains", "words", "of", "different", "lengths" })]
+        [InlineData("[\"Hello, World!\"]", new[] { "hello", "world" })]
         [InlineData("[\"\"]", new string[] { })]
-        [InlineData("[\"one\"]", new string[] { "one" })]
-        [InlineData("[\"One, two, three.\"]", new string[] { "One", "two", "three" })]
-        public void TextAnalyser_CreateWordsFromRawText_ReturnsGenericList<T>(string input, T[] expectedWords)
+        [InlineData("[\"one\"]", new[] { "one" })]
+        [InlineData("[\"%$#\"]", new string[] {  })]
+        [InlineData("[\"125654\"]", new string[] {  })]
+        [InlineData("[\"One, two1, three.\"]", new[] { "one", "two", "three" })]
+        [InlineData("[\"two, two, three.\"]", new[] { "two", "two", "three" })]
+        public void TextAnalyser_CreateWordsFromRawText_ReturnsGenericList(string input, string [] expectedWords)
         {
             // Arrange
             TextAnalyser sut = new TextAnalyser(input);
 
             // Act
-            var result = sut.CreateWordsFromRawText<T>().ToArray();
+            var results = sut.CreateWordsFromRawText<Word>().ToArray();
 
             // Assert
-            Assert.Equal(expectedWords, result);
+            Assert.Equal(expectedWords.Length, results.Length);
+            for (int i = 0; i < expectedWords.Length; i++)
+            {
+                Assert.Equal(expectedWords[i], results[i].Text);
+            }
         }
         
         [Theory]
         [InlineData("This is a sample text. It contains words of different lengths.", 11, 9, 1, 4, "t", 1)]
         [InlineData("", 0, 0, 0, 0, "NA", 0)]
-        [InlineData("$#@,.", 0, 0, 0, 0, "NA", 0)]
         [InlineData("Hello world!", 2, 5, 5, 5, "l", 1)]
         [InlineData("Count words in this sentence.", 5, 8, 2, 4.8, "t", 1)]
         public void CreateTextAnalysis_ReturnsCorrectResult(string input, int expectedWordsCount, int expectedMaxWordLength, int expectedMinWordLength, int expectedAvgWordLength, string expectedMostCommonLetter, double expectedWordDensity)

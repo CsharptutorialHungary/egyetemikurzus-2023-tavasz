@@ -4,8 +4,6 @@ namespace T4XJYT_LGI301.Core
 {
 	interface ITextAnalyser
 	{
-        string RawText { get; }
-
         int CountWords();
 
         int MaximumWordLength();
@@ -18,7 +16,7 @@ namespace T4XJYT_LGI301.Core
 
         double WordDensity();
 
-        List<T> CreateWordsFromRawText<T>();
+        List<T> CreateWordsFromRawText<T>() where T : Word, new();
 
         TextAnalysis CreateTextAnalysis();
 	}
