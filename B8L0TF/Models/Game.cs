@@ -6,10 +6,5 @@ using System.Threading.Tasks;
 
 namespace B8L0TF.Models
 {
-    internal class User
-    {
-
-        public string ?Name { get; set; }
-
-    }
+    internal record Game(int Id, string username, string result);
 }

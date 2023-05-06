@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using B8L0TF.Models;
+using B8L0TF.Commands;
 
 
 namespace B8L0TF.Controller
@@ -13,31 +14,67 @@ namespace B8L0TF.Controller
     {
 
         private string _command = "";
-        private User user;
+        private User user = new User();
+        private LessonsController lessonsController = new LessonsController();
 
         public void init()
         {
             start();
         }
 
-        public void destroy() { }
-
         public void start()
         {
             Console.WriteLine("Start!");
-            readUserName();
-
+            ReadUserName();
+            Console.WriteLine($"Udv {user.Name}");
             while (true)
             {
                 Console.WriteLine("Adj meg egy parancsot:");
                 _command = Console.ReadLine();
 
-                if (!IsCommandInvalid()) runCommand();
+                if (!IsCommandInvalid()) RunCommand();
                 else Console.WriteLine("Nem adtal meg parancsot!");
             }
         }
 
-        private void runCommand()
+        private void RunCommand()
+        {
+            switch (_command)
+            {
+                case Commands.Commands.Help:
+                    WriteCommands();
+                    break;
+                case Commands.Commands.ListGames:
+                    WritePlayedGamesStats();
+                    break;
+                case Commands.Commands.CreateGame:
+                    CreateGameLoop();
+                    break;
+                case Commands.Commands.Exit:
+                    ExitControllerLoop();
+                    break;
+                default: Console.WriteLine("Nincs ilyen Parancs!");
+                    break;
+            }
+       
+        }
+
+        private static void ExitControllerLoop()
+        {
+            Environment.Exit(0);
+        }
+
+        private void CreateGameLoop()
+        {
+            lessonsController.Init();
+        }
+
+        private void WritePlayedGamesStats()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void WriteCommands()
         {
             throw new NotImplementedException();
         }
@@ -48,16 +85,14 @@ namespace B8L0TF.Controller
         }
 
 
-        public void readUserName()
+        public void ReadUserName()
         {
             Console.WriteLine("Add meg a jatekos nevet!");
             user.Name = Console.ReadLine();
 
-            int line = 0;
-
-            while (!int.TryParse(user.Name, out line))
+            while (user.Name == null)
             {
-                Console.WriteLine("Try again.");
+                Console.WriteLine("Ervenytelen nev adj meg egy ujat.");
                 user.Name = Console.ReadLine();
             }
         }
