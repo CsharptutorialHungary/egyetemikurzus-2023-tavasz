@@ -18,9 +18,10 @@ namespace T4XJYT_LGI301
         public int CountWords()
         {
             if (!_cleanedUpWords.Any()) return 0;
-            
+
             int count = _cleanedUpWords
                 .Count();
+
             return count;
         }
 
@@ -28,62 +29,54 @@ namespace T4XJYT_LGI301
         {
             if (!_cleanedUpWords.Any()) return 0;
 
-            Word longestWord = _cleanedUpWords.OrderByDescending(w => w.Length).FirstOrDefault();
-            return longestWord.Length;
-
-            //string longestWord = _cleanedUpWords
-            //    .OrderByDescending(s => s.Length)
-            //    .First()
-            //    .ToString();
-
-            //return longestWord.Length;
+            return _cleanedUpWords
+                .Max(word => word.Text.Length);
         }
 
         public int MinimumWordLength()
         {
             if (!_cleanedUpWords.Any()) return 0;
 
-            string shortestWord = _cleanedUpWords
-                .OrderByDescending(s => s.Length)
-                .Last()
-                .ToString();
-
-            return shortestWord.Length;
+            return _cleanedUpWords
+                .Min(word => word.Text.Length);
         }
 
         public double AverageWordLength()
         {
             if (!_cleanedUpWords.Any()) return 0;
 
-            double averageWordLength = _cleanedUpWords
-                .Average(w => w.Length);
+            double average = _cleanedUpWords
+                .Select(word => word.Text.Length)
+                .Average();
 
-            return averageWordLength;
+            return Math.Floor(average * 100) / 100;
         }
 
         public string MostCommonLetter()
         {
             if (!_cleanedUpWords.Any()) return "NA";
 
-            var letterCounts = _cleanedUpWords
+            return _cleanedUpWords
+                .SelectMany(word => word.Text)
                 .GroupBy(letter => letter)
-                .Select(group => new { Letter = group.Key, Count = group.Count() })
-                .OrderByDescending(x => x.Count);
-
-            return letterCounts.First().Letter.ToString();
+                .OrderByDescending(group => group.Count())
+                .First()
+                .Key
+                .ToString();
         }
 
         public double WordDensity()
         {
             if (!_cleanedUpWords.Any()) return 0;
 
-            int sumWords = _cleanedUpWords.Count();
-            var numberOfUniqueWords = _cleanedUpWords
-                .Distinct().Count();
+            int totalWords = _cleanedUpWords.Count;
+            int uniqueWords = _cleanedUpWords
+                .Select(word => word.Text.ToLower())
+                .Distinct()
+                .Count();
 
-            double wordDensity = numberOfUniqueWords / sumWords;
-
-            return wordDensity;
+            double density = totalWords != 0 ? (double)uniqueWords / totalWords : 0;
+            return Math.Floor(density * 100) / 100;
         }
 
         public List<T> CreateWordsFromRawText<T>() where T : Word, new()
@@ -102,7 +95,7 @@ namespace T4XJYT_LGI301
             List<T> wordList = new List<T>();
             foreach (string word in words)
             {
-                T newWord = new T { Text = word.ToLowerInvariant()};
+                T newWord = new T { Text = word.ToLowerInvariant() };
                 wordList.Add(newWord);
             }
 
