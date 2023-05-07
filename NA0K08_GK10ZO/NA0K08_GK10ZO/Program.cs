@@ -2,7 +2,7 @@
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         string fileName = "2022.csv";
         string path = Path.Combine(Environment.CurrentDirectory, fileName);
@@ -10,7 +10,7 @@ internal class Program
         try
         {
             var races = FileManager.GetRaceDataFromCsv(path);
-            var topThree = Stats.getTop3Winners(races);
+            var topThree = await Stats.getTop3WinnersAsync(races);
             FileManager.SaveToJSON(topThree, "topThree.json");
         }
         catch (Exception ex)

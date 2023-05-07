@@ -11,17 +11,19 @@ namespace NA0K08_GK10ZO
 {
     internal class Stats
     {
-
-        public static List<TopThree> getTop3Winners(List<RaceResult> raceResults)
+        public static async Task<List<TopThree>> getTop3WinnersAsync(List<RaceResult> raceResults)
         {
             List<string> results = new List<string>();
             Console.WriteLine();
-            var result = raceResults
+
+            var result = await Task.Run(() =>
+                raceResults
                 .Where(m => m.Position != 0)
                 .GroupBy(m => m.Country)
                 .OrderBy(g => g.Min(m => m.Position))
                 .Select(g => g.Select(m => m.DriverName).ToList())
-                .ToList();
+                .ToList()
+            );
 
             var resultList = new List<TopThree>();
 
