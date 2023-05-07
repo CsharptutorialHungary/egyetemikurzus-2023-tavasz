@@ -1,3 +1,4 @@
+using T4XJYT_LGI301.Core.Core;
 using T4XJYT_LGI301.Core.Models;
 using Xunit;
 
@@ -78,7 +79,7 @@ namespace T4XJYT_LGI301.Tests
         [InlineData("This is a sample text. It contains words of different lengths.", "t")]
         [InlineData("", "NA")]
         [InlineData("Hello world!", "l")]
-        [InlineData("Count words in this sentence.", "t")]
+        [InlineData("Count words in this sentence.", "n")]
         public void TextAnalyser_MostCommonLetter_ReturnsString(string textInput, string expectedMostCommonLetter)
         {
             // Arrange
@@ -110,6 +111,25 @@ namespace T4XJYT_LGI301.Tests
         }
         
         [Theory]
+        [InlineData("the quick brown fox jumps over the lazy dog", "quick, brown, jumps")]
+        [InlineData("hello, world!", "hello, world")]
+        [InlineData("one, two, three", "three")]
+        [InlineData("", "")]
+        [InlineData("$#@,.", "")]
+        public void TextAnalyser_LongestWords_ReturnsString(string textInput, string expectedLongestWords)
+        {
+            // Arrange
+            TextAnalyser sut = new TextAnalyser(textInput);
+
+            // Act
+            string result = sut.LongestWords();
+
+            // Assert
+            Assert.Equal(expectedLongestWords, result);
+        }
+
+        
+        [Theory]
         [InlineData("[\"This is a sample text. It contains words of different lengths.\"]", new[] { "this", "is", "a", "sample", "text", "it", "contains", "words", "of", "different", "lengths" })]
         [InlineData("[\"Hello, World!\"]", new[] { "hello", "world" })]
         [InlineData("[\"\"]", new string[] { })]
@@ -133,13 +153,13 @@ namespace T4XJYT_LGI301.Tests
                 Assert.Equal(expectedWords[i], results[i].Text);
             }
         }
-        
+
         [Theory]
-        [InlineData("This is a sample text. It contains words of different lengths.", 11, 9, 1, 4, "t", 1)]
-        [InlineData("", 0, 0, 0, 0, "NA", 0)]
-        [InlineData("Hello world!", 2, 5, 5, 5, "l", 1)]
-        [InlineData("Count words in this sentence.", 5, 8, 2, 4.8, "t", 1)]
-        public void CreateTextAnalysis_ReturnsCorrectResult(string input, int expectedWordsCount, int expectedMaxWordLength, int expectedMinWordLength, int expectedAvgWordLength, string expectedMostCommonLetter, double expectedWordDensity)
+        [InlineData("This is a sample text. It contains words of different lengths.", 11, 9, 1, 4.54, "t", "different",1)]
+        [InlineData("", 0, 0, 0, 0, "NA", "",0)]
+        [InlineData("Hello world!", 2, 5, 5, 5, "l", "hello, world",1)]
+        [InlineData("Count words in this sentence.", 5, 8, 2, 4.8, "n", "sentence",1)]
+        public void CreateTextAnalysis_ReturnsCorrectResult(string input, int expectedWordsCount, int expectedMaxWordLength, int expectedMinWordLength, double expectedAvgWordLength, string expectedMostCommonLetter, string expectedLongestWords, double expectedWordDensity)
         {
             // Arrange
             var expectedAnalysis = new TextAnalysis
@@ -149,6 +169,7 @@ namespace T4XJYT_LGI301.Tests
                 MinimumWordLength = expectedMinWordLength,
                 AverageWordLength = expectedAvgWordLength,
                 MostCommonLetter = expectedMostCommonLetter,
+                LongestWords = expectedLongestWords,
                 WordDensity = expectedWordDensity
             };
             var sut = new TextAnalyser(input);
@@ -162,6 +183,7 @@ namespace T4XJYT_LGI301.Tests
             Assert.Equal(expectedAnalysis.MinimumWordLength, result.MinimumWordLength);
             Assert.Equal(expectedAnalysis.AverageWordLength, result.AverageWordLength);
             Assert.Equal(expectedAnalysis.MostCommonLetter, result.MostCommonLetter);
+            Assert.Equal(expectedAnalysis.LongestWords, result.LongestWords);
             Assert.InRange(result.WordDensity, expectedAnalysis.WordDensity - 0.001, expectedAnalysis.WordDensity + 0.001);
         }
     }

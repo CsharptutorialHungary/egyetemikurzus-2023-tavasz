@@ -1,9 +1,7 @@
-using System.Linq;
 using System.Text.RegularExpressions;
-using T4XJYT_LGI301.Core;
 using T4XJYT_LGI301.Core.Models;
 
-namespace T4XJYT_LGI301
+namespace T4XJYT_LGI301.Core.Core
 {
     public class TextAnalyser : ITextAnalyser
     {
@@ -65,6 +63,19 @@ namespace T4XJYT_LGI301
                 .ToString();
         }
 
+        public string LongestWords()
+        {
+            if (!_cleanedUpWords.Any()) return "";
+
+            int maxLength = MaximumWordLength();
+
+            var longestWords = _cleanedUpWords
+                .Where(word => word.Text.Length == maxLength)
+                .Select(word => word.Text);
+
+            return string.Join(", ", longestWords);
+        }
+
         public double WordDensity()
         {
             if (!_cleanedUpWords.Any()) return 0;
@@ -111,6 +122,7 @@ namespace T4XJYT_LGI301
                 MinimumWordLength = MinimumWordLength(),
                 AverageWordLength = AverageWordLength(),
                 MostCommonLetter = MostCommonLetter(),
+                LongestWords = LongestWords(),
                 WordDensity = WordDensity()
             };
 

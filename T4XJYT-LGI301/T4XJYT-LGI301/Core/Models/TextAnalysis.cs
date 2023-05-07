@@ -10,9 +10,11 @@ namespace T4XJYT_LGI301.Core.Models
 
         public int MinimumWordLength { get; set; }
 
-        public int AverageWordLength { get; set; }
+        public double AverageWordLength { get; set; }
 
         public string MostCommonLetter { get; set; }
+        
+        public string LongestWords { get; set; }
 
         public double WordDensity { get; set; }
     }

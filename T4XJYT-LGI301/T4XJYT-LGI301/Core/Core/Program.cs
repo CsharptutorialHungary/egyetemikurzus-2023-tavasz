@@ -1,15 +1,17 @@
-﻿using T4XJYT_LGI301.Core.API;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using T4XJYT_LGI301.Core.API;
 using T4XJYT_LGI301.Core.IO;
 using T4XJYT_LGI301.Core.Models;
 
-namespace T4XJYT_LGI301.Core
+namespace T4XJYT_LGI301.Core.Core
 {
     class Program
     {
         static async Task Main(string[] args)
         {
             Console.WriteLine("Welcome to the Text Analysis Project!");
-            TextManager textManager = new TextManager();
 
             bool runApp = true;
             while (runApp)
@@ -21,7 +23,7 @@ namespace T4XJYT_LGI301.Core
                 switch (input)
                 {
                     case "1":
-                        await textManager.DownloadAndSaveText();
+                        await DownloadAndSaveText();
                         break;
                     case "2":
                         runApp = false;
@@ -33,10 +35,8 @@ namespace T4XJYT_LGI301.Core
                 }
             }
         }
-        
-        class TextManager
-    {
-        public async Task DownloadAndSaveText()
+
+        static async Task DownloadAndSaveText()
         {
             string textFromApi = await FetchTextFromApi();
             bool shouldSave = PromptToSaveText();
@@ -51,7 +51,7 @@ namespace T4XJYT_LGI301.Core
             }
         }
 
-        private async Task<string> FetchTextFromApi()
+        static async Task<string> FetchTextFromApi()
         {
             Console.WriteLine("Getting the text from the API...\n");
             ApiDataProvider apiDataProvider = new ApiDataProvider();
@@ -60,16 +60,16 @@ namespace T4XJYT_LGI301.Core
             return textFromApi;
         }
 
-        private bool PromptToSaveText()
+        static bool PromptToSaveText()
         {
             Console.WriteLine("\nDo you want to save the text to a file? (yes/no)");
             string saveToFile = Console.ReadLine().ToLower();
-            string[] yesAnswers = new string[3] {"y", "yes", "igen"};
+            string[] yesAnswers = new string[4] {"y", "yes", "igen", "i"};
 
             return yesAnswers.Contains(saveToFile);
         }
 
-        private FileFormat? DetermineFileFormat()
+        static FileFormat? DetermineFileFormat()
         {
             Console.WriteLine("Select the file format:");
             Console.WriteLine("1. XML");
@@ -83,12 +83,12 @@ namespace T4XJYT_LGI301.Core
                 case "2":
                     return FileFormat.Json;
                 default:
-                    Console.WriteLine("Invalid option. Skipping save operation."); 
+                    Console.WriteLine("Invalid option. Skipping save operation.");
                     return null;
             }
         }
 
-        private async Task SaveText(string textFromApi, FileFormat fileFormat)
+        static async Task SaveText(string textFromApi, FileFormat fileFormat)
         {
             AnalysisFileSaver textAnalysisService = new AnalysisFileSaver();
             TextAnalyser textAnalyser = new TextAnalyser(textFromApi);
@@ -97,6 +97,5 @@ namespace T4XJYT_LGI301.Core
             await textAnalysisService.SaveAnalysis(textAnalysis, fileFormat);
             Console.WriteLine($"Text analysis saved in {fileFormat} format.");
         }
-    }
     }
 }
