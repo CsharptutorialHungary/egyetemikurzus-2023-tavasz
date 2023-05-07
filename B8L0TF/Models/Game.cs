@@ -6,5 +6,12 @@ using System.Threading.Tasks;
 
 namespace B8L0TF.Models
 {
-    internal record Game(int Id, string Username, int Result);
+    internal record Game(string Id, string Username, int Result)
+    {
+        public override string ToString()
+        {
+            return "Jatekos nev: " + $"{Username}" + " Eredmenye: " + $"{Result}";
+        }
+    }
+
 }

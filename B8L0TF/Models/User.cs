@@ -10,6 +10,14 @@ namespace B8L0TF.Models
     {
 
         public string ?Name { get; set; }
-        public int ? result { get; set; }
+        public int ?result { get; set; }
+
+        public void updateUserResult(int result)
+        {
+            this.result = result;
+        }
+
     }
+
+
 }

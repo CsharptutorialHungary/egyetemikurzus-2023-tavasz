@@ -1,4 +1,5 @@
-﻿using B8L0TF.Models;
+﻿using B8L0TF.Json;
+using B8L0TF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,17 @@ namespace B8L0TF.Controller
 {
     internal class LessonsController
     {
-
+        private ReadAndWriteJson ReadAndWriteJson = new();
         private List<Lesson> _lessons = new();
         private User _user = new();
 
 
-        public void Init(string userName)
+        public async Task Init(string userName)
         {
+            await ReadAndWriteJson.InitPlayedGames();
             _user.Name = userName;
             _lessons = CreateLessons();
-            RunAsync();
+            Run();
         }
 
         private List<Lesson> CreateLessons()
@@ -67,9 +69,10 @@ namespace B8L0TF.Controller
             return lesson;
         }
 
-        public async Task RunAsync()
+        public async void Run()
         {
-            int? result, score = 0, questionNumber = 1;
+            int score = 0, questionNumber = 1;
+            int? result;
             
             Console.WriteLine("A jatek hamarosan indul 10 feladatot kapsz sok sikert!");
             Console.WriteLine("A jatek hamarosan kezdodik...");
@@ -112,16 +115,16 @@ namespace B8L0TF.Controller
                 string save = Console.ReadLine();
                 if (save == "save")
                 {
-                    await SaveGameResult();
+                    SaveGameResult(score);
+                    _user.result = score;
                 }
-
-                return;
             }
         }
 
-        private Task SaveGameResult()
+        private void SaveGameResult(int score)
         {
-            throw new NotImplementedException();
+            ReadAndWriteJson.AddGameToList(_user.Name, score);
+            ReadAndWriteJson.SaveGames();
         }
     }
 }

@@ -10,8 +10,9 @@ namespace B8L0TF.Commands
     {
         public const string Help = "help";
         public const string ListGames = "list";
-        public const string CreateGame = "create";
+        public const string StartGame = "start";
         public const string Exit = "exit";
+        public const string MyScore = "myscore";
 
     }
 }

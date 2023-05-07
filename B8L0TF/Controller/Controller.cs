@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 using B8L0TF.Models;
 using B8L0TF.Commands;
-
+using B8L0TF.Json;
 
 namespace B8L0TF.Controller
 {
     internal class Controller
     {
-
+        private ReadAndWriteJson ReadAndWriteJson = new();
         private string _command = "";
         private readonly User user = new();
         private readonly LessonsController lessonsController = new();
 
 
-        public void init()
+        public async void init()
         {
-
+            //await ReadAndWriteJson.InitPlayedGames();
             start();
         }
 
@@ -49,11 +49,14 @@ namespace B8L0TF.Controller
                 case Commands.Commands.ListGames:
                     WritePlayedGamesStats();
                     break;
-                case Commands.Commands.CreateGame:
+                case Commands.Commands.StartGame:
                     CreateGameLoop();
                     break;
                 case Commands.Commands.Exit:
                     ExitControllerLoop();
+                    break;
+                case Commands.Commands.MyScore:
+                    getMyBestScore();
                     break;
                 default: Console.WriteLine("Nincs ilyen Parancs!");
                     break;
@@ -61,19 +64,37 @@ namespace B8L0TF.Controller
        
         }
 
+        private void getMyBestScore()
+        {
+            try
+            {
+            var bestScore = ReadAndWriteJson.getUserBestScore(user.Name);
+            Console.WriteLine($"A legjobb eredmenyed: {bestScore}");
+
+            }catch (Exception) {
+                Console.WriteLine("Ezen a neven nincs elmentve jatek."); 
+            }
+        }
+
         private static void ExitControllerLoop()
         {
             Environment.Exit(0);
         }
 
-        private void CreateGameLoop()
+        private async void CreateGameLoop()
         {
-            lessonsController.Init(user.Name);
+           await lessonsController.Init(user.Name);
         }
 
-        private void WritePlayedGamesStats()
+        private async void WritePlayedGamesStats()
         {
-            throw new NotImplementedException();
+            List<Game> games = await ReadAndWriteJson.ReadPlayedGames();
+
+            foreach (Game game in games)
+            {
+                Console.WriteLine(game.ToString());
+            }
+
         }
 
         private void WriteCommands()
