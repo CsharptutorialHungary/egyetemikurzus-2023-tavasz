@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D9MXN2", "D9MXN2\D9MXN2.csproj", "{F72396A8-9653-4B88-8B03-7AA0BD8AAD2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{8EAA04F7-6291-418B-8104-3E1188DEAA0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{F72396A8-9653-4B88-8B03-7AA0BD8AAD2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F72396A8-9653-4B88-8B03-7AA0BD8AAD2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F72396A8-9653-4B88-8B03-7AA0BD8AAD2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EAA04F7-6291-418B-8104-3E1188DEAA0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EAA04F7-6291-418B-8104-3E1188DEAA0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EAA04F7-6291-418B-8104-3E1188DEAA0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EAA04F7-6291-418B-8104-3E1188DEAA0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
