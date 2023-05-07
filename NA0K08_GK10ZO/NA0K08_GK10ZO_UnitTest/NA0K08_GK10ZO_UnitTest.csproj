@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NA0K08_GK10ZO\NA0K08_GK10ZO\NA0K08_GK10ZO.csproj" />
+    <ProjectReference Include="..\NA0K08_GK10ZO\NA0K08_GK10ZO.csproj" />
   </ItemGroup>
 
 </Project>
