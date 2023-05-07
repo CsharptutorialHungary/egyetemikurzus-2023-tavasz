@@ -18,6 +18,5 @@ public class MainScreen : IScreen
 
     public void Render()
     {
-        throw new NotImplementedException();
     }
 }
