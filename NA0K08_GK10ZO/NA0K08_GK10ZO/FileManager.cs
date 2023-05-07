@@ -53,6 +53,8 @@ namespace NA0K08_GK10ZO
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
 
             File.WriteAllText(filePath, json);
+
+            Console.WriteLine($"JSON file saved to {filePath}");
         }
     }
 }

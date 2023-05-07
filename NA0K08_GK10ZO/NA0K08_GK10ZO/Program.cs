@@ -4,8 +4,7 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        string fileName = "2022.csv";
-        string path = Path.Combine(Environment.CurrentDirectory, fileName);
+        string path = $@"..\..\..\sources\2022.csv";
 
         try
         {
