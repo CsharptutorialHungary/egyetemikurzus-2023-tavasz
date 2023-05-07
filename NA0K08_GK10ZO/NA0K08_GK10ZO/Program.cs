@@ -1,4 +1,5 @@
-﻿using NA0K08_GK10ZO.Model;
+﻿using NA0K08_GK10ZO;
+using NA0K08_GK10ZO.Model;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -36,5 +37,9 @@ internal class Program
                 races.Add(race);
             }
         }
+
+        var topThree = Stats.getTop3Winners(races);
+
+        Console.WriteLine();
     }
 }
