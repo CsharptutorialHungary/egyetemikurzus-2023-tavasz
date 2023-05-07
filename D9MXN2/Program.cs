@@ -10,7 +10,7 @@ class Program
         {"exit", () => Environment.Exit(0)}
     };
 
-    static void ScreenRender(IScreen screen)
+    static void ScreenRender(BaseScreen screen)
     {
         screen.Render();
     }
@@ -41,16 +41,7 @@ class Program
             int try_counter = 0;
             for (; try_counter < MAX_TRIES; try_counter++)
             {
-                Console.WriteLine("What would you like to do?");
-
-                foreach (string command_name in commands.Keys)
-                {
-                    Console.WriteLine($"\t-{command_name}");
-                }
-
-                Console.Write(": ");
-                user_command = Console.ReadLine() ?? "";
-                Console.Clear();
+                user_command = BaseScreen.GetRequestedCommandFrom(commands.Keys);
 
                 if (commands.ContainsKey(user_command)) break;
 

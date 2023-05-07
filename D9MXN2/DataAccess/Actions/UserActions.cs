@@ -1,7 +1,6 @@
 using D9MXN2.Models;
 using Database;
 using Database.Models;
-using System.Linq;
 
 namespace D9MXN2.DataAccess.Actions;
 
@@ -31,7 +30,9 @@ public class UserActions
 
         using (var db = SqliteDatabaseFactory<PeopleContext>.Create())
         {
-            var person_with_same_username = db.People.Where(p => p.Username == new_user.Username).ToList();
+            var person_with_same_username = db.People
+                .Where(p => p.Username == new_user.Username)
+                .ToList();
 
             if (person_with_same_username.Count() > 0)
             {

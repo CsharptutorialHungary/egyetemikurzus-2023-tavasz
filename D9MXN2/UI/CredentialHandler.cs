@@ -3,18 +3,11 @@ using D9MXN2.Models;
 namespace D9MXN2.UI;
 
 
-public abstract class CredentialHandler : IScreen
+public abstract class CredentialHandler : BaseScreen
 {
-    protected string GetCredentialWithMsg(string msg)
+    protected void RenderMain(string username)
     {
-        Console.Write(msg + ":");
-
-        return Console.ReadLine() ?? "";
-    }
-
-    protected void RenderMain()
-    {
-        MainScreen main = new();
+        MainScreen main = new(username);
         main.Render();
     }
 
@@ -22,10 +15,11 @@ public abstract class CredentialHandler : IScreen
     {
         const int MAX_TRIES = 3;
         int try_counter = 0;
+        User? user = null;
 
         while (try_counter < MAX_TRIES)
         {
-            var user = GetCredentails();
+            user = GetCredentails();
             Console.Clear();
 
             if (user.Username.Length >= 100 || user.Password.Length >= 100)
@@ -41,7 +35,6 @@ public abstract class CredentialHandler : IScreen
                 continue;
             }
 
-            Console.WriteLine($"Success! Your username is {user.Username}");
             break;
         }
 
@@ -51,17 +44,16 @@ public abstract class CredentialHandler : IScreen
             return;
         }
 
-        this.RenderMain();
+        if(user != null) {
+            RenderMain(user.Username);
+        }
     }
 
     public User GetCredentails()
     {
-        string username = GetCredentialWithMsg("Username");
-        string password = GetCredentialWithMsg("Password"); //! FIXME: passwordRead from console 
+        string username = GetInputWithMsg("Username");
+        string password = GetInputWithMsg("Password"); //! FIXME: passwordRead from console 
 
         return new User(username, password);
     }
-
-    public abstract void Render();
-
 }
