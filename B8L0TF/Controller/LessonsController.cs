@@ -16,9 +16,9 @@ namespace B8L0TF.Controller
         private User _user = new();
 
 
-        public async Task Init(string userName)
+        public void Init(string userName)
         {
-            await ReadAndWriteJson.InitPlayedGames();
+             ReadAndWriteJson.InitPlayedGames();
             _user.Name = userName;
             _lessons = CreateLessons();
             Run();
@@ -69,7 +69,7 @@ namespace B8L0TF.Controller
             return lesson;
         }
 
-        public async void Run()
+        public void Run()
         {
             int score = 0, questionNumber = 1;
             int? result;
@@ -118,13 +118,21 @@ namespace B8L0TF.Controller
                     SaveGameResult(score);
                     _user.result = score;
                 }
+                Console.WriteLine("A jateknak vege.\t (help)");
+                return;
             }
         }
 
         private void SaveGameResult(int score)
         {
-            ReadAndWriteJson.AddGameToList(_user.Name, score);
-            ReadAndWriteJson.SaveGames();
+            try
+            {
+                ReadAndWriteJson.AddGameToList(_user.Name, score);
+                ReadAndWriteJson.SaveGames();
+                Console.WriteLine("Sikeres mentes!");
+            } catch (Exception) {
+                Console.WriteLine("Sikertelen mentes"); 
+            }
         }
     }
 }

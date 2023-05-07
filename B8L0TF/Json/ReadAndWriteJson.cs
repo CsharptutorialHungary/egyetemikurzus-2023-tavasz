@@ -78,12 +78,16 @@ namespace B8L0TF.Json
 
         internal int getUserBestScore(string username)
         {
-            var result = _gameList
-                .Where(x => x.Username == username)
-                .OrderBy(x => x)
-                .FirstOrDefault();
+                var result = _gameList
+                    .Where(x => x.Username == username)
+                    .OrderBy(x => x)
+                    .FirstOrDefault();
 
-            return result.Result;
+            if (result != null)
+            {
+                return result.Result;
+            }
+            return -1;
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using B8L0TF.Models;
 using B8L0TF.Commands;
 using B8L0TF.Json;
+using System.Reflection;
 
 namespace B8L0TF.Controller
 {
@@ -18,9 +19,9 @@ namespace B8L0TF.Controller
         private readonly LessonsController lessonsController = new();
 
 
-        public async void init()
+        public void init()
         {
-            //await ReadAndWriteJson.InitPlayedGames();
+            ReadAndWriteJson.InitPlayedGames();
             start();
         }
 
@@ -29,9 +30,9 @@ namespace B8L0TF.Controller
             Console.WriteLine("Start!");
             ReadUserName();
             Console.WriteLine($"Udv {user.Name}");
+            Console.WriteLine("Adj meg egy parancsot:\t(help)");
             while (true)
             {
-                Console.WriteLine("Adj meg egy parancsot:");
                 _command = Console.ReadLine();
 
                 if (!IsCommandInvalid()) RunCommand();
@@ -58,6 +59,9 @@ namespace B8L0TF.Controller
                 case Commands.Commands.MyScore:
                     getMyBestScore();
                     break;
+                case Commands.Commands.Clear:
+                    Console.Clear();
+                    break;
                 default: Console.WriteLine("Nincs ilyen Parancs!");
                     break;
             }
@@ -66,13 +70,14 @@ namespace B8L0TF.Controller
 
         private void getMyBestScore()
         {
-            try
-            {
             var bestScore = ReadAndWriteJson.getUserBestScore(user.Name);
+            if (bestScore != -1)
+            {
             Console.WriteLine($"A legjobb eredmenyed: {bestScore}");
-
-            }catch (Exception) {
-                Console.WriteLine("Ezen a neven nincs elmentve jatek."); 
+            }
+            else
+            {
+                Console.WriteLine("Nincs meg elmentve eredmenyed.");
             }
         }
 
@@ -81,9 +86,9 @@ namespace B8L0TF.Controller
             Environment.Exit(0);
         }
 
-        private async void CreateGameLoop()
+        private void CreateGameLoop()
         {
-           await lessonsController.Init(user.Name);
+            lessonsController.Init(user.Name);
         }
 
         private async void WritePlayedGamesStats()
@@ -99,7 +104,13 @@ namespace B8L0TF.Controller
 
         private void WriteCommands()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Parancsok listaja");
+            var finfos = typeof(Commands.Commands).GetFields(BindingFlags.NonPublic | BindingFlags.Public |
+                  BindingFlags.Static);
+            foreach (var finfo in finfos)
+            {
+                Console.WriteLine("\t " + $"{finfo.GetValue(null)}");
+            }
         }
 
         private bool IsCommandInvalid()

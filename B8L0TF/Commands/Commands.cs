@@ -12,6 +12,7 @@ namespace B8L0TF.Commands
         public const string ListGames = "list";
         public const string StartGame = "start";
         public const string Exit = "exit";
+        public const string Clear = "clear";
         public const string MyScore = "myscore";
 
     }
