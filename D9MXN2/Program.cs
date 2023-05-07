@@ -1,2 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using D9MXN2.DataAccess;
+using Database;
+
+using(var db = SqliteDatabaseFactory<PeopleContext>.Create()) {
+    System.Console.WriteLine(db.People.Count());
+}
