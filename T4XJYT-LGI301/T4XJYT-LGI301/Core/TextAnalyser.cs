@@ -27,13 +27,16 @@ namespace T4XJYT_LGI301
         public int MaximumWordLength()
         {
             if (!_cleanedUpWords.Any()) return 0;
-            
-            string longestWord = _cleanedUpWords
-                .OrderByDescending(s => s.Length)
-                .First()
-                .ToString();
 
+            Word longestWord = _cleanedUpWords.OrderByDescending(w => w.Length).FirstOrDefault();
             return longestWord.Length;
+
+            //string longestWord = _cleanedUpWords
+            //    .OrderByDescending(s => s.Length)
+            //    .First()
+            //    .ToString();
+
+            //return longestWord.Length;
         }
 
         public int MinimumWordLength()
