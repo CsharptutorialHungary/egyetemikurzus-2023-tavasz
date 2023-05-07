@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using B8L0TF.Models;
-using B8L0TF.Commands;
+﻿using B8L0TF.Models;
 using B8L0TF.Json;
-using System.Reflection;
 
 namespace B8L0TF.Controller
 {
     internal class Controller
     {
+        public Dictionary<string,string> Commands = new() { { "help" , "kiirja az osszes hasznalahto parancsot"} , { "list" , "listazza az eddig lementett jatekokat"}, { "start", "uj jatek inditasa" }, { "exit", "kilepes a programbol" }, { "myscore", "kiirja az eddig elert legjobb eredmenyed" }, { "clear", "torli az osszes parancsot a console-rol" } };
         private ReadAndWriteJson ReadAndWriteJson = new();
         private string _command = "";
         private readonly User user = new();
@@ -44,22 +37,22 @@ namespace B8L0TF.Controller
         {
             switch (_command)
             {
-                case Commands.Commands.Help:
+                case "help":
                     WriteCommands();
                     break;
-                case Commands.Commands.ListGames:
+                case "list":
                     WritePlayedGamesStats();
                     break;
-                case Commands.Commands.StartGame:
+                case "start":
                     CreateGameLoop();
                     break;
-                case Commands.Commands.Exit:
+                case "exit":
                     ExitControllerLoop();
                     break;
-                case Commands.Commands.MyScore:
+                case "myscore":
                     getMyBestScore();
                     break;
-                case Commands.Commands.Clear:
+                case "clear":
                     Console.Clear();
                     break;
                 default: Console.WriteLine("Nincs ilyen Parancs!");
@@ -105,11 +98,9 @@ namespace B8L0TF.Controller
         private void WriteCommands()
         {
             Console.WriteLine("Parancsok listaja");
-            var finfos = typeof(Commands.Commands).GetFields(BindingFlags.NonPublic | BindingFlags.Public |
-                  BindingFlags.Static);
-            foreach (var finfo in finfos)
+            foreach(var command in Commands)
             {
-                Console.WriteLine("\t " + $"{finfo.GetValue(null)}");
+                Console.WriteLine($"{command.Key}\t {command.Value}");
             }
         }
 
@@ -130,7 +121,5 @@ namespace B8L0TF.Controller
                 user.Name = Console.ReadLine();
             }
         }
-
-        
     }
 }
