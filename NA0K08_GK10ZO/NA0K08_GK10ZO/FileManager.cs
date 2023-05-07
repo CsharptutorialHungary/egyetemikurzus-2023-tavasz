@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NA0K08_GK10ZO
 {
-    internal class FileManager
+    public class FileManager
     {
         public static List<RaceResult> GetRaceDataFromCsv(string path)
         {

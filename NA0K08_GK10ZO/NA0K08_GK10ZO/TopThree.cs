@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NA0K08_GK10ZO
 {
-    internal class TopThree
+    public class TopThree
     {
         public readonly string first;
         public readonly string second;

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NA0K08_GK10ZO", "NA0K08_GK10ZO\NA0K08_GK10ZO\NA0K08_GK10ZO.csproj", "{2B5CF384-333D-4D7C-B59B-06AF9799DEFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NA0K08_GK10ZO_UnitTest", "NA0K08_GK10ZO_UnitTest\NA0K08_GK10ZO_UnitTest.csproj", "{A940D445-AF4E-48DC-B869-FB47C9DC4BBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2B5CF384-333D-4D7C-B59B-06AF9799DEFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B5CF384-333D-4D7C-B59B-06AF9799DEFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B5CF384-333D-4D7C-B59B-06AF9799DEFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A940D445-AF4E-48DC-B869-FB47C9DC4BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A940D445-AF4E-48DC-B869-FB47C9DC4BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A940D445-AF4E-48DC-B869-FB47C9DC4BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A940D445-AF4E-48DC-B869-FB47C9DC4BBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
