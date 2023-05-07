@@ -103,17 +103,18 @@ namespace B8L0TF.Controller
                     }
                     
                     questionNumber++;
-
-                    Console.WriteLine("Ha el akarod menteni az eredmenyedet ird be a 'save' parancsot, ha nem, akkor barmit beirhatsz");
-                    string save = Console.ReadLine();
-                    if(save == "save")
-                    {
-                        await SaveGameResult();
-                    }
                     
                     System.Threading.Thread.Sleep(2000);
                     Console.Clear();
                 }
+
+                Console.WriteLine("Ha el akarod menteni az eredmenyedet ird be a 'save' parancsot, ha nem, akkor barmit beirhatsz");
+                string save = Console.ReadLine();
+                if (save == "save")
+                {
+                    await SaveGameResult();
+                }
+
                 return;
             }
         }

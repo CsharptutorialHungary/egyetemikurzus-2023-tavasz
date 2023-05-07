@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace B8L0TF.Models
 {
-    internal record Game(int Id, string username, string result);
+    internal record Game(int Id, string Username, int Result);
 }

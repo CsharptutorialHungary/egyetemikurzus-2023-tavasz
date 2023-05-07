@@ -14,11 +14,13 @@ namespace B8L0TF.Controller
     {
 
         private string _command = "";
-        private User user = new User();
-        private LessonsController lessonsController = new LessonsController();
+        private readonly User user = new();
+        private readonly LessonsController lessonsController = new();
+
 
         public void init()
         {
+
             start();
         }
 
@@ -33,7 +35,7 @@ namespace B8L0TF.Controller
                 _command = Console.ReadLine();
 
                 if (!IsCommandInvalid()) RunCommand();
-                else Console.WriteLine("Nem adtal meg parancsot!");
+                else Console.WriteLine("Nem adtal meg ervenyes parancsot!");
             }
         }
 
