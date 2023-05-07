@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NA0K08_GK10ZO.Model
 {
-    internal class RaceResult
+    public class RaceResult
     {
         private string Country { get; set; }
         private int Position { get; set; }
@@ -18,6 +18,8 @@ namespace NA0K08_GK10ZO.Model
         private int Points { get; set; }
         private bool GotFastestLap { get; set; }
         private string FastestLap { get; set; }
+
+
 
         public RaceResult(string country, int position, int driverNumber, string driverName, string teamName,
             string startedFromPosition, string numberOfLaps, int points, bool gotFastestLap, string fastestLap)
