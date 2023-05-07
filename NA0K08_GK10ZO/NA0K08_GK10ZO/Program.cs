@@ -18,5 +18,9 @@ internal class Program
         {
             Console.WriteLine($"An error occured while reading data from file: {path}", ex.ToString());
         }
+
+        var topThree = Stats.getTop3Winners(races);
+
+        Console.WriteLine();
     }
 }
