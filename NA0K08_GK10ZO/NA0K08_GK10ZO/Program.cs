@@ -7,7 +7,7 @@
 
         using (var reader = new StreamReader(path))
         {
-            //do smth
+            
         }
     }
 }
