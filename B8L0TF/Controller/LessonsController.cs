@@ -69,9 +69,16 @@ namespace B8L0TF.Controller
             int? result;
             
             Console.WriteLine("A jatek hamarosan indul 10 feladatot kapsz sok sikert!");
-            Console.WriteLine("A jatek hamarosan kezdodik...");
+            Console.Write("A jatek hamarosan kezdodik.");
             
-            System.Threading.Thread.Sleep(4000);
+            for (int i = 0; i < 3; i++)
+            {
+                System.Threading.Thread.Sleep(900);
+                Console.Write('.');
+            }
+            
+            System.Threading.Thread.Sleep(2000);
+
             Console.Clear();
             
             while (true)
