@@ -104,9 +104,17 @@ namespace T4XJYT_LGI301
 
         public TextAnalysis CreateTextAnalysis()
         {
-            // TODO: Implement CreateTextAnalysis
-            throw new NotImplementedException();
+            TextAnalysis textAnalysis = new TextAnalysis
+            {
+                WordsCount = CountWords(),
+                MaximumWordLength = MaximumWordLength(),
+                MinimumWordLength = MinimumWordLength(),
+                AverageWordLength = AverageWordLength(),
+                MostCommonLetter = MostCommonLetter(),
+                WordDensity = WordDensity()
+            };
+
+            return textAnalysis;
         }
     }
-
 }
