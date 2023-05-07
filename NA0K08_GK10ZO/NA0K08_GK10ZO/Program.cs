@@ -11,6 +11,7 @@ internal class Program
         {
             var races = FileManager.GetRaceDataFromCsv(path);
             var topThree = Stats.getTop3Winners(races);
+            FileManager.SaveToJSON(topThree, "topThree.json");
         }
         catch (Exception ex)
         {

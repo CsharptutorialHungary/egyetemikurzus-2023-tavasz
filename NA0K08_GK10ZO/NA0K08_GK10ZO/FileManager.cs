@@ -1,8 +1,10 @@
 ﻿using NA0K08_GK10ZO.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace NA0K08_GK10ZO
@@ -40,6 +42,17 @@ namespace NA0K08_GK10ZO
             }
 
             return races;
+        }
+
+        public static void SaveToJSON(List<TopThree> data, string name)
+        {
+            var options = new JsonSerializerOptions { IncludeFields = true };
+
+            string json = System.Text.Json.JsonSerializer.Serialize(data, options);
+
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, name);
+
+            File.WriteAllText(filePath, json);
         }
     }
 }

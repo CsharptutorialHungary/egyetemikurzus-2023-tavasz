@@ -12,9 +12,8 @@ namespace NA0K08_GK10ZO
     internal class Stats
     {
 
-        public static List<List<string>> getTop3Winners(List<RaceResult> raceResults)
+        public static List<TopThree> getTop3Winners(List<RaceResult> raceResults)
         {
-
             List<string> results = new List<string>();
             Console.WriteLine();
             var result = raceResults
@@ -24,8 +23,15 @@ namespace NA0K08_GK10ZO
                 .Select(g => g.Select(m => m.DriverName).ToList())
                 .ToList();
 
-            return result;
+            var resultList = new List<TopThree>();
 
+            foreach (var r in result)
+            {
+                var item = new TopThree(r[0].ToString(), r[1].ToString(), r[2].ToString());
+                resultList.Add(item);
+            }
+
+            return resultList;
         }
 
     }

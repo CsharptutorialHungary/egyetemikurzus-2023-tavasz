@@ -8,9 +8,9 @@ namespace NA0K08_GK10ZO
 {
     internal class TopThree
     {
-        readonly private string first;
-        readonly private string second;
-        readonly private string third;
+        public readonly string first;
+        public readonly string second;
+        public readonly string third;
 
         public TopThree(string first, string second, string third)
         {
