@@ -7,122 +7,86 @@ namespace T4XJYT_LGI301
 {
     public class TextAnalyser : ITextAnalyser
     {
-        private string RawText;
-        private List<Word> CleanedUpWords;
+        private readonly string _rawText;
+        private readonly List<Word> _cleanedUpWords;
         public TextAnalyser(string textToAnalyze)
         {
-            RawText = textToAnalyze;
-            CleanedUpWords = CreateWordsFromRawText<Word>();
+            _rawText = textToAnalyze;
+            _cleanedUpWords = CreateWordsFromRawText<Word>();
         }
 
         public int CountWords()
         {
-            if (!CleanedUpWords.Any())
-            {
-                return 0;
-            }
-            int count = CleanedUpWords
+            if (!_cleanedUpWords.Any()) return 0;
+            
+            int count = _cleanedUpWords
                 .Count();
             return count;
-
-            // TODO: Implement CountWords function
-            //throw new NotImplementedException();
         }
 
         public int MaximumWordLength()
         {
-            if (!CleanedUpWords.Any())
-            {
-                return 0;
-            }
-
-            string longest_word = CleanedUpWords
+            if (!_cleanedUpWords.Any()) return 0;
+            
+            string longestWord = _cleanedUpWords
                 .OrderByDescending(s => s.Length)
                 .First()
                 .ToString();
 
-            return longest_word.Length;
-
-            // TODO: Implement MaximumWordLength function
-            //throw new NotImplementedException();
+            return longestWord.Length;
         }
 
         public int MinimumWordLength()
         {
-            if (!CleanedUpWords.Any())
-            {
-                return 0;
-            }
+            if (!_cleanedUpWords.Any()) return 0;
 
-            string shortest_word = CleanedUpWords
+            string shortestWord = _cleanedUpWords
                 .OrderByDescending(s => s.Length)
                 .Last()
                 .ToString();
 
-            return shortest_word.Length;
-
-            // TODO: Implement MinimumWordLength function
-            // throw new NotImplementedException();
+            return shortestWord.Length;
         }
 
         public double AverageWordLength()
         {
-            if (!CleanedUpWords.Any())
-            {
-                return 0;
-            }
+            if (!_cleanedUpWords.Any()) return 0;
 
-            double average_word_length = CleanedUpWords
+            double averageWordLength = _cleanedUpWords
                 .Average(w => w.Length);
 
-            return average_word_length;
-
-            // TODO: Implement AverageWordLength function
-            //throw new NotImplementedException();
+            return averageWordLength;
         }
 
         public string MostCommonLetter()
         {
-            if (!CleanedUpWords.Any())
-            {
-                return "";
-            }
+            if (!_cleanedUpWords.Any()) return "NA";
 
-            var letterCounts = CleanedUpWords
+            var letterCounts = _cleanedUpWords
                 .GroupBy(letter => letter)
                 .Select(group => new { Letter = group.Key, Count = group.Count() })
                 .OrderByDescending(x => x.Count);
 
             return letterCounts.First().Letter.ToString();
-
-            // TODO: Implement MostCommonLetter function
-            //throw new NotImplementedException();
         }
 
         public double WordDensity()
         {
-            if (!CleanedUpWords.Any())
-            {
-                return 0;
-            }
+            if (!_cleanedUpWords.Any()) return 0;
 
-            int sum_words = CleanedUpWords.Count();
-            var number_of_unique_words = CleanedUpWords
+            int sumWords = _cleanedUpWords.Count();
+            var numberOfUniqueWords = _cleanedUpWords
                 .Distinct().Count();
 
-            double word_density = number_of_unique_words / sum_words;
+            double wordDensity = numberOfUniqueWords / sumWords;
 
-            return word_density;
-            // TODO: Implement WordDensity function
-            //throw new NotImplementedException();
+            return wordDensity;
         }
 
         public List<T> CreateWordsFromRawText<T>() where T : Word, new()
         {
-            // Don't forget to remove the [" from the start and "] from the end of the text.
-            // Also remove every symbol such as .,!? etc.
             // Remove [" from the start and "] from the end of the text
-            string trimmedText = RawText.TrimStart('[').TrimEnd(']');
+            string trimmedText = _rawText.TrimStart('[').TrimEnd(']');
 
             // Remove every symbol such as .,!? etc.
             string symbols = @"[^a-zA-Z\s]";
