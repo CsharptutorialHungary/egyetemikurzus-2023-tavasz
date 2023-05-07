@@ -1,15 +1,22 @@
 ﻿using D9MXN2;
+using D9MXN2.UI;
 
 class Program
 {
     static Dictionary<string, Delegate> commands = new() {
-        {"login", () => System.Console.WriteLine()},
-        {"register", () => System.Console.WriteLine()},
+        {"login", () => ScreenRender(new LoginScreen())},
+        {"register", () => ScreenRender(new RegisterScreen())},
         {"help", () => Help()},
         {"exit", () => Environment.Exit(0)}
     };
 
-    static void Help() {
+    static void ScreenRender(IScreen screen)
+    {
+        screen.Render();
+    }
+
+    static void Help()
+    {
         Console.WriteLine("This is an awesome note handling application with user handling.");
         Console.WriteLine();
         Console.WriteLine("Commands:");
@@ -22,40 +29,40 @@ class Program
         Console.Clear();
     }
 
-    static void MainScreen()
-    {
-        int try_counter = 0;
-        while (try_counter++ < 3)
-        {
-            Console.WriteLine("What would you like to do?");
-
-            foreach (string command_name in commands.Keys)
-            {
-                Console.WriteLine($"\t-{command_name}");
-            }
-
-            Console.Write(": ");
-            string user_command = Console.ReadLine() ?? "";
-            Console.Clear();
-
-            if (!commands.ContainsKey(user_command))
-            {
-                Console.WriteLine($"There is no command called *{user_command}*");
-                continue;
-            }
-
-            commands[user_command].DynamicInvoke();
-        }
-        Console.WriteLine("[Error]: could not provide valid input.");
-        Environment.Exit(-1);
-    }
-
     static void Main(string[] args)
     {
+        const int MAX_TRIES = 3;
+
         while (true)
         {
             Console.WriteLine("Welcome to Awesome Note!");
-            MainScreen();
+         
+            string user_command = "";
+            int try_counter = 0;
+            for (; try_counter < MAX_TRIES; try_counter++)
+            {
+                Console.WriteLine("What would you like to do?");
+
+                foreach (string command_name in commands.Keys)
+                {
+                    Console.WriteLine($"\t-{command_name}");
+                }
+
+                Console.Write(": ");
+                user_command = Console.ReadLine() ?? "";
+                Console.Clear();
+
+                if (commands.ContainsKey(user_command)) break;
+
+                Console.WriteLine($"There is no command called *{user_command}*");
+            }
+            
+            if(try_counter >= MAX_TRIES) {
+                Console.WriteLine("[Error]: could not provide valid input.");
+                Environment.Exit(-1);
+            }
+            
+            commands[user_command].DynamicInvoke();
         }
     }
 }
