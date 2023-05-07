@@ -17,7 +17,8 @@ namespace T4XJYT_LGI301
 
         public int CountWords()
         {
-            if (CleanedUpWords == null) {
+            if (!CleanedUpWords.Any())
+            {
                 return 0;
             }
             int count = CleanedUpWords
@@ -30,7 +31,7 @@ namespace T4XJYT_LGI301
 
         public int MaximumWordLength()
         {
-            if (CleanedUpWords == null)
+            if (!CleanedUpWords.Any())
             {
                 return 0;
             }
@@ -48,7 +49,7 @@ namespace T4XJYT_LGI301
 
         public int MinimumWordLength()
         {
-            if (CleanedUpWords == null)
+            if (!CleanedUpWords.Any())
             {
                 return 0;
             }
@@ -66,7 +67,7 @@ namespace T4XJYT_LGI301
 
         public double AverageWordLength()
         {
-            if (CleanedUpWords == null)
+            if (!CleanedUpWords.Any())
             {
                 return 0;
             }
@@ -82,7 +83,7 @@ namespace T4XJYT_LGI301
 
         public string MostCommonLetter()
         {
-            if (CleanedUpWords == null)
+            if (!CleanedUpWords.Any())
             {
                 return "";
             }
@@ -100,11 +101,11 @@ namespace T4XJYT_LGI301
 
         public double WordDensity()
         {
-            if (CleanedUpWords == null)
+            if (!CleanedUpWords.Any())
             {
                 return 0;
             }
-                   
+
             int sum_words = CleanedUpWords.Count();
             var number_of_unique_words = CleanedUpWords
                 .Distinct().Count();
