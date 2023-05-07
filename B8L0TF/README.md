@@ -1,13 +1,13 @@
-# Váraljai Áron B8L0TF 
-### Leírás
+# VÃ¡raljai Ãron B8L0TF 
+### LeÃ­rÃ¡s
 
-Sziasztok, a program egy matek feladványokat generáló és értékelõ konzol alkalmazás, ami listázza az eddigi elmentett rekordokat és kiírja a jelenlegi felhasználó eddig elért legjobb eredményét.
+Sziasztok, a program egy matek feladvÃ¡nyokat generÃ¡lÃ³ Ã©s Ã©rtÃ©kelÅ‘ konzol alkalmazÃ¡s, ami listÃ¡zza az eddigi elmentett rekordokat Ã©s kiÃ­rja a jelenlegi felhasznÃ¡lÃ³ eddig elÃ©rt legjobb eredmÃ©nyÃ©t.
 
-**Hasznos Infók**
-* Unit tesztet nem készítettem
-* A program az eredményeket a "result.txt"-be menti le
-* A 'help' parancsal tudod listázni a használató parancsokat
+**Hasznos InfÃ³k**
+* Unit tesztet nem kÃ©szÃ­tettem
+* A program az eredmÃ©nyeket a "result.txt"-be menti le
+* A 'help' parancsal tudod listÃ¡zni a hasznÃ¡latÃ³ parancsokat
 
-### Használata
+### HasznÃ¡lata
 
-A program indítása után meg kell adnod a felhasználó nevedet, ezek után pedig a parancsokat használva tudsz továbbhaladni a programon belül. Teszt indításához a 'start' parancsot kell beírni. A teszt kitöltését nem lehet megszakítani és nem értékel ki más karaktereket a számokon kívül. A teszt végén, ha el akarod menteni az eredményedet a 'save' parancsal tuddo megtenni. Ezek után visszakerülsz abba az állapotba, amiben voltál, miután beírtad a felhasználó nevedet.
+A program indÃ­tÃ¡sa utÃ¡n meg kell adnod a felhasznÃ¡lÃ³ nevedet, ezek utÃ¡n pedig a parancsokat hasznÃ¡lva tudsz tovÃ¡bbhaladni a programon belÃ¼l. Teszt indÃ­tÃ¡sÃ¡hoz a 'start' parancsot kell beÃ­rni. A teszt kitÃ¶ltÃ©sÃ©t nem lehet megszakÃ­tani Ã©s nem Ã©rtÃ©kel ki mÃ¡s karaktereket a szÃ¡mokon kÃ­vÃ¼l. A teszt vÃ©gÃ©n, ha el akarod menteni az eredmÃ©nyedet a 'save' parancsal tudod megtenni. Ezek utÃ¡n visszakerÃ¼lsz abba az Ã¡llapotba, amiben voltÃ¡l, miutÃ¡n beÃ­rtad a felhasznÃ¡lÃ³ nevedet.
