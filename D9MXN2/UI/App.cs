@@ -39,7 +39,7 @@ public class HomeScreen : CommandScreen
 {
     const string LOGOUT_COMMAND = "logout";
     string _username;
-    ActionHandler<Note> _note_action_handler = new();
+    NoteActionHandler<Note> _note_action_handler = new();
 
     protected override Dictionary<string, Delegate> Commands { get; set; } = new() {
         {LOGOUT_COMMAND, () => Console.WriteLine("Goodbye")},
@@ -78,7 +78,7 @@ public class HomeScreen : CommandScreen
 
     async Task<bool> SaveNotes()
     {
-        await _note_action_handler.Save(this._username);
+        await _note_action_handler.SaveNotes(this._username);
 
         return true;
     }
@@ -96,6 +96,11 @@ public class HomeScreen : CommandScreen
 
         _note_action_handler.Add(new Note() { Value = note });
         Console.WriteLine();
+    }
+
+    void DeleteNote()
+    {
+        _note_action_handler.DeleteNote(_username);
     }
 
     string GetFilePath()
@@ -124,7 +129,7 @@ public class HomeScreen : CommandScreen
         string file_path = GetFilePath();
         if (file_path == string.Empty) { return false; }
 
-        await _note_action_handler.DumpPersonTo(file_path, _username);
+        await PersonActionHandler.DumpPersonTo(file_path, _username);
         return true;
     }
 
@@ -133,11 +138,6 @@ public class HomeScreen : CommandScreen
         string file_path = GetFilePath();
         if (file_path == string.Empty) { return; }
 
-        _note_action_handler.LoadPersonFrom(file_path, _username);
-    }
-
-    void DeleteNote()
-    {
-        _note_action_handler.DeleteNote(_username);
+        PersonActionHandler.LoadPersonFrom(file_path, _username);
     }
 }
