@@ -41,6 +41,7 @@ public class HomeScreen : CommandScreen
         {"notes", () => System.Console.WriteLine()},
         {"add", () => System.Console.WriteLine()},
         {"delete", () => System.Console.WriteLine()},
+        {"statistics", () => System.Console.WriteLine()},
         {"dump", () => System.Console.WriteLine()},
         {"load", () => System.Console.WriteLine()},
         {LOGOUT_COMMAND, () => Console.WriteLine("Goodbye")},
