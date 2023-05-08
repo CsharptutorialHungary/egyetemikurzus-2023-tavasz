@@ -15,12 +15,15 @@ namespace D9MXN2.DataAccess
             return JsonSerializer.Serialize<Person>(model, serializerOptions);
         }
 
-        public static IEnumerable<Person> Deserialize(this Person model, string data)
+        public static Person Deserialize(this Person model, string data)
         {
             try {
-                var deserialized =  JsonSerializer.Deserialize<List<Person>>(data, serializerOptions);
+                var deserialized =  JsonSerializer.Deserialize<Person>(data, serializerOptions);
+                if(deserialized is null) {
+                    throw new JsonException("Json with null value is not accepted");
+                }
 
-                return deserialized ?? Enumerable.Empty<Person>();
+                return deserialized;
             } catch(JsonException) {
                 Console.WriteLine("[Error] Inctorrect json");
                 throw;

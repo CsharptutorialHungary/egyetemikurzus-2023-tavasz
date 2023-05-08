@@ -59,11 +59,10 @@ public class HomeScreen : CommandScreen
 
         this.Commands.Add("notes", this.PrintNotes);
         this.Commands.Add("add", this.AddNote);
+        this.Commands.Add("delete", this.DeleteNote);
         this.Commands.Add("save", this.SaveNotes);
         this.Commands.Add("dump", this.DumpUser);
-
-        // {"delete", () => System.Console.WriteLine()},
-        // {"load", () => System.Console.WriteLine()},
+        this.Commands.Add("load", this.LoadUser);
     }
 
     void PrintNotes()
@@ -125,7 +124,18 @@ public class HomeScreen : CommandScreen
         string file_path = GetFilePath();
         if (file_path == string.Empty) { return false; }
 
-        await _note_action_handler.DumpUserTo(file_path, _username);
+        await _note_action_handler.DumpPersonTo(file_path, _username);
         return true;
+    }
+
+    void LoadUser() {
+        string file_path = GetFilePath();
+        if (file_path == string.Empty) { return;}
+
+        _note_action_handler.LoadPersonFrom(file_path, _username);
+    }
+
+    void DeleteNote() {
+        
     }
 }
