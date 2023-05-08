@@ -128,14 +128,16 @@ public class HomeScreen : CommandScreen
         return true;
     }
 
-    void LoadUser() {
+    void LoadUser()
+    {
         string file_path = GetFilePath();
-        if (file_path == string.Empty) { return;}
+        if (file_path == string.Empty) { return; }
 
         _note_action_handler.LoadPersonFrom(file_path, _username);
     }
 
-    void DeleteNote() {
+    void DeleteNote()
+    {
         _note_action_handler.DeleteNote(_username);
     }
 }

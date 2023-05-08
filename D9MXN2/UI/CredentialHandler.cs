@@ -17,7 +17,7 @@ public abstract class CredentialHandler : BaseScreen
         int try_counter = 0;
         User? user = null;
 
-        for (;try_counter < MAX_TRIES; ++try_counter)
+        for (; try_counter < MAX_TRIES; ++try_counter)
         {
             user = GetCredentails();
             Console.Clear();
@@ -43,7 +43,8 @@ public abstract class CredentialHandler : BaseScreen
             return;
         }
 
-        if(user != null) {
+        if (user != null)
+        {
             RenderMain(user.Username);
         }
     }

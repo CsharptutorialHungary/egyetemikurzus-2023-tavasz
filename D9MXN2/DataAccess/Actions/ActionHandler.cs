@@ -161,7 +161,7 @@ public class ActionHandler<T> : ICollection<T> where T : Note
                     .Where(n => n.Id == id_to_delete)
                     .Single()
             );
- 
+
             db.SaveChanges();
         }
     }

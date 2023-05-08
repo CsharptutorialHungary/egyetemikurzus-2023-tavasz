@@ -22,21 +22,28 @@ public class PersonContainer<T> : ICollection<T> where T : Person
     }
 
 
-    public int BinarySearch(T item) {
+    public int BinarySearch(T item)
+    {
         this._values.Sort();
 
         int begin = 0;
         int center = 0;
         int end = this._values.Count() - 1;
 
-        while(begin <= end) {
+        while (begin <= end)
+        {
             center = (begin + end) / 2; // hmm
-            
-            if(this._values[center] < item) {
+
+            if (this._values[center] < item)
+            {
                 begin = center + 1;
-            } else if(this._values[center] > item) {
+            }
+            else if (this._values[center] > item)
+            {
                 end = center - 1;
-            } else {
+            }
+            else
+            {
                 return center; // FIXME: this will give false positives
             }
         }
@@ -56,7 +63,8 @@ public class PersonContainer<T> : ICollection<T> where T : Person
 
     public IEnumerator<T> GetEnumerator()
     {
-        foreach(var elem in this._values) {
+        foreach (var elem in this._values)
+        {
             yield return elem;
         }
     }

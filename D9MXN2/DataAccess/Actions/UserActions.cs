@@ -16,7 +16,8 @@ public class UserActions
                 .Where(p => p.Username == user.Username && p.Password == user.Password)
                 .ToList();
 
-            if(user_with_correct_credentails.Count() != 1) {
+            if (user_with_correct_credentails.Count() != 1)
+            {
                 error_msg = "User not found.";
             }
         }

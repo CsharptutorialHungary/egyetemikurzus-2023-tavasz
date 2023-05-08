@@ -8,7 +8,8 @@ public abstract class BaseScreen
         return Console.ReadLine() ?? "";
     }
 
-    public static string GetChosenCommandFrom(IEnumerable<string> command_keys) {
+    public static string GetChosenCommandFrom(IEnumerable<string> command_keys)
+    {
         Console.WriteLine("What would you like to do?");
 
         foreach (string command_name in command_keys)
@@ -18,7 +19,7 @@ public abstract class BaseScreen
 
         string user_command = GetInputWithMsg(" ");
         Console.Clear();
-    
+
         return user_command;
     }
 
