@@ -4,7 +4,7 @@ public abstract class BaseScreen
 {
     public static string GetInputWithMsg(string msg)
     {
-        Console.Write(msg + ":");
+        Console.Write(msg + ": ");
         return Console.ReadLine() ?? "";
     }
 

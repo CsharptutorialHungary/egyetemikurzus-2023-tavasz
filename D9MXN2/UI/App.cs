@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using D9MXN2.DataAccess.Actions;
+using Database.Models;
 
 namespace D9MXN2.UI;
 
@@ -40,12 +38,10 @@ public class App : CommandScreen
 public class HomeScreen : CommandScreen
 {
     const string LOGOUT_COMMAND = "logout";
+    string _username;
+    NoteActionHandler<Note> _note_action_handler = new();
+    
     protected override Dictionary<string, Delegate> Commands { get; set; } = new() {
-        {"notes", () => System.Console.WriteLine()},
-        {"add", () => System.Console.WriteLine()},
-        {"delete", () => System.Console.WriteLine()},
-        {"dump", () => System.Console.WriteLine()},
-        {"load", () => System.Console.WriteLine()},
         {LOGOUT_COMMAND, () => Console.WriteLine("Goodbye")},
         {"exit", () => Environment.Exit(0)}
     };
@@ -55,5 +51,47 @@ public class HomeScreen : CommandScreen
         if (command == LOGOUT_COMMAND) { return false; } // this will break the render loop
 
         return base.SuccessfulCommandInvoke(command);
+    }
+
+    public HomeScreen(string username) {
+        this._username = username;
+
+        this.Commands.Add("notes", this.PrintNotes);
+        this.Commands.Add("add", this.AddNote);
+        this.Commands.Add("save", this.SaveNotes);
+
+        // {"delete", () => System.Console.WriteLine()},
+        // {"dump", () => System.Console.WriteLine()},
+        // {"load", () => System.Console.WriteLine()},
+    }
+
+
+    void PrintNotes() {
+        Console.Clear();
+        
+        _note_action_handler.PrintAllNotes(this._username);
+        
+        Console.WriteLine();
+        Console.Write("Press any key to proceed...");
+        Console.ReadKey();
+    }
+
+    async Task<bool> SaveNotes() {
+        await _note_action_handler.Save(this._username);
+
+        return true;
+    }
+
+    void AddNote() {
+        Console.WriteLine("Write a note (max length is 200)!");
+        string note = GetInputWithMsg("");
+
+        if(note.Length > 200) {
+            Console.WriteLine("[Error]: Note was too long, it got discarded");
+            return;
+        }
+
+        _note_action_handler.Add(new Note() { Value = note });
+        Console.WriteLine();
     }
 }

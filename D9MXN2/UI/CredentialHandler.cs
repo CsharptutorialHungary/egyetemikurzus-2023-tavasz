@@ -7,7 +7,7 @@ public abstract class CredentialHandler : BaseScreen
 {
     protected void RenderMain(string username)
     {
-        HomeScreen main = new();
+        HomeScreen main = new(username);
         main.Render($"You are logged in as *{username}* user.");
     }
 

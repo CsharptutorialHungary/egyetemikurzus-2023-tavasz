@@ -7,4 +7,9 @@ public class Note : BaseModel
     [MaxLength(250)]
     public string Value {get; set;} = null!;
     // TODO datetime
+
+    public override string ToString()
+    {
+        return this.Value;
+    }
 }
