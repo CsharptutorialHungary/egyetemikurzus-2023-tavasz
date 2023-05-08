@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using D9MXN2.DataAccess.Actions;
 
 namespace D9MXN2.UI;
 
@@ -10,6 +11,7 @@ public class App : CommandScreen
     protected override Dictionary<string, Delegate> Commands { get; set; } = new() {
         {"login", () => ScreenRender(new LoginScreen())},
         {"register", () => ScreenRender(new RegisterScreen())},
+        {"statistics", () => Statistics.PrintStatistics()},
         {"help", () => Help()},
         {"exit", () => Environment.Exit(0)}
     };
@@ -21,6 +23,7 @@ public class App : CommandScreen
         Console.WriteLine("Commands:");
         Console.WriteLine("login: You can login here if you are registered.");
         Console.WriteLine("register: You can register here.");
+        Console.WriteLine("statistics: Print statistics about the users.");
         Console.WriteLine("exit: closes the application.");
         Console.WriteLine();
         Console.WriteLine("Press anything to proceed.");
@@ -41,7 +44,6 @@ public class HomeScreen : CommandScreen
         {"notes", () => System.Console.WriteLine()},
         {"add", () => System.Console.WriteLine()},
         {"delete", () => System.Console.WriteLine()},
-        {"statistics", () => System.Console.WriteLine()},
         {"dump", () => System.Console.WriteLine()},
         {"load", () => System.Console.WriteLine()},
         {LOGOUT_COMMAND, () => Console.WriteLine("Goodbye")},
