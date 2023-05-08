@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace Database;
-internal class PeopleDesignTimeContextFactory: IDesignTimeDbContextFactory<PeopleContext>
+internal class PeopleDesignTimeContextFactory : IDesignTimeDbContextFactory<PeopleContext>
 {
     const string DB_PATH = "../data.db";
 

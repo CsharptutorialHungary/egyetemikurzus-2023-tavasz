@@ -1,5 +1,9 @@
+using System.Text.Json.Serialization;
+
 namespace Database.Models;
 
-public class BaseModel {
-    public int Id{get; set;}
+public class BaseModel
+{
+    [JsonIgnore]
+    public int Id { get; set; }
 }

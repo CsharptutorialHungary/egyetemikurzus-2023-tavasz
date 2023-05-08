@@ -20,7 +20,8 @@ public static class SqliteDatabaseFactory<T> where T : DbContext
         var options_builder = GetOptionsBuilder(DB_PATH);
         // this is slow
         T? result = (T?)Activator.CreateInstance(typeof(T), options_builder.Options);
-        if(result == null) {
+        if (result == null)
+        {
             throw new ArgumentNullException("Invalid generic type, got null after CreateInstance.");
         }
 
