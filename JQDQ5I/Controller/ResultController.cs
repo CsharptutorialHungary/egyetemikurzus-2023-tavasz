@@ -1,6 +1,7 @@
 ﻿using GoogleBooks.Communication;
 using GoogleBooks.Exception;
 using GoogleBooks.Model;
+using JQDQ5I.Model.GoogleApiSearchResult;
 using System.ComponentModel;
 
 namespace GoogleBooks.Controller
@@ -36,7 +37,7 @@ namespace GoogleBooks.Controller
             return stringList;
         }
 
-        List<List<string>> ConvertClassListTo2DStringList<T>(List<T> classList) where T : class
+        private List<List<string>> ConvertClassListTo2DStringList<T>(List<T> classList) where T : class
         {
             List<List<string>> stringList = new List<List<string>>
             {
@@ -61,7 +62,7 @@ namespace GoogleBooks.Controller
             return stringList;
         }
 
-        List<string> GetPropertyNamesToList(System.Reflection.PropertyInfo[] properties)
+        private List<string> GetPropertyNamesToList(System.Reflection.PropertyInfo[] properties)
         {
             List<string> propNames = new List<string>();
 

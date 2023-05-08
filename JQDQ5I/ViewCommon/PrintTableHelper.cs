@@ -13,16 +13,16 @@ public static class PrintTableHelper
         PrintLine(totalWith);
     }
 
-    static void PrintTableRow(int totalWith, List<string> row)
+    private static void PrintTableRow(int totalWith, List<string> row)
     {
         PrintLine(totalWith);
         PrintRow(row);
     }
 
-    static void PrintLine(int width) => Console.WriteLine(new string('-', width));
+    private static void PrintLine(int width) => Console.WriteLine(new string('-', width));
 
 
-    static void PrintRow(List<string> row)
+    private static void PrintRow(List<string> row)
     {
         string currentRow = "|";
         for (int i = 0; i < row.Count; i++)
@@ -34,7 +34,7 @@ public static class PrintTableHelper
         Console.WriteLine(currentRow);
     }
 
-    static string AlignCentre(string text, int columnWidths)
+    private static string AlignCentre(string text, int columnWidths)
     {
         if (text.Length > _maxColumnSize)
             text = text.Substring(0, columnWidths - 3) + "...";
@@ -43,7 +43,7 @@ public static class PrintTableHelper
 
     }
 
-    static int[] CalculateColumnWidths(List<List<string>> rows)
+    private static int[] CalculateColumnWidths(List<List<string>> rows)
     {
         int[] columnWidths = Enumerable.Range(0, rows[0].Count)
             .Select(j => Math.Min(rows.Max(row => row[j].Length), _maxColumnSize))

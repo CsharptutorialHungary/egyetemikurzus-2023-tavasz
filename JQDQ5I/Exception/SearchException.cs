@@ -1,6 +1,7 @@
 ﻿namespace GoogleBooks.Exception;
- 
 
+
+[Serializable]
 public class SearchException : System.Exception
 {
     public SearchException() : base() { }

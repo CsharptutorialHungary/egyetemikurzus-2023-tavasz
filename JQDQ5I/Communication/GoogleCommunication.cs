@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using GoogleBooks.Model;
+﻿using JQDQ5I.Model.GoogleApiSearchResult;
+using Newtonsoft.Json;
 using System.Configuration;
 namespace GoogleBooks.Communication;
 
