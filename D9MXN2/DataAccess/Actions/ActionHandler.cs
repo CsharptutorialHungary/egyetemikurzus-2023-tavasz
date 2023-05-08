@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace D9MXN2.DataAccess.Actions;
-public class NoteActionHandler<T> : ICollection<T> where T : Note
+public class ActionHandler<T> : ICollection<T> where T : Note
 {
     #region ICollection overrides
     List<T> _Values = new();
@@ -100,6 +100,72 @@ public class NoteActionHandler<T> : ICollection<T> where T : Note
         }
     }
 
+    int GetNoteIDToDelete(IEnumerable<Note> notes)
+    {
+        Console.WriteLine("Which note should be deleted");
+
+        for (int try_count = 0; try_count < 3; ++try_count)
+        {
+
+            Console.Write("id: ");
+            string user_answer = Console.ReadLine() ?? "";
+
+            if (!int.TryParse(user_answer, out var id_to_delete))
+            {
+                Console.WriteLine("Not a valid int...");
+                continue;
+            }
+
+            var has_the_given_id = notes.Select(n => n.Id).Contains(id_to_delete);
+            if (!has_the_given_id)
+            {
+                Console.WriteLine("Provided id was not found...");
+                continue;
+            }
+
+            return id_to_delete;
+        }
+        return -1;
+    }
+
+    public void DeleteNote(string username)
+    {
+        using (var db = SqliteDatabaseFactory<PeopleContext>.Create())
+        {
+            var user_notes = db.People
+                .Where(p => p.Username == username)
+                .Include(p => p.Notes)
+                .Select(p => p.Notes)
+                .Single();
+
+            if (user_notes.Count == 0)
+            {
+                Console.WriteLine("You dont have notes yet...");
+                return;
+            }
+
+            foreach (var user_note in user_notes)
+            {
+                System.Console.WriteLine($"{user_note.Id}: {user_note}");
+            }
+
+            int id_to_delete = GetNoteIDToDelete(user_notes);
+            if (id_to_delete == -1)
+            {
+                Console.WriteLine("[Error]: Could not provide valid id...");
+                return;
+            }
+
+            db.Remove(
+                user_notes
+                    .Where(n => n.Id == id_to_delete)
+                    .Single()
+            );
+ 
+            db.SaveChanges();
+        }
+    }
+
     #region serialization
     public async Task DumpPersonTo(string file_path, string username)
     {
@@ -109,7 +175,7 @@ public class NoteActionHandler<T> : ICollection<T> where T : Note
                 .Where(p => p.Username == username)
                 .Include(p => p.Notes)
                 .Single();
-            
+
             using (StreamWriter sw = new(file_path))
             {
                 await sw.WriteAsync(person.Serialize());
@@ -117,10 +183,12 @@ public class NoteActionHandler<T> : ICollection<T> where T : Note
         }
     }
 
-    public void LoadPersonFrom(string file_path, string username) {
+    public void LoadPersonFrom(string file_path, string username)
+    {
         string file_content = System.IO.File.ReadAllText(file_path);
 
-        using(var db = SqliteDatabaseFactory<PeopleContext>.Create()) {
+        using (var db = SqliteDatabaseFactory<PeopleContext>.Create())
+        {
             Person saved_person = db.People
                 .Where(p => p.Username == username)
                 .Include(p => p.Notes)
@@ -131,7 +199,7 @@ public class NoteActionHandler<T> : ICollection<T> where T : Note
             Person loaded_person = saved_person.Deserialize(file_content);
             db.Remove(saved_person.Notes);
             db.Remove(saved_person);
-            
+
             db.Add(loaded_person);
             db.SaveChanges();
         }

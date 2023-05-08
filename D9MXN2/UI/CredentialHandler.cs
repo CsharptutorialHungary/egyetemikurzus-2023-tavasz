@@ -17,7 +17,7 @@ public abstract class CredentialHandler : BaseScreen
         int try_counter = 0;
         User? user = null;
 
-        for (;try_counter < MAX_TRIES; try_counter++)
+        for (;try_counter < MAX_TRIES; ++try_counter)
         {
             user = GetCredentails();
             Console.Clear();

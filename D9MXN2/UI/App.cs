@@ -39,7 +39,7 @@ public class HomeScreen : CommandScreen
 {
     const string LOGOUT_COMMAND = "logout";
     string _username;
-    NoteActionHandler<Note> _note_action_handler = new();
+    ActionHandler<Note> _note_action_handler = new();
 
     protected override Dictionary<string, Delegate> Commands { get; set; } = new() {
         {LOGOUT_COMMAND, () => Console.WriteLine("Goodbye")},
@@ -136,6 +136,6 @@ public class HomeScreen : CommandScreen
     }
 
     void DeleteNote() {
-        
+        _note_action_handler.DeleteNote(_username);
     }
 }
