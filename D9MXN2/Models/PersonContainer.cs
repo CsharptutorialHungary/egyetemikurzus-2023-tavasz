@@ -37,7 +37,7 @@ public class PersonContainer<T> : ICollection<T> where T : Person
             } else if(this._values[center] > item) {
                 end = center - 1;
             } else {
-                return center;
+                return center; // FIXME: this will give false positives
             }
         }
 

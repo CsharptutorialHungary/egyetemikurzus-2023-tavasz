@@ -30,6 +30,7 @@ public static class Statistics
             else
             {
                 var ordered_people_with_index = _container
+                    .AsParallel()
                     .OrderByDescending(p => p.Notes.Count)
                     .Where(p => p.Notes.Count > 0)
                     .Zip(Enumerable.Range(0, people_with_notes_count));
@@ -40,6 +41,7 @@ public static class Statistics
                 }
             }
 
+            _container.Clear();
             Console.WriteLine();
             Console.Write("Press any key to proceed..");
             Console.ReadKey();
