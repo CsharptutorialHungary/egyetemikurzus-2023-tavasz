@@ -7,8 +7,8 @@ public abstract class CredentialHandler : BaseScreen
 {
     protected void RenderMain(string username)
     {
-        MainScreen main = new(username);
-        main.Render();
+        HomeScreen main = new();
+        main.Render($"You are logged in as *{username}* user.");
     }
 
     protected void CredentialHandling(Func<User, string> user_action)
@@ -17,7 +17,7 @@ public abstract class CredentialHandler : BaseScreen
         int try_counter = 0;
         User? user = null;
 
-        while (try_counter < MAX_TRIES)
+        for (;try_counter < MAX_TRIES; try_counter++)
         {
             user = GetCredentails();
             Console.Clear();
@@ -31,7 +31,6 @@ public abstract class CredentialHandler : BaseScreen
             if (action_result.Length > 0)
             {
                 Console.WriteLine($"[Error]: {action_result}");
-                try_counter++;
                 continue;
             }
 
