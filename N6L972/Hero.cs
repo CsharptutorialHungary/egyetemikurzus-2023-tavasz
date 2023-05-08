@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace N6L972;
+﻿namespace N6L972;
 
 public record Hero
 {
