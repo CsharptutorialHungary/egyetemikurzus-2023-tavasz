@@ -12,7 +12,7 @@ namespace ConnectingToSQLServer
             //connection string 
             string connString = @"Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;";
 
-            //create instanace of database connection
+            // connecting to the database
             SqlConnection conn = new SqlConnection(connString);
            
              try
@@ -24,7 +24,7 @@ namespace ConnectingToSQLServer
 
                 Console.WriteLine("Connection successful!");
 
-                //create a new SQL Query using StringBuilder
+                //creating a new SQL Query
                 StringBuilder strBuilder = new StringBuilder();
                  strBuilder.Append("CREATE TABLE Demotabla ( Name VARCHAR(255), Email VARCHAR(255), Class VARCHAR(255)) ");
                 strBuilder.Append("INSERT INTO Demotabla (Name, Email, Class) VALUES ");
@@ -32,15 +32,15 @@ namespace ConnectingToSQLServer
                 strBuilder.Append("(N'Ronak', N'ronak@gmail.com', N'Class X') ");
 
                 string sqlQuery = strBuilder.ToString();
-                using (SqlCommand command = new SqlCommand(sqlQuery, conn)) //pass SQL query created above and connection
+                using (SqlCommand command = new SqlCommand(sqlQuery, conn)) //SQL query and connection in the SQL command
                 {
-                    command.ExecuteNonQuery(); //execute the Query
+                    command.ExecuteNonQuery(); //execute the query
                     Console.WriteLine("Query Executed.");
                 }
 
                 strBuilder.Clear(); // clear all the string
 
-                //add Query to update to Student_Details table
+                //add Query to update Demotabla
                 strBuilder.Append("UPDATE Demotabla SET Email = N'suri@gmail.com' WHERE Name = 'Surendra'");
                 sqlQuery = strBuilder.ToString();
                 using (SqlCommand command = new SqlCommand(sqlQuery, conn))
