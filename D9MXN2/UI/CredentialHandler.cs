@@ -13,7 +13,10 @@ public abstract class CredentialHandler : BaseScreen
 
     protected void CredentialHandling(Func<User, string> user_action)
     {
-        const int MAX_TRIES = 3;
+        const int MAX_TRIES = 5;
+        const int MIN_CHAR_COUNT = 4;
+        const int MAX_CHAR_COUNT = 100; // from db models
+
         int try_counter = 0;
         User? user = null;
 
@@ -22,9 +25,16 @@ public abstract class CredentialHandler : BaseScreen
             user = GetCredentails();
             Console.Clear();
 
-            if (user.Username.Length >= 100 || user.Password.Length >= 100)
+            if (user.Username.Length >= MAX_CHAR_COUNT || user.Password.Length >= MAX_CHAR_COUNT)
             {
-                Console.WriteLine("[Error]: username and password must be smaller than 100 characters!");
+                Console.WriteLine($"[Error]: username and password must be smaller than {MAX_CHAR_COUNT} characters!");
+                continue;
+            }
+
+            if (user.Username.Length < MIN_CHAR_COUNT || user.Password.Length < MIN_CHAR_COUNT)
+            {
+                Console.WriteLine($"[Error]: username and password must contain at least {MIN_CHAR_COUNT} characters");
+                continue;
             }
 
             string action_result = user_action(user);
