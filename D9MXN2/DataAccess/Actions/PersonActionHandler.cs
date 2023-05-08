@@ -31,16 +31,20 @@ public class PersonActionHandler
 
         using (var db = SqliteDatabaseFactory<PeopleContext>.Create())
         {
+            Person loaded_person = new Person().Deserialize(file_content);
+
+            if (loaded_person.Username != username)
+            {
+                throw new InvalidOperationException("Tried to change not one's own data..");
+            }
+
             Person saved_person = db.People
-                .Where(p => p.Username == username)
+                .Where(p => p.Username == loaded_person.Username)
                 .Include(p => p.Notes)
                 .Single();
 
-
             // Fixme: not the best...
-            Person loaded_person = saved_person.Deserialize(file_content);
-            db.Remove(saved_person.Notes);
-            db.Remove(saved_person);
+            db.Remove(saved_person); // this is going to make rubbish in the db, but apparently its intended.
 
             db.Add(loaded_person);
             db.SaveChanges();
