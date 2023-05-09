@@ -21,28 +21,61 @@ namespace Kotprog
         private static void Main(string[] args)
         {
             MakeCollectionAndListPokemons(false, globalPokemons);
-            SelectMethods();
+            ChooseMethods();
 
             Console.WriteLine("Program vége");
             Console.ReadKey();
-        }
-        private static void WriteInstructions()
+        }        
+        
+        private static void MakeCollectionAndListPokemons(bool listing, PokemonCollection pokemonCollection)
         {
-            Console.WriteLine("\n----------------");
-            Console.WriteLine("Kérlek válaszd ki mit szeretnél csinálni: ");
-            Console.WriteLine("\t 0. Kilépés");
-            Console.WriteLine("\t 1. Pokémonok listázása a megadott tojáskategória alapján");
-            Console.WriteLine("\t 2. Megadott típusú Pokémonok listázása a keltetéshez szükséges Candy alapján");
-            Console.WriteLine("\t 3. Legnagyobb eséllyel spawn-oló Pokémon");
-            Console.WriteLine("\t 4. Átlagos spawn_change");
-            Console.Write("\nAdd meg a sorszámot: ");
+            var readedPokemons = ReadJSON();
+            foreach (var item in readedPokemons)
+            {
+                pokemonCollection.Add(item);
+            }
+
+            if (listing)
+            {
+                readedPokemons.ForEach(n => Console.WriteLine(n));
+            }
         }
 
-        private static void SelectMethods()
+        private static List<Pokemon> ReadJSON()
+        {
+            string fileName = @"pokemon.json";
+            string path = Path.Combine(AppContext.BaseDirectory, fileName);
+            List<Pokemon> pokemons = new List<Pokemon>();
+            using (FileStream file = File.OpenRead(path))
+            {
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    try
+                    {
+                        pokemons = JsonSerializer.Deserialize<List<Pokemon>>(reader.ReadToEnd());
+                        return pokemons;
+                    }
+                    catch (IOException ioEx)
+                    {
+                        Console.WriteLine("Hiba keletkezett a beolvasás során: [" + ioEx.Message + "]");
+                    }
+                    catch (Exception ex) //Pokemon exception handling hehe
+                    {
+                        Console.WriteLine("Hiba keletkezett: [" + ex.Message + "]");
+                    }
+                    Console.WriteLine("Kilépéshez nyomjon meg egy gombot");
+                    Console.ReadKey();
+                    Environment.Exit(1);
+                    return null;
+                }
+            }
+        }
+
+        private static void ChooseMethods()
         {
             Console.WriteLine("Üdvözöllek a Pokémonokkal foglalkozó programomban");
             string selectMethod = "";
-            while (selectMethod != "0")
+            while (true)
             {
                 WriteInstructions();
                 selectMethod = Console.ReadLine();
@@ -50,7 +83,7 @@ namespace Kotprog
                 switch (selectMethod)
                 {
                     case "0":
-                        break;
+                        return;
                     case "1":
                         Console.WriteLine("1. Pokémonok listázása a megadott tojáskategória alapján:");
                         SelectPokemonsByEggs();
@@ -70,10 +103,24 @@ namespace Kotprog
                     default:
                         Console.WriteLine("Helytelen sorszám, kérlek a fentiek közül válassz!");
                         break;
-                        break;
                 }
+                Console.ReadKey();
+
             }
         }
+
+        private static void WriteInstructions()
+        {
+            Console.WriteLine("\n----------------");
+            Console.WriteLine("Kérlek válaszd ki mit szeretnél csinálni: ");
+            Console.WriteLine("\t 0. Kilépés");
+            Console.WriteLine("\t 1. Pokémonok listázása a megadott tojáskategória alapján");
+            Console.WriteLine("\t 2. Megadott típusú Pokémonok listázása a keltetéshez szükséges Candy alapján");
+            Console.WriteLine("\t 3. Legnagyobb eséllyel spawn-oló Pokémon");
+            Console.WriteLine("\t 4. Átlagos spawn_change");
+            Console.Write("\nAdd meg a sorszámot: ");
+        }
+
         private static void SelectNameByTypeOrderByCandyCount()
         {
             #region Creating typeList
@@ -239,37 +286,6 @@ namespace Kotprog
 
             return optionList;
         }
-        private static List<Pokemon> ReadJSON()
-        {
-            string fileName = @"pokemon.json";
-            string path = Path.Combine(AppContext.BaseDirectory, fileName);
-            List<Pokemon> pokemons = new List<Pokemon>();
-            using (FileStream file = File.OpenRead(path))
-            {
-                using (StreamReader reader = new StreamReader(file))
-                {
-                    try
-                    {
-                        pokemons = JsonSerializer.Deserialize<List<Pokemon>>(reader.ReadToEnd());
-                        return pokemons;
-                    }
-                    catch (IOException ioEx)
-                    {
-                        Console.WriteLine("Hiba keletkezett a beolvasás során: [" + ioEx.Message + "]");
-                    }
-                    catch (Exception ex) //Pokemon exception handling hehe
-                    {
-                        Console.WriteLine("Hiba keletkezett: [" + ex.Message + "]");
-                    }
-                    Console.WriteLine("Kilépéshez nyomjon meg egy gombot");
-                    Console.ReadKey();
-                    Environment.Exit(1);
-                    return null;
-                }
-            }
-        }
-
-
 
         private static async Task WriteJSONAsync(string fileName, PokemonCollection output)
         {
@@ -284,19 +300,5 @@ namespace Kotprog
             }
         }
 
-
-        private static void MakeCollectionAndListPokemons(bool listing, PokemonCollection pokemonCollection)
-        {
-            var readedPokemons = ReadJSON();
-            foreach (var item in readedPokemons)
-            {
-                pokemonCollection.Add(item);
-            }
-
-            if (listing)
-            {
-                readedPokemons.ForEach(n => Console.WriteLine(n));
-            }
-        }
     }
 }
