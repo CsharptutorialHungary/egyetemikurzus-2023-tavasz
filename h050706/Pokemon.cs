@@ -104,7 +104,7 @@ public sealed class Pokemon
         };
 
         result += "prev_evolution:\n";
-        foreach (object element in prev_evolution)
+        foreach (object element in  prev_evolution)
             result += "\t" + element + "\n";
         {
         };
@@ -118,7 +118,7 @@ public sealed class Pokemon
         return result;
     }
 
-
+    [Serializable]
     public record Evolution
     {
         public string num { get; }
