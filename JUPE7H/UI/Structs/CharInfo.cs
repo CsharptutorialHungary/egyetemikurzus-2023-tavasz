@@ -3,12 +3,12 @@
 using System.Runtime.InteropServices;
 
 [StructLayout(LayoutKind.Explicit)]
-internal struct CharInfo{
+internal readonly struct CharInfo{
     [FieldOffset(0)]
-    public ushort Char;
+    public readonly ushort Char;
     
     [FieldOffset(2)]
-    public short Attributes;
+    public readonly short Attributes;
 
     public CharInfo(ushort c, short attributes){
         Char = c;

@@ -1,5 +1,7 @@
 ﻿namespace JUPE7H.Logic;
 
+using System.Text;
+using System.Text.Json;
 using UI.Structs;
 
 internal sealed class Board{
@@ -22,6 +24,8 @@ internal sealed class Board{
     private int FlagCount;
     private int RevealedCount;
 
+    private readonly BoardFile _boardFile;
+
     public Board(Point size, Difficulty difficulty, int? seed = null){
         Difficulty = difficulty;
         Width = size.X;
@@ -36,6 +40,8 @@ internal sealed class Board{
         FlagCount = 0;
         RevealedCount = 0;
         
+        _boardFile = new BoardFile(new Point(Width, Height), Difficulty, Seed);
+
         VisibleTiles.Fill(UNMARKED);
     }
 
@@ -70,6 +76,8 @@ internal sealed class Board{
         if(Status != GameStatus.Running) return;
         if(!IsGenerated) Generate();
         
+        _boardFile.Actions.Add(new BoardAction(position, true));
+        
         sbyte selectedTile = VisibleTiles[position.X, position.Y];
 
         switch (selectedTile){
@@ -86,11 +94,13 @@ internal sealed class Board{
         CheckWin();
     }
 
-    public void Reveal(Point position){
+    public void Reveal(Point position, bool isChained = false){
         if(Status != GameStatus.Running) return;
         if(!IsGenerated) Generate(position);
 
         if(VisibleTiles[position.X, position.Y] != UNMARKED) return;
+        
+        if(!isChained) _boardFile.Actions.Add(new BoardAction(position, false));
         
         sbyte realValue = RealTiles[position.X, position.Y];
 
@@ -104,7 +114,7 @@ internal sealed class Board{
         RevealedCount++;
         if(realValue == 0){
             foreach((int x, int y) adjacent in RealTiles.AdjacentPositions(position.X, position.Y)){
-                Reveal(new Point((short)adjacent.x, (short)adjacent.y));
+                Reveal(new Point((short)adjacent.x, (short)adjacent.y), true);
             }
         }
         
@@ -115,5 +125,39 @@ internal sealed class Board{
         if(RemainingMines != 0) return;
         if(RevealedCount != Width * Height - MineCount) return;
         Status = GameStatus.Won;
+    }
+
+    public async Task SaveGame(string path) {
+        string contents = JsonSerializer.Serialize(_boardFile);
+        await File.WriteAllTextAsync(path, contents);
+    }
+
+    public static async Task<Board> LoadGame(string path) {
+        string contents = await File.ReadAllTextAsync(path);
+
+        //JsonElement? json = JsonSerializer.Deserialize<JsonElement>(contents);
+        
+        //if(json == null) throw new Exception("Failed to parse save file");
+
+        BoardFile? boardFile = JsonSerializer.Deserialize<BoardFile>(contents); //json.Value.Deserialize<BoardFile>();
+        
+        if(boardFile == null) throw new Exception("Failed to parse save file");
+
+        //boardFile.Actions = json.Value.GetProperty("Actions").Deserialize<BoardAction[]>()!.ToList();
+        
+        File.WriteAllText("last.txt", JsonSerializer.Serialize(boardFile));
+
+        Board board = new(boardFile.Size, boardFile.Difficulty, boardFile.Seed);
+
+        foreach(BoardAction action in boardFile.Actions) {
+            if(action.IsFlag) {
+                board.Flag(action.Location);
+            }
+            else {
+                board.Reveal(action.Location);
+            }
+        }
+
+        return board;
     }
 }

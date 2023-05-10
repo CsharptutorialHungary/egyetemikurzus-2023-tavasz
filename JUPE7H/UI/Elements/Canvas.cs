@@ -78,11 +78,11 @@ internal sealed class Canvas{
         }
     }
 
-    public void PutString(int x, int y, string value, ConsoleColor color = ConsoleColor.White, bool canWrap = false){
+    public void PutString(int x, int y, string value, ConsoleColor foreground = ConsoleColor.White, ConsoleColor background = ConsoleColor.Black, bool canWrap = false){
         int index = 0;
         
-        for(int i = x; (canWrap || i < Width) && index < value.Length; i++){
-            _buffer[Width * y + i] = new CharInfo(value[index++], color);
+        for(int i = x; (canWrap || i < Width) && Width * y + i < _buffer.Length && index < value.Length; i++){
+            _buffer[Width * y + i] = new CharInfo(value[index++], foreground, background);
         }
     }
 
