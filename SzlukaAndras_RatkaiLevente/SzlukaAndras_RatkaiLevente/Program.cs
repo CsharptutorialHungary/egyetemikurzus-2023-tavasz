@@ -60,26 +60,6 @@ namespace Nevter
 
     class Program
     {
-
-        // Aszinkron Task method
-        private static async Task PrintCurrentTimeAsync()
-        {
-            Console.WriteLine(DateTime.Now);
-            await Task.Delay(2000);
-            Console.WriteLine(DateTime.Now);
-        }
-
-        // record (immutable type) KEZDETE
-        #region record
-        private record TesztRecord(string ezmiezhalo);
-        private static TesztRecord[] data = new TesztRecord[]
-        {
-            new TesztRecord("Ezt egy szoveg a recordhoz"),
-            new TesztRecord("Ezt egy valami masik szoveg a recordhoz")
-        };
-        #endregion
-        // record (immutable type) VEGE
-
         static void Main(string[] args)
         {
 
