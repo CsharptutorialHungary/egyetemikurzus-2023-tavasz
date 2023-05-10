@@ -114,7 +114,7 @@ namespace Nevter
                 //{
                 //    command.ExecuteNonQuery(); //execute the Query
                 //    Console.WriteLine("Query Executed.");
-               
+                //}
 
                 //strBuilder.Clear(); // strBuilder osszes appendalando stringtol "megtisztitasa", torlese
 
