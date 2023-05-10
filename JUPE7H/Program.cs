@@ -7,7 +7,7 @@ internal static class Program{
     private static void Main(string[] _){
         Console.CursorVisible = false;
 
-        Canvas canvas = new(10, 10);
+        Canvas canvas = new(30, 30);
         GameController gameController = new(canvas);
 
         while(!gameController.ShouldExit){

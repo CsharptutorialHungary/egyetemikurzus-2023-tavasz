@@ -35,7 +35,7 @@ internal sealed class Canvas{
     
     public short Width => _size.X;
     public short Height => _size.Y;
-    
+
     public Canvas(short width, short height){
         _handle = CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
         _size = new Point(width, height);
