@@ -25,8 +25,8 @@ namespace Kotprog
 
             Console.WriteLine("Program vége");
             Console.ReadKey();
-        }        
-        
+        }
+
         private static void MakeCollectionAndListPokemons(bool listing, PokemonCollection pokemonCollection)
         {
             var readedPokemons = ReadJSON();
@@ -46,29 +46,33 @@ namespace Kotprog
             string fileName = @"pokemon.json";
             string path = Path.Combine(AppContext.BaseDirectory, fileName);
             List<Pokemon> pokemons = new List<Pokemon>();
-            using (FileStream file = File.OpenRead(path))
+            try
             {
-                using (StreamReader reader = new StreamReader(file))
+                using (FileStream file = File.OpenRead(path))
                 {
-                    try
+                    using (StreamReader reader = new StreamReader(file))
                     {
                         pokemons = JsonSerializer.Deserialize<List<Pokemon>>(reader.ReadToEnd());
+                        if (!pokemons.Any())
+                        {
+                            throw new IOException("Üres input");
+                        }
                         return pokemons;
                     }
-                    catch (IOException ioEx)
-                    {
-                        Console.WriteLine("Hiba keletkezett a beolvasás során: [" + ioEx.Message + "]");
-                    }
-                    catch (Exception ex) //Pokemon exception handling hehe
-                    {
-                        Console.WriteLine("Hiba keletkezett: [" + ex.Message + "]");
-                    }
-                    Console.WriteLine("Kilépéshez nyomjon meg egy gombot");
-                    Console.ReadKey();
-                    Environment.Exit(1);
-                    return null;
                 }
             }
+            catch (IOException ioEx)
+            {
+                Console.WriteLine("Hiba keletkezett a beolvasás során: [" + ioEx.Message + "]");
+            }
+            catch (Exception ex) //Pokemon exception handling hehe
+            {
+                Console.WriteLine("Hiba keletkezett: [" + ex.Message + "]");
+            }
+            Console.WriteLine("Kilépéshez nyomjon meg egy gombot");
+            Console.ReadKey();
+            Environment.Exit(1);
+            return null;
         }
 
         private static void ChooseMethods()
@@ -105,7 +109,6 @@ namespace Kotprog
                         break;
                 }
                 Console.ReadKey();
-
             }
         }
 
@@ -121,52 +124,6 @@ namespace Kotprog
             Console.Write("\nAdd meg a sorszámot: ");
         }
 
-        private static void SelectNameByTypeOrderByCandyCount()
-        {
-            #region Creating typeList
-            List<string> typeList = OptionListing("type", true);
-            if (typeList == null)
-            {
-                Console.WriteLine("[Hiba] Nem létező opció " + nameof(SelectNameByTypeOrderByCandyCount));
-                return;
-            }
-            #endregion
-
-            #region Reading input, check if it's valid
-            string typeInput;
-            Console.WriteLine("Adja meg a szűrni kívánt típust!");
-            while (true)
-            {
-                Console.Write("Opciók: ");
-                typeList.ForEach(n => Console.Write("[" + n + "] "));
-                Console.WriteLine();
-                typeInput = Console.ReadLine();
-
-                if (typeList.Any(n => n.Equals(typeInput, StringComparison.OrdinalIgnoreCase)))
-                {
-                    break;
-                }
-                Console.WriteLine("Ismeretlen típus, válassz az alábbiakból:");
-            }
-            #endregion
-
-            #region Select the given types with not zero candy_count, sorting and grouping by candy_count and
-            var result = from pokemon in globalPokemons
-                         where pokemon.type.Any(n => n.Equals(typeInput, StringComparison.OrdinalIgnoreCase)) && pokemon.candy_count > 0
-                         orderby pokemon.candy_count ascending
-                         group pokemon by pokemon.candy_count into candy_countGroup
-                         select candy_countGroup;
-
-            foreach (var item in result)
-            {
-                Console.WriteLine(item.Key + ": ");
-                foreach (var poke_item in item)
-                {
-                    Console.WriteLine("\t" + poke_item.name);
-                }
-            }
-            #endregion
-        }
         private static void SelectPokemonsByEggs()
         {
             List<string> eggList = OptionListing("egg", true);
@@ -199,6 +156,40 @@ namespace Kotprog
                 WriteJSONAsync("pokemonsByEggs", outputColletion);
             }
         }
+
+        private static void SelectNameByTypeOrderByCandyCount()
+        {
+            List<string> typeList = OptionListing("type", true);
+
+            string typeInput;
+            Console.WriteLine("Adja meg a szűrni kívánt típust!");
+            while (true)
+            {
+                typeInput = Console.ReadLine();
+
+                if (typeList.Any(n => n.Equals(typeInput, StringComparison.OrdinalIgnoreCase)))
+                {
+                    break;
+                }
+                Console.WriteLine("Ismeretlen típus, válassz fenti opciók közül:");
+            }
+
+            var result = from pokemon in globalPokemons
+                         where pokemon.type.Any(n => n.Equals(typeInput, StringComparison.OrdinalIgnoreCase)) && pokemon.candy_count > 0
+                         orderby pokemon.candy_count ascending
+                         group pokemon by pokemon.candy_count into candy_countGroup
+                         select candy_countGroup;
+
+            foreach (var item in result)
+            {
+                Console.WriteLine(item.Key + ": ");
+                foreach (var poke_item in item)
+                {
+                    Console.WriteLine("\t" + poke_item.name);
+                }
+            }
+        }
+
         private static void SelectMaxSpawnChance()
         {
             var result = from elem in globalPokemons
@@ -218,6 +209,7 @@ namespace Kotprog
                 Console.WriteLine("Invalid érték");
             }
         }
+
         private static void SelectAvgSpawnChance()
         {
             var result = globalPokemons.Average(i => i.spawn_chance);
@@ -238,7 +230,7 @@ namespace Kotprog
             List<string> optionList = new List<string>();
             PropertyInfo[] properties = typeof(Pokemon).GetProperties();
 
-            Array.ForEach(properties, item => optionNamesList.Add(item.Name));
+            Array.ForEach(typeof(Pokemon).GetProperties(), item => optionNamesList.Add(item.Name));
 
             if (!optionNamesList.Any(n => n.Equals(propertyKey.ToLower(), StringComparison.OrdinalIgnoreCase)))
             {
@@ -273,12 +265,10 @@ namespace Kotprog
                 }
             }
 
-
             if (sorted)
             {
                 optionList.Sort();
             }
-
 
             Console.Write("\nOpciók: ");
             optionList.ForEach(n => Console.Write("[" + n + "] "));
@@ -299,6 +289,5 @@ namespace Kotprog
                 await writer.WriteAsync(json);
             }
         }
-
     }
 }
