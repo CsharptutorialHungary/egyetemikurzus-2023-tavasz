@@ -1,8 +1,16 @@
-﻿// Alkalmazasfejlesztes C# alapokon a modern fejlesztesi iranyelvek bemutatasaval kurzus Kotelezo program
+﻿// ==========================================================================================
+// Alkalmazasfejlesztes C# alapokon a modern fejlesztesi iranyelvek bemutatasaval kurzus Kotelezo program
 // 2023. majus
+// ==========================================================================================
 using System;
 using System.Data.SqlClient;
 using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using System.Collections.Generic;
+
+// serializaciohoz namespace-ek
+
 using System.Text.Json;
 using System.Xml.Serialization;
 
@@ -69,9 +77,20 @@ namespace Nevter
             Console.WriteLine(DateTime.Now);
         }
 
+        // record (immutable type) KEZDETE
+        #region record
+        private record TesztRecord(string ezmiezhalo);
+        private static TesztRecord[] data = new TesztRecord[]
+        {
+            new TesztRecord("Ezt egy szoveg a recordhoz"),
+            new TesztRecord("Ezt egy valami masik szoveg a")
+        };
+        #endregion
+        // record (immutable type) VEGE
+
         static void Main(string[] args)
         {
-
+            
             // Szerializacio KEZDETE
             #region szerializacio
             try
@@ -171,9 +190,9 @@ namespace Nevter
             var max = Users.Max(user => user.Penz);
 
             var Okosak = from user in Users
-                         where user.IsOkos()
-                         orderby user.Penz descending
-                         select user.FelhNev;
+                        where user.IsOkos()
+                        orderby user.Penz descending
+                        select user.FelhNev;
 
             foreach (var user in Okosak.Take(2))
             {
@@ -197,10 +216,10 @@ namespace Nevter
 
             // A task magja egy egy async Action delegate.
             Task.Run(async () =>
-            {
-                Console.WriteLine("Async elott");
-                await PrintCurrentTimeAsync();
-                Console.WriteLine("Async utan");
+             {
+                 Console.WriteLine("Async elott");
+                 await PrintCurrentTimeAsync();
+                 Console.WriteLine("Async utan");
             });
             #endregion
             // Aszinkron resz VEGE
@@ -213,8 +232,8 @@ namespace Nevter
 
             // adatbazis kapcsolathoz peldany letrehozasa
             SqlConnection conn = new SqlConnection(connString);
-
-            try
+           
+             try
             {
                 Console.WriteLine("Openning Connection ...");
 
@@ -225,25 +244,25 @@ namespace Nevter
 
                 //create a new SQL Query using StringBuilder
                 StringBuilder strBuilder = new StringBuilder();
-                //strBuilder.Append("CREATE TABLE Demotabla ( Name VARCHAR(255), Email VARCHAR(255), Class VARCHAR(255)) ");
-                //strBuilder.Append("INSERT INTO Demotabla (Name, Email, Class) VALUES ");
-                //strBuilder.Append("(N'Harsh', N'harsh@gmail.com', N'Class X'), ");
-                //strBuilder.Append("(N'Ronak', N'ronak@gmail.com', N'Class X') ");
+                strBuilder.Append("CREATE TABLE Demotabla ( Name VARCHAR(255), Email VARCHAR(255), Class VARCHAR(255)) ");
+                strBuilder.Append("INSERT INTO Demotabla (Name, Email, Class) VALUES ");
+                strBuilder.Append("(N'Harsh', N'harsh@gmail.com', N'Class X'), ");
+                strBuilder.Append("(N'Ronak', N'ronak@gmail.com', N'Class X') ");
 
                 string sqlQuery = strBuilder.ToString();
-                //using (SqlCommand command = new SqlCommand(sqlQuery, conn)) //pass SQL query created above and connection
-                //{
-                //    command.ExecuteNonQuery(); //execute the Query
-                //    Console.WriteLine("Query Executed.");
-                //}
+                using (SqlCommand command = new SqlCommand(sqlQuery, conn)) //pass SQL query created above and connection
+                {
+                    command.ExecuteNonQuery(); //execute the Query
+                    Console.WriteLine("Query Executed.");
+                }
 
-                //strBuilder.Clear(); // strBuilder osszes appendalando stringtol "megtisztitasa", torlese
+                strBuilder.Clear(); // strBuilder osszes appendalando stringtol "megtisztitasa", torlese
 
                 // update-elo lekerdezes
                 strBuilder.Append("UPDATE Demotabla SET Email = N'suri@gmail.com' WHERE Name = 'Surendra'");
                 sqlQuery = strBuilder.ToString();
                 using (SqlCommand command = new SqlCommand(sqlQuery, conn))
-                {
+                {                   
                     int rowsAffected = command.ExecuteNonQuery(); // lekerdezes vegrehajtasa es update-elt sorok szamanak kiiratasa
                     Console.WriteLine(rowsAffected + " row(s) updated");
                 }
