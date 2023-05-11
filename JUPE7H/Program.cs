@@ -10,7 +10,7 @@ internal static class Program{
 
         while(!gameController.ShouldExit){
             ConsoleKeyInfo key = Console.ReadKey(true);
-            gameController.InputKey(key);
+            gameController.HandleKey(key);
         }
     }
 }

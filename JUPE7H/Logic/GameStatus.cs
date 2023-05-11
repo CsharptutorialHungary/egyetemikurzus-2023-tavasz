@@ -1,7 +1,7 @@
 ﻿namespace JUPE7H.Logic;
 
 internal enum GameStatus{
-    Running,
+    InProgress,
     Lost,
     Won
 }

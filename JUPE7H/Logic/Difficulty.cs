@@ -1,9 +1,8 @@
 ﻿namespace JUPE7H.Logic;
 
 internal enum Difficulty{
-    Special = 10,
-    Easy = 123,
-    Normal = 156, 
-    Hard = 206,
+    Easy = 100,
+    Normal = 150, 
+    Hard = 200,
     Extreme = 233
 }

@@ -2,15 +2,15 @@
 
 using UI.Structs;
 
-internal sealed class BoardFile {
+internal sealed class SaveFile {
     public List<BoardAction> Actions { get; set; }
-    public Point Size { get; }
+    public Point BoardSize { get; }
     public Difficulty Difficulty { get; }
     public int Seed { get; }
 
-    public BoardFile(Point size, Difficulty difficulty, int seed) {
+    public SaveFile(Point boardSize, Difficulty difficulty, int seed) {
         Actions = new List<BoardAction>();
-        Size = size;
+        BoardSize = boardSize;
         Difficulty = difficulty;
         Seed = seed;
     }

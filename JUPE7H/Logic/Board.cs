@@ -1,6 +1,5 @@
 ﻿namespace JUPE7H.Logic;
 
-using System.Text;
 using System.Text.Json;
 using UI.Structs;
 
@@ -13,81 +12,81 @@ internal sealed class Board{
     public readonly short Width;
     public readonly short Height;
     public GameStatus Status{ get; private set; }
-    public sbyte this[int x, int y] => VisibleTiles[x, y];
-    public int RemainingMines => MineCount - FlagCount;
+    public sbyte this[int x, int y] => _visibleTiles[x, y];
+    public int RemainingMines => _mineCount - _flagCount;
 
-    private readonly int Seed;
-    private readonly int MineCount;
-    private readonly sbyte[,] RealTiles;
-    private readonly sbyte[,] VisibleTiles;
-    private bool IsGenerated;
-    private int FlagCount;
-    private int RevealedCount;
+    private readonly int _seed;
+    private readonly int _mineCount;
+    private readonly sbyte[,] _realTiles;
+    private readonly sbyte[,] _visibleTiles;
+    private bool _isGenerated;
+    private int _flagCount;
+    private int _revealedCount;
 
-    private readonly BoardFile _boardFile;
+    private readonly SaveFile _saveFile;
 
     public Board(Point size, Difficulty difficulty, int? seed = null){
         Difficulty = difficulty;
         Width = size.X;
         Height = size.Y;
-        Status = GameStatus.Running;
+        Status = GameStatus.InProgress;
 
-        Seed = seed ?? Guid.NewGuid().GetHashCode();
-        MineCount = (int)(size.X * size.Y * (int)difficulty / 1000.0);
-        RealTiles = new sbyte[size.X, size.Y];
-        VisibleTiles = new sbyte[size.X, size.Y];
-        IsGenerated = false;
-        FlagCount = 0;
-        RevealedCount = 0;
+        _seed = seed ?? Guid.NewGuid().GetHashCode();
+        _mineCount = (int)(size.X * size.Y * (int)difficulty / 1000.0);
+        _realTiles = new sbyte[size.X, size.Y];
+        _visibleTiles = new sbyte[size.X, size.Y];
+        _isGenerated = false;
+        _flagCount = 0;
+        _revealedCount = 0;
         
-        _boardFile = new BoardFile(new Point(Width, Height), Difficulty, Seed);
+        _saveFile = new SaveFile(new Point(Width, Height), Difficulty, _seed);
 
-        VisibleTiles.Fill(UNMARKED);
+        _visibleTiles.Fill(UNMARKED);
     }
 
     private void Generate(Point? safePosition = null){
-        IsGenerated = true;
-        Random random = new(Seed);
+        _isGenerated = true;
+        Random random = new(_seed);
         int placedMines = 0;
 
-        while(placedMines < MineCount){
+        while(placedMines < _mineCount){
             int x = random.Next() % Width;
             int y = random.Next() % Height;
             
-            if(RealTiles[x, y] == MINE) continue;
+            if(_realTiles[x, y] == MINE) continue;
             if(x == safePosition?.X && y == safePosition?.Y) continue;
             
-            RealTiles[x, y] = MINE;
+            _realTiles[x, y] = MINE;
             placedMines++;
         }
 
         for(int x = 0; x < Width; x++){
             for(int y = 0; y < Height; y++){
-                VisibleTiles[x, y] = UNMARKED;
+                _visibleTiles[x, y] = UNMARKED;
                 
-                if(RealTiles[x, y] == MINE) continue;
+                if(_realTiles[x, y] == MINE) continue;
                 
-                RealTiles[x, y] = (sbyte)RealTiles.AdjacentTo(x, y).Count(tile => tile == MINE);
+                _realTiles[x, y] = (sbyte)_realTiles.AdjacentTo(x, y).Count(tile => tile == MINE);
             }
         }
     }
 
     public void Flag(Point position){
-        if(Status != GameStatus.Running) return;
-        if(!IsGenerated) Generate();
+        if(Status != GameStatus.InProgress) return;
+        if(!_isGenerated) Generate();
         
-        _boardFile.Actions.Add(new BoardAction(position, true));
+        _saveFile.Actions.Add(new BoardAction(position, true));
         
-        sbyte selectedTile = VisibleTiles[position.X, position.Y];
+        sbyte selectedTile = _visibleTiles[position.X, position.Y];
 
         switch (selectedTile){
             case FLAG:
-                VisibleTiles[position.X, position.Y] = UNMARKED;
-                FlagCount--;
+                _visibleTiles[position.X, position.Y] = UNMARKED;
+                _flagCount--;
                 break;
             case UNMARKED:
-                VisibleTiles[position.X, position.Y] = FLAG;
-                FlagCount++;
+                _visibleTiles[position.X, position.Y] = FLAG;
+                _flagCount++;
                 break;
         }
         
@@ -95,25 +94,25 @@ internal sealed class Board{
     }
 
     public void Reveal(Point position, bool isChained = false){
-        if(Status != GameStatus.Running) return;
-        if(!IsGenerated) Generate(position);
+        if(Status != GameStatus.InProgress) return;
+        if(!_isGenerated) Generate(position);
 
-        if(VisibleTiles[position.X, position.Y] != UNMARKED) return;
+        if(_visibleTiles[position.X, position.Y] != UNMARKED) return;
         
-        if(!isChained) _boardFile.Actions.Add(new BoardAction(position, false));
+        if(!isChained) _saveFile.Actions.Add(new BoardAction(position, false));
         
-        sbyte realValue = RealTiles[position.X, position.Y];
+        sbyte realValue = _realTiles[position.X, position.Y];
 
         if(realValue == MINE){
             Status = GameStatus.Lost;
-            RealTiles.CopyTo(VisibleTiles);
+            _realTiles.CopyTo(_visibleTiles);
             return;
         }
         
-        VisibleTiles[position.X, position.Y] = realValue;
-        RevealedCount++;
+        _visibleTiles[position.X, position.Y] = realValue;
+        _revealedCount++;
         if(realValue == 0){
-            foreach((int x, int y) adjacent in RealTiles.AdjacentPositions(position.X, position.Y)){
+            foreach((int x, int y) adjacent in _realTiles.AdjacentPositions(position.X, position.Y)){
                 Reveal(new Point((short)adjacent.x, (short)adjacent.y), true);
             }
         }
@@ -123,31 +122,23 @@ internal sealed class Board{
 
     private void CheckWin(){
         if(RemainingMines != 0) return;
-        if(RevealedCount != Width * Height - MineCount) return;
+        if(_revealedCount != Width * Height - _mineCount) return;
         Status = GameStatus.Won;
     }
 
     public async Task SaveGame(string path) {
-        string contents = JsonSerializer.Serialize(_boardFile);
+        string contents = JsonSerializer.Serialize(_saveFile);
         await File.WriteAllTextAsync(path, contents);
     }
 
     public static async Task<Board> LoadGame(string path) {
         string contents = await File.ReadAllTextAsync(path);
 
-        //JsonElement? json = JsonSerializer.Deserialize<JsonElement>(contents);
-        
-        //if(json == null) throw new Exception("Failed to parse save file");
-
-        BoardFile? boardFile = JsonSerializer.Deserialize<BoardFile>(contents); //json.Value.Deserialize<BoardFile>();
+        SaveFile? boardFile = JsonSerializer.Deserialize<SaveFile>(contents);
         
         if(boardFile == null) throw new Exception("Failed to parse save file");
 
-        //boardFile.Actions = json.Value.GetProperty("Actions").Deserialize<BoardAction[]>()!.ToList();
-        
-        File.WriteAllText("last.txt", JsonSerializer.Serialize(boardFile));
-
-        Board board = new(boardFile.Size, boardFile.Difficulty, boardFile.Seed);
+        Board board = new(boardFile.BoardSize, boardFile.Difficulty, boardFile.Seed);
 
         foreach(BoardAction action in boardFile.Actions) {
             if(action.IsFlag) {
